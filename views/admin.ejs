@@ -1,0 +1,85 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="/css/admin.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+  <body>
+    <div class="heading">
+      <h2 style="text-align: center; color: black; margin-bottom: 50px">
+        Welcome Admin <%= name %>
+      </h2>
+      <button id="logout-btn" style="float: right">Logout</button>
+    </div>
+
+    <div id="category-container">
+      <h3>Select the category of the product</h3>
+      <button class="category-btn" data-category="phone">Phone</button>
+      <button class="category-btn" data-category="laptop">Laptop</button>
+      <button class="category-btn" data-category="smartwatch">
+        Smart Watch
+      </button>
+      <button class="category-btn" data-category="earphones">Earphones</button>
+    </div>
+
+    <div id="sub-category-container"></div>
+
+    <div
+      style="text-align: center; padding-bottom: 20px; display: none"
+      id="container"
+    >
+      <input type="text" placeholder="Name" id="name" />
+      <input type="text" placeholder="Price" id="price" />
+      <input type="text" placeholder="Quantity" id="quantity" />
+      <input type="text" placeholder="Description" id="description" />
+      <input type="file" id="image" accept="image/*" />
+      <button id="addBtn">Add Product</button>
+    </div>
+
+    <div id="productList">
+      <% for (let cat in products) { %> <% for (let sub in products[cat]) { let
+      subProducts = products[cat][sub]; if (subProducts && subProducts.length >
+      0) { %>
+      <div class="subcategory-box">
+        <h3><%= sub.charAt(0).toUpperCase() + sub.slice(1) %> Products</h3>
+        <div class="subcategory-products">
+          <% subProducts.forEach((prod, i) => { %>
+          <div
+            class="product-card"
+            data-cat="<%= cat %>"
+            data-sub="<%= sub %>"
+            data-index="<%= i %>"
+          >
+            <img
+              src="/uploads/<%= prod.imagePath %>"
+              alt="<%= prod.name %>"
+              style="width: 100px; height: 100px"
+              class="product-img"
+            />
+            <p>
+              <strong>Name: </strong
+              ><span class="prod-name"><%= prod.name %></span>
+            </p>
+            <p>
+              <strong>Price: </strong
+              ><span class="prod-price"><%= prod.price %></span>
+            </p>
+            <p>
+              <strong>Quantity: </strong
+              ><span class="prod-quantity"><%= prod.quantity %></span>
+            </p>
+            <p>
+              <strong>Description: </strong
+              ><span class="prod-description"><%= prod.description %></span>
+            </p>
+            <input type="file" class="image-input" style="display: none" />
+            <button class="editBtn">Edit</button>
+            <button class="deleteBtn">Delete</button>
+          </div>
+          <% }) %>
+        </div>
+      </div>
+      <% } %> <% } %> <% } %>
+    </div>
+    <script src="/jsExpress/product.js"></script>
+  </body>
+</html>

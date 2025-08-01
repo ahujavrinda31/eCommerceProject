@@ -1,0 +1,44 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="/css/signup.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+  <body>
+    <div id="signupContainer">
+      <form id="signupForm">
+        <label for="sname" style="margin-top: 115px; font-size: 20px"
+          >Username</label
+        >
+        <input type="text" , id="sname" , name="sname" /><br /><br />
+        <label for="semail" style="font-size: 20px">Email</label>
+        <input type="email" , id="semail" , name="semail" /><br /><br />
+        <label for="spass" style="font-size: 20px">Password</label>
+        <input type="password" , id="spass" , name="spass" /><br /><br />
+        <label for="confirmpass" style="font-size: 20px"
+          >Confirm Password</label
+        >
+        <input
+          type="password"
+          ,
+          id="confirmpass"
+          ,
+          name="confirmpass"
+        /><br /><br />
+        <label for="check">Admin?</label>
+        <input
+          type="checkbox"
+          id="check"
+          name="check"
+        />
+      </form>
+      <div id="otpSection" style="display: none">
+        <label style="margin-left: 500px;">Enter OTP</label>
+        <input type="text" id="otpInput"/>
+      </div>
+      <div class="btn">
+        <button type="submit" id="submitBtn">Send OTP</button>
+      </div>
+    </div>
+    <script src="/jsExpress/signupScript.js"></script>
+  </body>
+</html>

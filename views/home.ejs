@@ -1,0 +1,73 @@
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="/css/home.css" />
+  </head>
+  <body>
+    <div class="heading">
+      <h2 style="text-align: center; color: black">Welcome User <%= name %></h2>
+      <button id="logout-btn">Logout</button>
+    </div>
+
+    <div class="main-container">
+      <div class="product-section">
+        <h3>What you are looking for?</h3>
+        <% Object.keys(products).forEach((cat) => { %>
+        <div class="category">
+          <h3
+            class="category-title"
+            style="cursor: pointer; text-transform: capitalize"
+          >
+            <%= cat %>
+          </h3>
+          <% Object.keys(products[cat]).forEach((subcat) => { %>
+          <div class="subcategory" style="display: none">
+            <h4><%= subcat %></h4>
+            <div class="slider-container">
+              <% products[cat][subcat].forEach((product, index) => { %>
+                <% if (index === 0) { %>
+                  <div class="product-slide" data-index="<%= index %>" data-id="<%= product.id %>">
+                <% } else { %>
+                    <div class="product-slide" data-index="<%= index %>" data-id="<%= product.id %>" style="display:none;">
+                <% } %>
+                <img
+                  src="/uploads/<%= product.imagePath %>"
+                  width="100px"
+                  height="100px"
+                />
+                <span style="display: block;"><strong>Name:</strong> <%= product.name %></span>
+                <span style="display: block;"><strong>Price:</strong> <%= product.price %></span>
+                <span style="display: block;"><strong>Quantity:</strong> <%= product.quantity %></span>
+                <span style="display: block;"
+                  ><strong>Description:</strong> <%= product.description
+                  %></span
+                >
+                <!-- <img
+                  src="/uploads/<%= product.imagePath %>"
+                  width="100px"
+                  height="100px"
+                /> -->
+                <button class="add-to-cart">Add to Cart</button>
+              </div>
+              <% }) %>
+            </div>
+            <% if (products[cat][subcat].length > 1) { %>
+            <div class="slider-controls">
+              <button class="prev-btn">Previous</button>
+              <button class="next-btn">Next</button>
+            </div>
+            <% } %>
+          </div>
+          <% }); %>
+        </div>
+        <% }); %>
+      </div>
+      
+      <div class="cart-section">
+        <button id="view-cart">View Cart</button>
+        <div id="cart-container"></div>
+      </div>
+    </div>
+    <script src="/jsExpress/home.js"></script>
+  </body>
+</html>

@@ -1,3 +1,6 @@
+The signed up users will be stored in users.json with name, email, password, passwordConfirm and admin as yes or no(based on whether they selected the checkbox or not) 
+If signed up user is not an admin but a normal user his cart will be created in cart.json
+
 Place your email and app password in .env file
 write email as EMAIL_USER=youremail@gmail.com
 write app password as EMAIL_PASS=16 digit password

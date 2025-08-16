@@ -5,7 +5,7 @@
         "id": 1753851630979,
         "name": "Realme GT 7 Dream Edition",
         "price": "50000",
-        "quantity": "1",
+        "quantity": 5,
         "description": "Flagship-grade Dream Edition with MediaTek Dimensity 9400e, 6.78″ LTPO AMOLED at 120 Hz, 50 + 8 + 50 MP rear and 32 MP front cameras, massive 7,000 mAh battery with 120 W fast charging, Android 15 and IP69 rating",
         "imagePath": "Realme GT 7 Dream Edition.jpg"
       },
@@ -13,23 +13,15 @@
         "id": 1753851696321,
         "name": "Realme GT 7T",
         "price": "34,998",
-        "quantity": "1",
+        "quantity": "12",
         "description": "A gamer‑centric model with Dimensity 8400‑Max, 6.8″ AMOLED 120 Hz, 50 MP main + 8 MP wide rear camera, 7,000 mAh battery, IP69 dust/water resistance, tailored for extended gaming sessions",
         "imagePath": "Realme GT 7T.jpg"
-      },
-      {
-        "id": 1753851766234,
-        "name": "Realme 15 Pro 5G",
-        "price": "31,999",
-        "quantity": "1",
-        "description": "Part of the newly launched 15-series (July 2025) featuring Snapdragon 7 Gen 4, 6.8″ 1.5 K AMOLED at up to 144 Hz, 50 MP rear and front cameras (Sony IMX896 with OIS on Pro), 7,000 mAh battery with 80 W fast charging and advanced AI features",
-        "imagePath": "Realme 15 Pro 5G.jpg"
       },
       {
         "id": 1753851881349,
         "name": "Realme 15 5G",
         "price": "25,999",
-        "quantity": "1",
+        "quantity": "14",
         "description": "Standard 15-series phone powered by Dimensity 7300+, 6.8″ AMOLED (1.5 K, 140 Hz possible), 50 MP main + 32 MP front cameras, 7,000 mAh battery with 80 W charging, Android 15 UI and AI editing tools",
         "imagePath": "Realme 15 5G.jpg"
       },
@@ -37,7 +29,7 @@
         "id": 1753851943729,
         "name": "Realme Narzo 80 Pro 5G",
         "price": "17,499",
-        "quantity": "1",
+        "quantity": "16",
         "description": "Mid-range contender with Dimensity 7400, 6.7″ FHD+ OLED at 120 Hz, 50 MP + 2 MP rear camera, 16 MP front shooter, 6,000 mAh battery with 80 W charging, Android 15 support and solid performance for under ₹20K",
         "imagePath": "Realme Narzo 80 Pro 5G.jpg"
       },
@@ -45,17 +37,9 @@
         "id": 1753852004919,
         "name": "Realme Narzo 80 Lite 5G",
         "price": "10,499",
-        "quantity": "1",
+        "quantity": "18",
         "description": "Budget 5G phone powered by Dimensity 6300 on 6 nm, 6.67″ HD+ display at 120 Hz, 32 MP rear and 8 MP front camera, 6,000 mAh battery with 15 W charging, IP64 dust‑water resistance, starting under ₹11K",
         "imagePath": "Realme Narzo 80 Lite 5G.jpg"
-      },
-      {
-        "id": 1753852067608,
-        "name": "Realme Narzo 80 Lite 4G",
-        "price": "6,599",
-        "quantity": "1",
-        "description": "Ultra-budget model with a 6,300 mAh battery and 6.67″ display, Unison chipset, 4 GB RAM, robust Armor Shell design with reinforced corners, IP54 resistance, and an \"Elegant Pulse Light\" customizable back glow feature—ideal for entry‑level needs under ₹7K",
-        "imagePath": "Realme Narzo 80 Lite 4G.jpg"
       }
     ],
     "Samsung": [
@@ -63,47 +47,39 @@
         "id": 1753850972876,
         "name": "Samsung Galaxy S24 FE 5G",
         "price": "40,099",
-        "quantity": "1",
+        "quantity": "15",
         "description": "2024 Fan Edition flagship with 6.7″ FHD+ 120 Hz AMOLED, Exynos 2400e, 50 MP triple rear camera, 10 MP front shooter, 8 GB RAM, 256 GB storage, 4700 mAh battery, 25 W fast charging, One UI 7 on Android 15, 5 G",
-        "imagePath": "SamsungÂ GalaxyÂ S24â¯FEÂ 5Gâ¯.webp"
+        "imagePath": "Samsung Galaxy S24â¯FE 5G.jpg"
       },
       {
         "id": 1753851061172,
         "name": "Samsung Galaxy S24 5G",
         "price": "46,999",
-        "quantity": "1",
+        "quantity": "20",
         "description": "Mainline Galaxy S model offering premium performance—Dynamic AMOLED 2X display, flagship‑grade chipset (Exynos or Snapdragon depending on region), 12 MP selfie, water‑resistant (IP68), and excellent battery life",
-        "imagePath": "Samsung Galaxy S24â¯5Gâ¯.webp"
+        "imagePath": "Samsung Galaxy S24â¯5G.jpg"
       },
       {
         "id": 1753851126340,
         "name": "Samsung Galaxy S25 5G",
         "price": "64,799",
-        "quantity": "1",
+        "quantity": "25",
         "description": "Latest 2025 Galaxy S flagship with Snapdragon 8 Elite (or equivalent), Galaxy AI features, 50 MP main camera, 12 MP front camera, Big 6.9″ Dynamic AMOLED 2X, IP68 water resistance, long‑term support and top‑tier performance",
-        "imagePath": "SamsungÂ GalaxyÂ S25â¯5G.webp"
+        "imagePath": "Samsung Galaxy S25â¯5G.jpg"
       },
       {
         "id": 1753851202224,
         "name": "Samsung Galaxy Z Fold7 5G",
         "price": "162,999",
-        "quantity": "1",
+        "quantity": "30",
         "description": "Samsung’s newest foldable flagship launched July 2025, featuring a 6.5″ external OLED and 8″ internal Dynamic AMOLED 2X sleek ultraportable displays, 200 MP main camera, Snapdragon 8 Elite, up to 16 GB RAM/1 TB storage, 4,400 mAh battery with wireless charging, Galaxy AI tools, ultraportable at ~8.9 mm folded, IP-rated durability, 7-year support",
         "imagePath": "SamsungÂ GalaxyÂ ZÂ Fold7â¯5G.webp"
-      },
-      {
-        "id": 1753851349425,
-        "name": "Samsung Galaxy A26 5G",
-        "price": "23,000",
-        "quantity": "1",
-        "description": "A budget‑friendly 5G-powered device launched in March 2025. Runs Android 15 with One UI 7 and supports up to six major Android upgrades. Powered by Exynos 1380 (5 nm), it features a 6.7″ Super AMOLED 120 Hz display, 50 MP main + 8 MP ultrawide + 2 MP macro rear cameras, and a 13 MP front shooter. It offers a 5000 mAh battery with 25 W charging and IP67 water/dust resistance.",
-        "imagePath": "Samsung Galaxy A26â¯5G.jpg"
       },
       {
         "id": 1753851415963,
         "name": "Samsung Galaxy A56 5G",
         "price": "38,999",
-        "quantity": "1",
+        "quantity": "35",
         "description": "A well-rounded mid‑range phone with Android 15 (One UI 7). It’s built on the Exynos 1580 chipset, paired with a 6.7″ Super AMOLED display at 120 Hz and Gorilla Glass protection. The rear camera array includes a 50 MP primary (with OIS), 12 MP ultrawide, and 5 MP macro, while a 12 MP selfie camera handles the front. A large 5000 mAh battery supports 45 W fast charging. Offers long upgrade support and improved brightness and performance over the A55.",
         "imagePath": "Samsung Galaxy A56â¯5G.jpg"
       },
@@ -111,7 +87,7 @@
         "id": 1753851520223,
         "name": "Samsung Galaxy Z Flip 7",
         "price": "1,09,999",
-        "quantity": "1",
+        "quantity": "40",
         "description": "Launched July 2025 alongside the Z Fold 7, the Flip7 is Samsung’s stylish clamshell foldable phone. It includes a 6.9″ inner Dynamic AMOLED 2X 120 Hz display and a 4.1″ cover Super AMOLED secondary display. Power comes from Exynos 2500 (3 nm) with 12 GB RAM. The rear camera setup features a 50 MP main and 12 MP ultrawide lens, while a 10 MP camera covers selfies. It has a 4300 mAh battery (25 W wired, 15 W wireless charging), is dust‑ and water‑resistant, and carries the latest Galaxy AI features.",
         "imagePath": "Samsung Galaxy Z Flipâ¯7.jpg"
       }
@@ -121,7 +97,7 @@
         "id": 1753852151370,
         "name": "OnePlus Nord CE 5 5G",
         "price": "24,998",
-        "quantity": "1",
+        "quantity": "3",
         "description": "Launched July 12, 2025, this model offers a 6.77″ 1.5K AMOLED display (120 Hz), Dimensity 8350 Apex chipset, and a massive 7,100 mAh battery with 80 W fast charging. It has a 50 MP main rear camera (with OIS), 8 MP ultra‑wide, and 16 MP selfies. Runs OxygenOS 15 on Android 15 with IP65 rating. Battery life and value are its main strengths.",
         "imagePath": "OnePlus Nord CEâ¯5 5G.jpg"
       },
@@ -129,7 +105,7 @@
         "id": 1753852241760,
         "name": "OnePlus Nord 5",
         "price": "31,999",
-        "quantity": "1",
+        "quantity": "6",
         "description": "Released July 8, 2025, with Snapdragon 8s Gen 3 chipset, 6.83″ FHD+ (1.5K) AMOLED display at 120 Hz, and 6,800 mAh battery charging at 80 W. It features dual-camera: 50 MP main + 8 MP ultra-wide, and a 50 MP front camera. OxygenOS 15 includes a programmable “Plus Key” for shortcuts and AI tools.",
         "imagePath": "OnePlus Nord 5.jpg"
       },
@@ -137,7 +113,7 @@
         "id": 1753852302226,
         "name": "OnePlus 13s",
         "price": "54,998",
-        "quantity": "1",
+        "quantity": "9",
         "description": "Announced June 2025, this compact flagship features a 6.32″ LTPO AMOLED display at 120 Hz, powered by Snapdragon 8 Elite. It packs a 5,850 mAh battery (80 W fast charging), 50 MP rear camera + 32 MP selfie, and includes the new “Plus Key” and Google Gemini assistant. It gained praise for being a smaller phone with flagship features",
         "imagePath": "OnePlus 13s.jpg"
       },
@@ -145,7 +121,7 @@
         "id": 1753852353262,
         "name": "OnePlus 13R",
         "price": "42,997",
-        "quantity": "1",
+        "quantity": "12",
         "description": "Positioned between the 13s and 13, the OnePlus 13R offers Snapdragon 8 Gen 3 performance, solid battery (≈6,000 mAh), dual cameras, and flag‑class responsiveness at a lower price. It was discounted to ~₹36,999 during recent Amazon sales.",
         "imagePath": "OnePlus 13R.jpg"
       },
@@ -153,7 +129,7 @@
         "id": 1753852436025,
         "name": "OnePlus 13",
         "price": "69,997",
-        "quantity": "1",
+        "quantity": "15",
         "description": "Launched January 2025 internationally; top‑tier flagship with Snapdragon 8 Elite, 6.82″ LTPO AMOLED 120 Hz display, IP68/69 dust‑water resistance, and a trio of 50 MP cameras (wide, ultra‑wide, periscope zoom). Its 6,000 mAh silicon‑carbon battery charges in about 36 min (100 W). Reviewers noted stellar battery life and camera quality on par with Galaxy S25 Ultra.",
         "imagePath": "OnePlus 13.jpg"
       },
@@ -161,7 +137,7 @@
         "id": 1753852510457,
         "name": "OnePlus Nord 4",
         "price": "29,999",
-        "quantity": "1",
+        "quantity": "18",
         "description": "A value‑midrange 2024 phone now available in India. It offers a 6.74″ AMOLED 120 Hz display, Snapdragon 7+ Gen 3 processor, and 5,500 mAh battery with 100 W charging. Dual rear cameras (50 MP + 8 MP), premium aluminum design, and OxygenOS 14.1 make it attractive around ₹30K.",
         "imagePath": "OnePlus Nord 4.jpg"
       },
@@ -169,7 +145,7 @@
         "id": 1753852587639,
         "name": "OnePlus 12R",
         "price": "39,999",
-        "quantity": "1",
+        "quantity": "21",
         "description": "Released February 2024 as a semi‑flagship with Snapdragon 8 Gen 2 chipset, LTPO4 AMOLED 120 Hz display, 5,500 mAh battery with 100 W wired charging, and a 50 + 8 + 2 MP rear camera setup. Robust specs and long‑term support make it a solid choice in the ₹40 K segment.",
         "imagePath": "OnePlus 12R.jpg"
       }
@@ -179,7 +155,7 @@
         "id": 1753853154127,
         "name": "iPhone 16",
         "price": "72,400",
-        "quantity": "1",
+        "quantity": "4",
         "description": "The standard 2024 iPhone, featuring a 6.1″ OLED display, powerful A18 chip, dual-lens rear camera (48 MP + 12 MP), USB‑C, Face ID, wireless charging, and Apple Intelligence support",
         "imagePath": "iPhone 16.jpg"
       },
@@ -187,7 +163,7 @@
         "id": 1753853267189,
         "name": "iPhone 16 Pro",
         "price": "110,900",
-        "quantity": "1",
+        "quantity": "8",
         "description": "Pro-tier with the A18 Pro chip, 6.3″ ProMotion OLED (adaptive 120 Hz), triple rear cameras (including telephoto & LiDAR), IP68, Apple Intelligence, and premium finish with advanced imaging tools",
         "imagePath": "iPhone 16 Pro.jpg"
       },
@@ -195,7 +171,7 @@
         "id": 1753853325188,
         "name": "iPhone 16 Pro Max",
         "price": "133,900",
-        "quantity": "1",
+        "quantity": "12",
         "description": "The largest and most premium of the 16‑series: big OLED screen (~6.9″), flagship A18 Pro chip, top‑end camera system, excellent battery life, and support for the full suite of Apple Intelligence features",
         "imagePath": "iPhone 16 Pro Max.jpg"
       },
@@ -203,7 +179,7 @@
         "id": 1753853387360,
         "name": "iPhone 16e",
         "price": "59,900",
-        "quantity": "1",
+        "quantity": "16",
         "description": "Budget-friendly model launched Feb 28, 2025 powered by A18 chip with Apple Intelligence, 6.1″ OLED display (60 Hz), single 48 MP Fusion camera, Face ID, USB‑C port (no MagSafe or ultra‑wide), and great battery life (~26 h video playback)",
         "imagePath": "iPhone 16e.jpg"
       },
@@ -211,7 +187,7 @@
         "id": 1753853467808,
         "name": "iPhone 15",
         "price": "61,400",
-        "quantity": "1",
+        "quantity": "20",
         "description": "Last year’s core model—6.1″ OLED (notch), A16 chip, dual rear cameras (48 MP + ultra-wide), Face ID, wireless charging; widely discounted post‑iPhone 16 launch",
         "imagePath": "iPhone 15.jpg"
       },
@@ -219,7 +195,7 @@
         "id": 1753853514295,
         "name": "iPhone 14",
         "price": "49,999",
-        "quantity": "1",
+        "quantity": "24",
         "description": "Still officially available after price cut—features A15 chip, 6.1″ Super Retina OLED, dual-lens camera, Face ID, and IP68 water resistance; a solid older iOS upgrade path model",
         "imagePath": "iPhone 14.jpg"
       }
@@ -231,7 +207,7 @@
         "id": 1753853638348,
         "name": "HP Pavilion x360 14‑inch (13th Gen i5)",
         "price": "75,999",
-        "quantity": "1",
+        "quantity": 5,
         "description": "A flexible 2-in-1 convertible with Intel 13th Gen i5‑1335U, 14″ Full HD touchscreen, likely Wi-Fi 6E, backlit keyboard, polished design — ideal for students or hybrid use.",
         "imagePath": "HPâ¯Pavilionâ¯x360â¯14âinch (13thâ¯Genâ¯i5).webp"
       },
@@ -239,7 +215,7 @@
         "id": 1753853728291,
         "name": "HP Pavilion 15‑inch (13th Gen i5)",
         "price": "71,999",
-        "quantity": "1",
+        "quantity": "12",
         "description": "Standard 15.6″ Pavilion with Intel 13th Gen Core i5, FHD display, fast SSD, likely Bluetooth 5.3 and modern ports—solid for everyday productivity and light multimedia",
         "imagePath": "HPâ¯Pavilionâ¯15âinch (13thâ¯Genâ¯i5).webp"
       },
@@ -247,7 +223,7 @@
         "id": 1753853848776,
         "name": "HP Spectre x360 2‑in‑1 Laptop",
         "price": "1,65,000",
-        "quantity": "1",
+        "quantity": "18",
         "description": "High-end convertible flagship featuring OLED touchscreen, premium aluminum chassis, stylus support—excellent for creative professionals. Some users report battery quirks and sensitivity issues",
         "imagePath": "HPâ¯Spectreâ¯x360â¯2âinâ1â¯Laptop"
       },
@@ -255,7 +231,7 @@
         "id": 1753853988402,
         "name": "HP 14s Intel i5 10th Gen",
         "price": "23,999",
-        "quantity": "1",
+        "quantity": "24",
         "description": "Refurbished Intel i5‑10th Gen model with 14″ HD screen and Windows 11 Pro. Affordable entry-level pick for lightweight tasks, reading, and basic use.",
         "imagePath": "HPâ¯14s Intelâ¯i5â¯10thâ¯Gen.svg"
       }
@@ -265,7 +241,7 @@
         "id": 1753854124246,
         "name": "Dell 14 2‑in‑1 Plus",
         "price": "87,670",
-        "quantity": "1",
+        "quantity": "11",
         "description": "Convertible 14″ premium laptop from Dell’s AI‑powered Plus series. Offers Intel Core Ultra processors, touchscreen capability, Copilot+ AI features, long battery life (~22 h), and productivity-focused design. Ideal for creators and hybrid users.",
         "imagePath": "Dell 14 2âinâ1 Plus.jpg"
       },
@@ -273,7 +249,7 @@
         "id": 1753854193086,
         "name": "Dell 14 Plus",
         "price": "1,15,799",
-        "quantity": "1",
+        "quantity": "10",
         "description": "A high‑spec 14″ clamshell laptop in the Dell Plus line with Intel Core Ultra chips, immersive display, AI enhancements through Copilot+, and long runtime (up to 22 h). Great for creator and multitasking workflows.",
         "imagePath": "Dell 14 Plus.jpg"
       },
@@ -281,7 +257,7 @@
         "id": 1753854248936,
         "name": "Dell 16 Plus",
         "price": "76,400",
-        "quantity": "1",
+        "quantity": "9",
         "description": "Affordable 16″ model powered by AMD Ryzen AI 300 series CPUs (up to Ryzen AI 7 350). Offers 16 GB RAM, 512 GB SSD, Full‑HD+ display, Wi‑Fi 7, and all‑day battery life. A solid choice for users who want large‑screen performance in the ₹75K range.",
         "imagePath": "Dell 16 Plus.jpg"
       },
@@ -289,7 +265,7 @@
         "id": 1753854326042,
         "name": "Dell Inspiron 14 Plus",
         "price": "1,05,999",
-        "quantity": "1",
+        "quantity": "8",
         "description": "Part of Dell’s Snapdragon‑based Copilot+ AI PC lineup. This 14″ premium Inspiron offers Qualcomm Snapdragon X Plus chipset with on‑device NPU, QHD+ display, excellent battery life (~21 hours video), voice‑enabled secure login, and integrated AI tools like Cocreator and Live Captions.",
         "imagePath": "Dell Inspiron 14 Plus.jpg"
       },
@@ -297,7 +273,7 @@
         "id": 1753854371627,
         "name": "Dell XPS 13",
         "price": "1,39,990",
-        "quantity": "1",
+        "quantity": "7",
         "description": "Previously among the best‑loved models globally, now part of Dell’s AI PC series. Features Qualcomm Snapdragon X1 Elite CPU, up to 27 hours of battery life, 13.4″ 3K OLED Touch display, LPDDR5x RAM up to 32 GB, and Copilot+ features. Designed for mobile power users and creators.",
         "imagePath": "Dell XPS 13.jpg"
       }
@@ -307,7 +283,7 @@
         "id": 1753854446781,
         "name": "MacBook Air 13‑inch",
         "price": "99,900",
-        "quantity": "1",
+        "quantity": "2",
         "description": "Powered by Apple’s newest M4 chip with a 10‑core CPU and integrated 8‑core or 10‑core GPU, this fanless design features a 13.6″ Super Retina display, 12 MP Center Stage webcam, ~18 hours battery life, and support for Apple Intelligence + macOS Sequoia. Comes in colors including Sky Blue. Starts with 16 GB unified memory standard.",
         "imagePath": "MacBook Air 13âinch.jpg"
       },
@@ -315,7 +291,7 @@
         "id": 1753854535879,
         "name": "MacBook Air 15‑inch",
         "price": "1,24,900",
-        "quantity": "1",
+        "quantity": "14",
         "description": "A larger version of the M4 Air with a stunning 15.3″ Super Retina display (~224 ppi), same M4 chip, 18 hours battery, and support for up to two external displays. Lightweight and ideal for users needing a bigger screen without sacrificing portability.",
         "imagePath": "MacBook Air 15âinch.jpg"
       },
@@ -323,7 +299,7 @@
         "id": 1753854604216,
         "name": "MacBook Pro 14‑inch",
         "price": "1,69,900",
-        "quantity": "1",
+        "quantity": "19",
         "description": "The compact Pro offers the M4 chip (10‑core), or optionally the M4 Pro with up to 24 GB RAM and up to 32 GPU cores. Features include a 14.2″ Liquid Retina XDR display with ProMotion (120 Hz), HDMI, SDXC port, MagSafe 3, and up to 24 hours battery life. Ideal for video editing and creative tasks.",
         "imagePath": "MacBook Pro 14âinch.jpg"
       },
@@ -331,7 +307,7 @@
         "id": 1753854717064,
         "name": "MacBook Pro 14‑inch (M4 Max, 2024)",
         "price": "2,92,990",
-        "quantity": "1",
+        "quantity": "22",
         "description": "Equipped with the top-tier M4 Max silicon (up to 16‑core CPU and 36‑core GPU), this powerhouse variant is targeted toward professionals working on graphics-intensive workflows. Delivers unrivaled peak performance and a gorgeous XDR display.",
         "imagePath": "MacBook Pro 14âinch (M4 Max, 2024).jpg"
       },
@@ -339,7 +315,7 @@
         "id": 1753854840767,
         "name": "MacBook Pro 16‑inch",
         "price": "2,39,990",
-        "quantity": "1",
+        "quantity": "13",
         "description": "Apple’s keystone for demanding users. Offers a 16.2″ Liquid Retina XDR display with staggering brightness (up to ~1,600 nits HDR), up to 128 GB unified memory options (depending on chip), massive battery (~22–24 hrs), and stellar multitasking capacity. The M4 Max delivers top-tier rendering and compute power.",
         "imagePath": "MacBook Pro 16âinch.jpg"
       }
@@ -349,7 +325,7 @@
         "id": 1753854940570,
         "name": "Lenovo Yoga Pro 7",
         "price": "1,39,990",
-        "quantity": "1",
+        "quantity": "6",
         "description": "Premium Yoga model with Copilot+ AI features, OLED or high-refresh displays, Intel Core Ultra or Ryzen AI CPUs, slim convertible design. Excellent for creators and multitaskers.",
         "imagePath": "Lenovo Yoga ProÂ 7.jpg"
       },
@@ -357,7 +333,7 @@
         "id": 1753855008974,
         "name": "Lenovo Yoga Slim 7i Aura Edition",
         "price": "1,32,141",
-        "quantity": "1",
+        "quantity": "14",
         "description": "Lightweight ultrabook powered by Intel Core Ultra, 14″ OLED, long battery life, Aura Edition with smart AI enhancements. Ideal for daily productivity on the go.",
         "imagePath": "Lenovo Yoga SlimÂ 7i Aura Edition.jpg"
       },
@@ -365,7 +341,7 @@
         "id": 1753855065222,
         "name": "Lenovo IdeaPad Pro 5i",
         "price": "1,09,990",
-        "quantity": "1",
+        "quantity": "8",
         "description": "Flagship-class Intel Core Ultra 9 185H chip, 32 GB RAM, AI PC features with Copilot+, high-res OLED touchscreen at 120 Hz—great for creative pros.",
         "imagePath": "Lenovo IdeaPad ProÂ 5i.jpg"
       },
@@ -373,7 +349,7 @@
         "id": 1753855117313,
         "name": "Lenovo ThinkPad X9‑15 Gen 1 Aura Edition",
         "price": "1,59,990",
-        "quantity": "1",
+        "quantity": "9",
         "description": "Business flagship with Intel Core Ultra, 15.3″ 2.8K OLED 120 Hz, lightweight (~3 lb), over 16 hours battery life, sleek aluminum build. A standout ThinkPad model.",
         "imagePath": "Lenovo ThinkPad X9â15â¯Genâ¯1 Aura Edition.jpg"
       },
@@ -381,7 +357,7 @@
         "id": 1753855179067,
         "name": "Lenovo V15 G4",
         "price": "24,990",
-        "quantity": "1",
+        "quantity": "5",
         "description": "Budget-friendly 15.6″ laptop with Ryzen 7 7730U, 8 GB RAM, 512 GB SSD, FHD screen—solid pick for students or everyday office use. Excellent value in sub‑₹30K segment.",
         "imagePath": "Lenovo V15 G4.jpg"
       }
@@ -393,7 +369,7 @@
         "id": 1753855353064,
         "name": "boAt Storm Infinity Smartwatch",
         "price": "1,399",
-        "quantity": "1",
+        "quantity": 5,
         "description": "Features a large 2.01″ touch display, Bluetooth calling, dual health sensors (heart rate, SpO₂), activity tracking, sleep monitor, pedometer, and up to 20 days battery on a charge. IP68 water resistance ensures durability. Ideal for users wanting a basic yet full-featured smartwatch.",
         "imagePath": "boAt StormÂ Infinity Smartwatch"
       },
@@ -401,7 +377,7 @@
         "id": 1753855418262,
         "name": "boAt Ultima Connect Max",
         "price": "1,300",
-        "quantity": "1",
+        "quantity": "14",
         "description": "Offers a huge 2.0″ HD display, Bluetooth calling, up to 10-day battery life, DND mode and custom vibrations, IP68 resistance, and support for 100+ sports modes and notifications. A vibrant option if screen size and long runtime matter.",
         "imagePath": "boAt Ultima Connect Max.webp"
       },
@@ -409,7 +385,7 @@
         "id": 1753855477650,
         "name": "boAt Chrome Horizon Smartwatch",
         "price": "3,299",
-        "quantity": "1",
+        "quantity": "16",
         "description": "Mid-range Bluetooth-calling smartwatch with stylish dust- and sweat-resistant build, solid heart-rate monitoring, and a splash-proof design. Delivers fitness tracking plus seamless phone call integration.",
         "imagePath": "boAt Chrome Horizon Smartwatch"
       },
@@ -417,7 +393,7 @@
         "id": 1753855532999,
         "name": "boAt Lunar Discovery Smartwatch",
         "price": "1,649",
-        "quantity": "1",
+        "quantity": "4",
         "description": "Unique for its built‑in turn‑by‑turn navigation (MapMyIndia), along with essential health tracking, Bluetooth calling support, 1.39″ HD display, and fitness modes. Stands out for offering navigation on a budget wearable.",
         "imagePath": "boAt Lunar Discovery Smartwatch"
       }
@@ -427,7 +403,7 @@
         "id": 1753855671807,
         "name": "Noise ColorFit Pulse 4 Max",
         "price": "1,899",
-        "quantity": "1",
+        "quantity": "6",
         "description": "A sleek Apple Watch‑style AMOLED smartwatch featuring a 1.96″ display (410×502 px), functional crown, Bluetooth calling, IP68 rating, and up to 7 days battery life. It includes heart‑rate, SpO₂, activity tracking, female cycle tracking, and other premium wellness features.",
         "imagePath": "Noise ColorFit Pulse 4 Max.jpg"
       },
@@ -435,7 +411,7 @@
         "id": 1753855723027,
         "name": "Noise ColorFit Victor 2",
         "price": "2,499",
-        "quantity": "1",
+        "quantity": "9",
         "description": "Bluetooth calling watch with a 1.96″ touchscreen, cloud-based watch faces, IP68 water resistance, and performance tracking including heart rate, SpO₂, sleep, and sports modes. Simple, reliable features for an affordable price.",
         "imagePath": "Noise ColorFit Victor 2.jpg"
       },
@@ -443,7 +419,7 @@
         "id": 1753855773874,
         "name": "Noise ColorFit Pro 6 Max",
         "price": "7,499",
-        "quantity": "1",
+        "quantity": "8",
         "description": "A premium offering with a bright 1.96″ AMOLED display (75% brighter than Pro 3), built-in GPS, stainless-steel frame, 5 ATM water resistance, and AI watch faces with the Nebula UI 2.0 & EN2 processor. Offers advanced tracking and style.",
         "imagePath": "Noise ColorFit Pro 6 Max.jpg"
       },
@@ -451,7 +427,7 @@
         "id": 1753855905419,
         "name": "Noise ColorFit Pro 5",
         "price": "3,499",
-        "quantity": "1",
+        "quantity": "33",
         "description": "Mid‑range AMOLED smartwatch (≈1.85″), Bluetooth calling, cloud-based watch faces, IP68 water resistance, health suite including heart-rate and SpO₂ monitoring, and a battery life of up to 7 days. Great option in the ₹3‑4K segment.",
         "imagePath": "noisepro5.jpg"
       }
@@ -461,7 +437,7 @@
         "id": 1753855982954,
         "name": "Fire‑Boltt Phoenix Ultra",
         "price": "1,699",
-        "quantity": "1",
+        "quantity": 15,
         "description": "A stylish square‑dial Bluetooth‑calling watch with a 1.39″ touchscreen, IP67/68 water resistance, heart‑rate & SpO₂ sensors, sleep tracking, pedometer, and up to 7 days of battery life. Built in a stainless/metal finish with 120+ sports modes and AI voice assistant.",
         "imagePath": "FireâBoltt Phoenixâ¯Ultra.jpg"
       },
@@ -469,7 +445,7 @@
         "id": 1753856034886,
         "name": "Fire‑Boltt Rise",
         "price": "1,499",
-        "quantity": "1",
+        "quantity": "25",
         "description": "Elegant Bluetooth‑calling smartwatch with a 47 mm dial, AMOLED display, IP68 resistance, heart‑rate & SpO₂ monitoring, and a full health suite tailored for both men and women. Offers AI assistant support and good battery life (~7 days).",
         "imagePath": "FireâBoltt Rise.jpg"
       },
@@ -477,7 +453,7 @@
         "id": 1753856084541,
         "name": "Fire‑Boltt Ninja Call Pro Max",
         "price": "1,199",
-        "quantity": "1",
+        "quantity": "34",
         "description": "Square display Bluetooth‑calling watch with a large 51 mm dial, IP68 rating, health tracking (HR, SpO₂, sleep), smart notifications, and basic AI voice features. Good for users who want big screen and calling on wrist at low price.",
         "imagePath": "FireâBoltt Ninjaâ¯Call Pro Max.jpg"
       },
@@ -485,7 +461,7 @@
         "id": 1753856137197,
         "name": "Fire‑Boltt Cobra Rugged",
         "price": "3,499",
-        "quantity": "1",
+        "quantity": "39",
         "description": "Rugged square‑face watch with AMOLED display, IP68 water resistance, heart‑rate & SpO₂ sensors, sports tracking, and sturdy design for outdoor use. Offers long battery backup and military‑style durability in sub‑₹3.5K segment.",
         "imagePath": "FireâBoltt Cobra Rugged.jpg"
       }
@@ -495,23 +471,15 @@
         "id": 1753856238564,
         "name": "Apple Watch SE",
         "price": "24,900",
-        "quantity": "1",
+        "quantity": 3,
         "description": "The most affordable Apple Watch option, offering core features like daily activity tracking, heart-rate alerts, Fall Detection, Emergency SOS, Crash Detection, and support for watchOS 10. Ideal as a budget-friendly entry into the Apple ecosystem.",
         "imagePath": "Apple Watch SE.jpg"
-      },
-      {
-        "id": 1753856360821,
-        "name": "Apple Watch Series 9",
-        "price": "38,500",
-        "quantity": "1",
-        "description": "Features Apple’s S9 SiP with a 4‑core Neural Engine, brighter display, and the new \"double‑tap\" gesture for hands‑free control. Supports ECG, SpO₂, Precision Finding, redesigned Smart Stack widgets, and carbon‑neutral build options.",
-        "imagePath": "Apple Watch Series 9.jpg"
       },
       {
         "id": 1753856408968,
         "name": "Apple Watch Ultra 2",
         "price": "89,900",
-        "quantity": "1",
+        "quantity": "9",
         "description": "Built for adventure and endurance, featuring a rugged titanium case, dual-precision GPS, Action button, up to 36 hours battery (72 hrs in Low Power Mode), and water resistance for scuba diving. Complies with outdoor-grade standards for athletes and explorers.",
         "imagePath": "Apple Watch UltraÂ 2.jpg"
       },
@@ -519,7 +487,7 @@
         "id": 1753856468620,
         "name": "Apple Watch Series 10",
         "price": "46,900",
-        "quantity": "1",
+        "quantity": "2",
         "description": "Apple’s latest mainstream flagship introduced in 2025 with the S10 chip. Offers performance enhancements over Series 9, extended health and fitness tracking, longer battery life in Low Power Mode (~36 hrs), and full compatibility with the Apple Intelligence suite. Carbon-neutral configurations begin here.",
         "imagePath": "Apple Watch Series 10.jpg"
       }
@@ -531,7 +499,7 @@
         "id": 1753856565318,
         "name": "Sony WF‑1000XM5 ANC Earbuds",
         "price": "22,798",
-        "quantity": "1",
+        "quantity": "16",
         "description": "Sony’s current flagship truly wireless earbuds featuring industry-leading active noise cancellation powered by the latest Sony V2 chip, LDAC codec support, wireless charging, Bluetooth 5.3, ambient sound modes, and up to 36 hours battery life including charging case. Known for refined fit and detailed soundstage.",
         "imagePath": "SonyÂ WFâ1000XM5â¯ANC Earbuds"
       },
@@ -539,7 +507,7 @@
         "id": 1753856621670,
         "name": "Sony WF‑C510 Entry‑Level Buds",
         "price": "3,990",
-        "quantity": "1",
+        "quantity": "21",
         "description": "Affordable compact TWS earbuds targeted at budget-conscious users. Offers up to 11 hours playback per charge and 22 hours total with case, multipoint Bluetooth, musical tonal profile. No active noise cancellation or hi-res codec support—but delivers remarkably good sound and comfort for its price. Best Hi‑Fi awarded these as top entry-level buds.",
         "imagePath": "SonyÂ WFâC510Â EntryâLevel Buds"
       },
@@ -547,7 +515,7 @@
         "id": 1753856687817,
         "name": "Sony WF‑1000XM3 ANC Earbuds",
         "price": "9,999",
-        "quantity": "1",
+        "quantity": "23",
         "description": "Previous-gen Sony noise-cancelling heads in-ear earbuds featuring QN1e ANC chip, wireless design and decent battery (~24 h). Now available at heavy discounts, offering flagship-level ANC at a mid-range price point, making them a value pick.",
         "imagePath": "SonyÂ WFâ1000XM3â¯ANC Earbuds.webp"
       },
@@ -555,7 +523,7 @@
         "id": 1753856734438,
         "name": "Sony WI‑1000XM2 Neckband ANC",
         "price": "24,999",
-        "quantity": "1",
+        "quantity": "44",
         "description": "Premium neckband-style wireless earphones offering industry-leading ANC, Alexa voice control, high-res LDAC support, and extended battery life. Ideal for commuters who prefer a behind-the-neck design with excellent call and audio performance.",
         "imagePath": "SonyÂ WIâ1000XM2Â Neckband ANC.webp"
       }
@@ -565,7 +533,7 @@
         "id": 1753856872503,
         "name": "Noise Air Buds Pro 6",
         "price": "2,999",
-        "quantity": "1",
+        "quantity": "12",
         "description": "Hybrid Active Noise Cancellation (up to ~49 dB) with LHDC codec support and 12.4 mm Titanium drivers",
         "imagePath": "Noise Air Buds Proâ¯6.jpg"
       },
@@ -573,7 +541,7 @@
         "id": 1753856959886,
         "name": "Noise Master Buds",
         "price": "7,999",
-        "quantity": "1",
+        "quantity": "17",
         "description": "Audio tuned in collaboration with Bose; Hybrid ANC (~49 dB), Supports spatial audio and LHDC codec",
         "imagePath": "Noise Master Buds.jpg"
       },
@@ -581,7 +549,7 @@
         "id": 1753857044403,
         "name": "Noise Buds N1",
         "price": "999",
-        "quantity": "1",
+        "quantity": "99",
         "description": "Simple TWS design with Bluetooth 5.3, up to 40 hours of playback, 11 mm dynamic drivers; basic call and media playback, lightweight and ideal for budget users, especially as a backup pair",
         "imagePath": "Noise Buds N1.jpg"
       },
@@ -589,7 +557,7 @@
         "id": 1753857126640,
         "name": "Noise Buds Connect 2",
         "price": "999",
-        "quantity": "1",
+        "quantity": "87",
         "description": "Bluetooth 5.3, quad‑mic ENC (environmental noise cancellation) for calls, lightweight, 10 mm drivers, long battery (~30–40 hours), dual-tone finish, easy pairing, touchscreen button controls",
         "imagePath": "Noise Buds Connectâ¯2.jpg"
       }
@@ -599,7 +567,7 @@
         "id": 1753857214886,
         "name": "OnePlus Buds Z2",
         "price": "2,200",
-        "quantity": "1",
+        "quantity": "33",
         "description": "Entry-level ANC earbuds with impressive 20–30 dB active noise cancellation, bass-forward tuning, up to 38 hours of total playback, and a snug in-ear fit. A top value pick for casual users and commuters.",
         "imagePath": "OnePlus Buds Z2.jpg"
       },
@@ -607,7 +575,7 @@
         "id": 1753857260047,
         "name": "OnePlus Nord Buds 3",
         "price": "1,900",
-        "quantity": "1",
+        "quantity": "36",
         "description": "Upgraded sound clarity and microphone quality over Z2, support for moderate ANC, longer battery life up to 38 hours with case, and excellent pairings especially with OnePlus phones. Ideal for work calls, classes, or music.",
         "imagePath": "OnePlus Nord Buds 3.jpg"
       },
@@ -615,7 +583,7 @@
         "id": 1753857316083,
         "name": "OnePlus Buds Pro 2",
         "price": "9,999",
-        "quantity": "1",
+        "quantity": "31",
         "description": "Premium earbuds co-developed with Dynaudio offering adaptive ANC, spatial audio, dual drivers, customizable EQ, multipoint pairing, and stellar sound tuning. A feature-rich choice for audiophiles.",
         "imagePath": "OnePlus Buds Pro 2.jpg"
       },
@@ -623,7 +591,7 @@
         "id": 1753857367673,
         "name": "OnePlus Buds 4",
         "price": "5,999",
-        "quantity": "1",
+        "quantity": "19",
         "description": "The newest “flagship killer” earbuds with dual DACs, high-res audio via LHDC 5.0, powerful ANC up to 55 dB, compact 4.7 g earbuds, Sound Master EQ, Spatial Audio, AI translate, and long battery life (~11 hours per charge, ~45 hours with case). Available in minimalist colors, they offer great overall ANC and sound balance.",
         "imagePath": "OnePlus Buds 4.jpg"
       }
@@ -633,7 +601,7 @@
         "id": 1753857454282,
         "name": "AirPods 4",
         "price": "11,999",
-        "quantity": "1",
+        "quantity": "12",
         "description": "Apple’s newest entry-level wireless earbuds powered by the H2 chip. Offers an open-ear design, Personalized Spatial Audio, Voice Isolation, Hey Siri support, up to 5 hours per charge and up to 30 hours total using the case, IP54 dust and sweat resistance, and a smaller USB‑C charging case. ANC is not available on this model. Compatible with iOS 18+ devices.",
         "imagePath": "AirPods 4.jpg"
       },
@@ -641,29 +609,40 @@
         "id": 1753857511391,
         "name": "AirPods 4 with Active Noise Cancellation",
         "price": "17,900",
-        "quantity": "1",
+        "quantity": "13",
         "description": "Adds ANC, Adaptive Audio, and Transparency mode to the features on AirPods 4. Same H2 chip, Spatial Audio, Siri support, and compact USB‑C charging case (with built-in speaker for Find My). Battery: up to 4 hours with ANC, 20 hours total with ANC on, or 30 hours with ANC off. Dust- and sweat-resistant IP54.",
         "imagePath": "AirPods 4 with Active Noise Cancellation.jpg"
-      },
-      {
-        "id": 1753857557713,
-        "name": "AirPods Pro 2",
-        "price": "24,990",
-        "quantity": "1",
-        "description": "Apple’s premium in-ear model with pro-grade ANC, Adaptive Audio, Transparency, Personalized Spatial Audio, and Apple’s first end-to-end hearing health suite (Hearing Test, Hearing Aid, Loud Sound Reduction). Includes a MagSafe charging case (USB‑C), IP54 rating, about 6 hours playback per charge, and up to 30 hours total. Also offers Conversation Boost and background noise masking. Compatible with iOS 18+ after firmware updates.",
-        "imagePath": "AirPods Proâ¯2.jpg"
       },
       {
         "id": 1753857635130,
         "name": "AirPods Max",
         "price": "59,900",
-        "quantity": "1",
+        "quantity": "14",
         "description": "Over-ear flagship headphones with high-fidelity audio, Pro‑level ANC, Transparency mode, Personalized Spatial Audio, and USB‑C support with Lossless Audio capabilities. Offers up to 20 hours battery life, premium titanium and mesh construction for comfort and fit, digital crown controls, and on‑head detection. Comes in fresh colour options like Midnight, Starlight, Blue, Purple, and Orange.",
         "imagePath": "AirPods Max.jpg"
       }
     ]
   },
-  "": {
-    "": []
+  "Shoes": {
+    "Red Tape": [
+      {
+        "id": 1754651619448,
+        "name": "Red Tape Men’s Leather Formal Shoes",
+        "price": "2,999",
+        "quantity": "30",
+        "description": "Red Tape Men’s Leather Formal Shoes",
+        "imagePath": "Red Tape Menâs Leather Formal Shoes"
+      }
+    ],
+    "Puma": [
+      {
+        "id": 1754651704688,
+        "name": "Puma Unisex Smash v2 Sneakers",
+        "price": "3,299",
+        "quantity": "21",
+        "description": "Elevate your casual look with the Puma Smash v2 sneakers. Designed with a soft synthetic leather upper, these shoes offer classic style with a modern twist. The padded collar, cushioned sole, and durable rubber outsole ensure comfort and grip all day long. Perfect for everyday wear, these sneakers combine fashion and function effortlessly.",
+        "imagePath": "Puma Unisex Smash v2 Sneakers"
+      }
+    ]
   }
 }

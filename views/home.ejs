@@ -37,16 +37,11 @@
                 />
                 <span style="display: block;"><strong>Name:</strong> <%= product.name %></span>
                 <span style="display: block;"><strong>Price:</strong> <%= product.price %></span>
-                <span style="display: block;"><strong>Quantity:</strong> <%= product.quantity %></span>
+                <span class="prod-qty" style="display: block;"><strong>Quantity:</strong> <%= product.quantity %></span>
                 <span style="display: block;"
                   ><strong>Description:</strong> <%= product.description
                   %></span
                 >
-                <!-- <img
-                  src="/uploads/<%= product.imagePath %>"
-                  width="100px"
-                  height="100px"
-                /> -->
                 <button class="add-to-cart">Add to Cart</button>
               </div>
               <% }) %>

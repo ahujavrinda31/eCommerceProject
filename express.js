@@ -380,6 +380,138 @@ app.delete("/deleteProduct", (req, res) => {
   });
 });
 
+app.get("/get-subcategories/:category", (req, res) => {
+  const category = req.params.category;
+
+  fs.readFile(PRODUCTS_FILE, "utf-8", (err, products) => {
+    if (err)
+      return res.json({ success: false, message: "Failed to read file" });
+
+    const parsedProducts = JSON.parse(products);
+    const categoryData = parsedProducts[category];
+    if (!categoryData) {
+      return res.json({ success: false, message: "Category not found" });
+    }
+
+    const subcategories = Object.keys(categoryData);
+    res.json({ success: true, subcategories });
+  });
+});
+
+app.post("/add-category", (req, res) => {
+  const { category } = req.body;
+
+  fs.readFile(PRODUCTS_FILE, "utf-8", (err, data) => {
+    if (err)
+      return res.json({
+        success: false,
+        message: "Error reading products.json",
+      });
+
+    let products = {};
+    try {
+      products = JSON.parse(data || "{}");
+    } catch (parseErr) {
+      return res.json({
+        success: false,
+        message: "Error parsing products.json",
+      });
+    }
+
+    if (products.hasOwnProperty(category)) {
+      return res.json({ success: false, message: "Category already exists" });
+    }
+
+    products[category] = {};
+
+    fs.writeFile(PRODUCTS_FILE, JSON.stringify(products, null, 2), (err) => {
+      if (err)
+        return res.json({
+          success: false,
+          message: "Failed to write new category",
+        });
+
+      return res.json({
+        success: true,
+        message: "Category added successfully",
+        products,
+      });
+    });
+  });
+});
+
+app.post("/add-subcategory", (req, res) => {
+  const { category, subcategory } = req.body;
+
+  fs.readFile(PRODUCTS_FILE, "utf-8", (err, data) => {
+    if (err)
+      return res.json({
+        success: false,
+        message: "Error reading products.json",
+      });
+
+    let products = {};
+    try {
+      products = JSON.parse(data || "{}");
+    } catch (parseErr) {
+      return res.json({
+        success: false,
+        message: "Error parsing products.json",
+      });
+    }
+
+    if (!products[category]) {
+      return res.json({ success: false, message: "Category does not exist" });
+    }
+
+    if (products[category][subcategory]) {
+      return res.json({
+        success: false,
+        message: "Subcategory already exists",
+      });
+    }
+
+    products[category][subcategory] = [];
+
+    fs.writeFile(PRODUCTS_FILE, JSON.stringify(products, null, 2), (err) => {
+      if (err)
+        return res.json({
+          success: false,
+          message: "Failed to add subcategory",
+        });
+
+      return res.json({
+        success: true,
+        message: "Subcategory added successfully",
+        products,
+      });
+    });
+  });
+});
+
+app.get("/get-users", (req, res) => {
+  if (!req.session.isLoggedIn || req.session.admin === false)
+    return res.redirect("/login");
+  fs.readFile(USERS_FILE, "utf-8", (err, data) => {
+    if (err) {
+      console.error("Error reading users.json: ", err);
+      return res.status(500).json({ message: "Server error" });
+    }
+
+    let users = [];
+    if (data) {
+      try {
+        users = JSON.parse(data);
+      } catch (parseErr) {
+        console.log("Error parsing users.json: ", parseErr);
+        return res.status(500).json({ message: "Server error" });
+      }
+    }
+    const normalUsers=users.filter(u=>u.admin=="no");
+    res.json({user:normalUsers});
+  });
+});
+
 app.get("/home", (req, res) => {
   if (req.session.isLoggedIn && req.session.admin === false) {
     fs.readFile(PRODUCTS_FILE, "utf-8", (err, data) => {
@@ -391,7 +523,6 @@ app.get("/home", (req, res) => {
         email: req.session.email,
         name: req.session.name,
         products,
-
       });
     });
   } else {
@@ -425,19 +556,32 @@ app.post("/add-to-cart", (req, res) => {
 
       const products = JSON.parse(productsData);
       let productToAdd = null;
+      let foundCat = null;
+      let foundSub = null;
+      let foundIndex = null;
 
-      for (const category in products) {
+      outer: for (const category in products) {
         for (const subcategory in products[category]) {
-          const found = products[category][subcategory].find(
+          const index = products[category][subcategory].findIndex(
             (p) => p.id == productId
           );
-          if (found) {
-            productToAdd = found;
-            break;
+          if (index != -1) {
+            productToAdd = products[category][subcategory][index];
+            foundCat = category;
+            foundSub = subcategory;
+            foundIndex = index;
+            break outer;
           }
         }
-        if (productToAdd) break;
       }
+      if (!productToAdd) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+
+      if (productToAdd.quantity <= 0) {
+        return res.json({ message: "Out of stock" });
+      }
+      products[foundCat][foundSub][foundIndex].quantity--;
 
       const cartItem = {
         id: productToAdd.id,
@@ -450,8 +594,21 @@ app.post("/add-to-cart", (req, res) => {
       fs.writeFile(CART_FILE, JSON.stringify(cart, null, 2), (err) => {
         if (err)
           return res.status(500).json({ message: "Failed to save cart" });
+        fs.writeFile(
+          PRODUCTS_FILE,
+          JSON.stringify(products, null, 2),
+          (err) => {
+            if (err)
+              return res
+                .status(500)
+                .json({ message: "Failed to update product stock" });
 
-        res.json({ message: "Product added to cart" });
+            res.json({
+              message: "Product added to cart",
+              newProductQty: products[foundCat][foundSub][foundIndex].quantity,
+            });
+          }
+        );
       });
     });
   });
@@ -459,77 +616,186 @@ app.post("/add-to-cart", (req, res) => {
 
 app.get("/cart", (req, res) => {
   fs.readFile(CART_FILE, "utf8", (err, cartData) => {
-    if (err) return res.json({ cart: [] });
+    if (err) return res.json({ cart: [], totalBill: 0 });
 
     const cart = JSON.parse(cartData);
     const userCart = cart[req.session.email] || [];
     fs.readFile(PRODUCTS_FILE, "utf-8", (err, productData) => {
-      if (err) return res.json({ cart: [] });
+      if (err) return res.json({ cart: [], totalBill: 0 });
 
       const products = JSON.parse(productData);
       let fullCart = [];
+      let totalBill = 0;
 
       userCart.forEach((cartItem) => {
         let foundProduct = null;
 
-        for (const category in products) {
+        outer: for (const category in products) {
           for (const subcategory in products[category]) {
             const match = products[category][subcategory].find(
               (p) => p.id == cartItem.id
             );
             if (match) {
               foundProduct = match;
-              break;
+              break outer;
             }
           }
-          if (foundProduct) break;
         }
         if (foundProduct) {
+          const price =
+            parseFloat(String(foundProduct.price).replace(/[^0-9.]/g, "")) || 0;
+
           fullCart.push({
             id: foundProduct.id,
             name: foundProduct.name,
-            price: foundProduct.price,
+            price: price,
             description: foundProduct.description,
             image: foundProduct.imagePath,
             quantity: cartItem.quantity,
           });
+          totalBill += price * cartItem.quantity;
         }
       });
-      return res.json({ cart: fullCart });
+      return res.json({ cart: fullCart, totalBill: totalBill || 0 });
     });
   });
 });
 
 app.post("/update-cart", (req, res) => {
+  if (!req.session.email) {
+    return res
+      .status(401)
+      .json({ success: false, message: "User not logged in" });
+  }
+
   const { id, change } = req.body;
   const email = req.session.email;
 
-  fs.readFile(CART_FILE, "utf8", (err, data) => {
-    if (err) return res.json({ success: false });
+  fs.readFile(CART_FILE, "utf-8", (err, cartData) => {
+    if (err)
+      return res
+        .status(500)
+        .json({ success: false, message: "Failed to read cart file" });
 
-    const cart = JSON.parse(data);
-    const userCart = cart[email] || [];
-    const itemIndex = userCart.findIndex((i) => i.id == id);
+    let cart = JSON.parse(cartData);
+    if (!cart[email])
+      return res
+        .status(404)
+        .json({ success: false, message: "Cart not found" });
 
-    if (itemIndex === -1) return res.json({ success: false });
+    let userCart = cart[email];
+    const cartIndex = userCart.findIndex((item) => item.id == id);
+    if (cartIndex == -1)
+      return res
+        .status(404)
+        .json({ success: false, message: "Item not in cart" });
 
-    userCart[itemIndex].quantity += change;
+    fs.readFile(PRODUCTS_FILE, "utf-8", (err, productData) => {
+      if (err)
+        return res
+          .status(500)
+          .json({ success: false, message: "Failed to read products file" });
 
-    let removed = false;
-    if (userCart[itemIndex].quantity <= 0) {
-      userCart.splice(itemIndex, 1);
-      removed = true;
-    }
+      let products = JSON.parse(productData);
+      let product = null;
+      let foundCat = null;
+      let foundSub = null;
+      let foundIndex = null;
+      outer: for (const category in products) {
+        for (const subcategory in products[category]) {
+          const index = products[category][subcategory].findIndex(
+            (p) => p.id == id
+          );
+          if (index !== -1) {
+            product = products[category][subcategory][index];
+            foundCat = category;
+            foundSub = subcategory;
+            foundIndex = index;
+            break outer;
+          }
+        }
+      }
 
-    cart[email] = userCart;
+      if (!product)
+        return res
+          .status(404)
+          .json({ success: false, message: "Product not found" });
 
-    fs.writeFile(CART_FILE, JSON.stringify(cart, null, 2), (err) => {
-      if (err) return res.json({ success: false });
+      if (change === 1) {
+        if (product.quantity > 0) {
+          userCart[cartIndex].quantity += 1;
+          product.quantity -= 1;
+        } else {
+          return res
+            .status(400)
+            .json({ success: false, message: "Product out of stock" });
+        }
+      } else if (change === -1) {
+        userCart[cartIndex].quantity -= 1;
+        product.quantity += 1;
 
-      res.json({
-        success: true,
-        removed,
-        newQty: removed ? 0 : userCart[itemIndex].quantity,
+        if (userCart[cartIndex].quantity === 0) {
+          userCart.splice(cartIndex, 1);
+        }
+      } else {
+        return res
+          .status(400)
+          .json({ success: false, message: "Invalid operation" });
+      }
+
+      cart[email] = userCart;
+
+      let totalBill = 0;
+      userCart.forEach((item) => {
+        let foundProduct = null;
+        outer: for (const category in products) {
+          for (const subcategory in products[category]) {
+            const match = products[category][subcategory].find(
+              (p) => p.id == item.id
+            );
+            if (match) {
+              foundProduct = match;
+              break outer;
+            }
+          }
+        }
+        if (foundProduct) {
+          const price =
+            parseFloat(String(foundProduct.price).replace(/[^0-9.]/g, "")) || 0;
+          totalBill += price * item.quantity;
+        }
+      });
+
+      fs.writeFile(CART_FILE, JSON.stringify(cart, null, 2), "utf-8", (err) => {
+        if (err)
+          return res
+            .status(500)
+            .json({ success: false, message: "Failed to update cart file" });
+
+        fs.writeFile(
+          PRODUCTS_FILE,
+          JSON.stringify(products, null, 2),
+          "utf-8",
+          (err) => {
+            if (err)
+              return res.status(500).json({
+                success: false,
+                message: "Failed to update product file",
+              });
+
+            res.json({
+              success: true,
+              message: "Cart updated successfully",
+              newQty:
+                userCart[cartIndex] && userCart[cartIndex].quantity
+                  ? userCart[cartIndex].quantity
+                  : 0,
+              newProductQty: product.quantity,
+              totalBill: totalBill || 0,
+              cartEmpty: userCart.length === 0,
+            });
+          }
+        );
       });
     });
   });

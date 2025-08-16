@@ -20,6 +20,10 @@ document.querySelectorAll(".add-to-cart").forEach((btn) => {
           showConfirmButton: false,
           timer: 1500,
         });
+        const productElem = e.target.closest(".product-slide");
+        const stockElem = productElem.querySelector(".prod-qty");
+        if (stockElem && result.newProductQty !== undefined)
+          stockElem.innerHTML = `<strong>Quantity:</strong> ${result.newProductQty}`;
       });
   });
 });
@@ -31,6 +35,7 @@ viewCartBtn.addEventListener("click", function () {
       cartContainer.innerHTML = "";
       if (data.cart.length === 0) {
         cartContainer.innerHTML = "<p>Your cart is empty</p>";
+        cartContainer.innerHTML += `<div id="total-bill"><h3>Total Bill: ₹0</h3></div>`;
       } else {
         data.cart.forEach((item) => {
           const div = document.createElement("div");
@@ -45,6 +50,7 @@ viewCartBtn.addEventListener("click", function () {
             <button class="qty-btn" data-id="${item.id}" data-change="-1">-</button>
             <button class="qty-btn" data-id="${item.id}"data-change="1">+</button>
           `;
+          
 
           const qtySpan = div.querySelector(".qty");
           div.querySelectorAll(".qty-btn").forEach((btn) => {
@@ -64,13 +70,59 @@ viewCartBtn.addEventListener("click", function () {
                       div.remove();
                     } else {
                       qtySpan.innerText = updated.newQty;
+                      const productElem = document.querySelector(
+                        `.product-slide[data-id="${id}"]`
+                      );
+                      if (productElem) {
+                        const stockElem =
+                          productElem.querySelector(".prod-qty");
+                        if (stockElem) {
+                          stockElem.innerHTML = `<strong>Quantity:</strong> ${updated.newProductQty}`;
+                        }
+                      }
                     }
+                    let billDiv = document.getElementById("total-bill");
+                    if (!billDiv) {
+                      billDiv = document.createElement("div");
+                      billDiv.id = "total-bill";
+                      cartContainer.appendChild(billDiv);
+                    }
+                    billDiv.innerHTML = `<h3>Total Bill: ₹${
+                      updated.totalBill || 0
+                    }</h3>`;
+
+                    if (updated.cartEmpty) {
+                      cartContainer.innerHTML = "<p>Your cart is empty</p>";
+                      const billDiv = document.createElement("div");
+                      billDiv.id = "total-bill";
+                      billDiv.innerHTML = `<h3>Total Bill: ₹0</h3>`;
+                      cartContainer.appendChild(billDiv);
+                    }
+                  } else {
+                    Swal.fire({
+                      icon: "error",
+                      title: updated.message || "Cart Update Failed",
+                      showConfirmButton: false,
+                      timer: 1500,
+                    });
                   }
+                })
+                .catch((err) => {
+                  console.error("Update cart failed: ", err);
+                  Swal.fire({
+                    icon: "error",
+                    title: "Connection error",
+                    text: "Could not update cart",
+                  });
                 });
             });
           });
           cartContainer.appendChild(div);
         });
+        const totalDiv = document.createElement("div");
+        totalDiv.id = "total-bill";
+        totalDiv.innerHTML = `<h3>Total Bill: ₹${data.totalBill || 0}</h3>`;
+        cartContainer.appendChild(totalDiv);
       }
     });
 });
@@ -81,9 +133,9 @@ document.querySelectorAll(".category-title").forEach((title) => {
       element.style.display = "none";
     });
 
-    document.querySelectorAll(".products").forEach((el) => {
-      el.style.display = "none";
-    });
+    // document.querySelectorAll(".products").forEach((el) => {
+    //   el.style.display = "none";
+    // });
 
     const subcats = title.parentElement.querySelectorAll(".subcategory");
     subcats.forEach((element) => {
@@ -122,7 +174,7 @@ document.querySelectorAll(".subcategory").forEach((subcategory) => {
     prevBtn.disabled = index === 0;
     nextBtn.disabled = index === slides.length - 1;
   }
-  
+
   showSlide(currentIndex);
 
   prevBtn.addEventListener("click", () => {

@@ -11,14 +11,35 @@
       <button id="logout-btn" style="float: right">Logout</button>
     </div>
 
+    <div style="text-align: center; margin-bottom: 20px;">
+      <button id="addCategoryBtn">Add Category</button>
+      <div id="categoryInputDiv" style="display: none; margin-top: 10px;">
+        <input type="text" id="newCategoryInput" placeholder="Enter Category Name" />
+        <button id="submitCategory">Submit Category</button>
+      </div>
+
+      <div id="subcategoryInputDiv" style="margin-top: 10px;">
+        <select id="categorySelect">
+          <% Object.keys(products).forEach((cat) => { %>
+          <option value="<%= cat %>"><%= cat.charAt(0).toUpperCase() + cat.slice(1) %></option>
+        <% }) %>
+        </select>
+        <input type="text" id="newSubcategoryInput" placeholder="Enter Subcategory Name" />
+        <button id="submitSubcategory">Submit SubCategory</button>
+      </div>
+    </div>
+    <div id="view-users">
+      <button id="users-btn">View Registered Users</button>
+      <div id="users"></div>
+    </div>
+
     <div id="category-container">
       <h3>Select the category of the product</h3>
-      <button class="category-btn" data-category="phone">Phone</button>
-      <button class="category-btn" data-category="laptop">Laptop</button>
-      <button class="category-btn" data-category="smartwatch">
-        Smart Watch
+      <% for (let cat in products) { %>
+      <button class="category-btn" data-category="<%= cat %>">
+        <%= cat.charAt(0).toUpperCase() + cat.slice(1) %>
       </button>
-      <button class="category-btn" data-category="earphones">Earphones</button>
+    <% } %>
     </div>
 
     <div id="sub-category-container"></div>

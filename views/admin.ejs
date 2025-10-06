@@ -11,20 +11,30 @@
       <button id="logout-btn" style="float: right">Logout</button>
     </div>
 
-    <div style="text-align: center; margin-bottom: 20px;">
+    <div style="text-align: center; margin-bottom: 20px">
       <button id="addCategoryBtn">Add Category</button>
-      <div id="categoryInputDiv" style="display: none; margin-top: 10px;">
-        <input type="text" id="newCategoryInput" placeholder="Enter Category Name" />
+      <div id="categoryInputDiv" style="display: none; margin-top: 10px">
+        <input
+          type="text"
+          id="newCategoryInput"
+          placeholder="Enter Category Name"
+        />
         <button id="submitCategory">Submit Category</button>
       </div>
 
-      <div id="subcategoryInputDiv" style="margin-top: 10px;">
+      <div id="subcategoryInputDiv" style="margin-top: 10px">
         <select id="categorySelect">
           <% Object.keys(products).forEach((cat) => { %>
-          <option value="<%= cat %>"><%= cat.charAt(0).toUpperCase() + cat.slice(1) %></option>
-        <% }) %>
+          <option value="<%= cat %>">
+            <%= cat.charAt(0).toUpperCase() + cat.slice(1) %>
+          </option>
+          <% }) %>
         </select>
-        <input type="text" id="newSubcategoryInput" placeholder="Enter Subcategory Name" />
+        <input
+          type="text"
+          id="newSubcategoryInput"
+          placeholder="Enter Subcategory Name"
+        />
         <button id="submitSubcategory">Submit SubCategory</button>
       </div>
     </div>
@@ -39,7 +49,7 @@
       <button class="category-btn" data-category="<%= cat %>">
         <%= cat.charAt(0).toUpperCase() + cat.slice(1) %>
       </button>
-    <% } %>
+      <% } %>
     </div>
 
     <div id="sub-category-container"></div>
@@ -102,5 +112,8 @@
       <% } %> <% } %> <% } %>
     </div>
     <script src="/jsExpress/product.js"></script>
+    <script>
+      window.currentEmail = "<%= email %>";
+    </script>
   </body>
 </html>

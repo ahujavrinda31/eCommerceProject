@@ -4,8 +4,8 @@
       {
         "id": 1753851630979,
         "name": "Realme GT 7 Dream Edition",
-        "price": "50000",
-        "quantity": 5,
+        "price": "51000",
+        "quantity": "7",
         "description": "Flagship-grade Dream Edition with MediaTek Dimensity 9400e, 6.78″ LTPO AMOLED at 120 Hz, 50 + 8 + 50 MP rear and 32 MP front cameras, massive 7,000 mAh battery with 120 W fast charging, Android 15 and IP69 rating",
         "imagePath": "Realme GT 7 Dream Edition.jpg"
       },
@@ -63,7 +63,7 @@
         "id": 1753851126340,
         "name": "Samsung Galaxy S25 5G",
         "price": "64,799",
-        "quantity": "25",
+        "quantity": "29",
         "description": "Latest 2025 Galaxy S flagship with Snapdragon 8 Elite (or equivalent), Galaxy AI features, 50 MP main camera, 12 MP front camera, Big 6.9″ Dynamic AMOLED 2X, IP68 water resistance, long‑term support and top‑tier performance",
         "imagePath": "Samsung Galaxy S25â¯5G.jpg"
       },
@@ -283,7 +283,7 @@
         "id": 1753854446781,
         "name": "MacBook Air 13‑inch",
         "price": "99,900",
-        "quantity": "2",
+        "quantity": 1,
         "description": "Powered by Apple’s newest M4 chip with a 10‑core CPU and integrated 8‑core or 10‑core GPU, this fanless design features a 13.6″ Super Retina display, 12 MP Center Stage webcam, ~18 hours battery life, and support for Apple Intelligence + macOS Sequoia. Comes in colors including Sky Blue. Starts with 16 GB unified memory standard.",
         "imagePath": "MacBook Air 13âinch.jpg"
       },
@@ -369,7 +369,7 @@
         "id": 1753855353064,
         "name": "boAt Storm Infinity Smartwatch",
         "price": "1,399",
-        "quantity": 5,
+        "quantity": 2,
         "description": "Features a large 2.01″ touch display, Bluetooth calling, dual health sensors (heart rate, SpO₂), activity tracking, sleep monitor, pedometer, and up to 20 days battery on a charge. IP68 water resistance ensures durability. Ideal for users wanting a basic yet full-featured smartwatch.",
         "imagePath": "boAt StormÂ Infinity Smartwatch"
       },
@@ -499,7 +499,7 @@
         "id": 1753856565318,
         "name": "Sony WF‑1000XM5 ANC Earbuds",
         "price": "22,798",
-        "quantity": "16",
+        "quantity": 16,
         "description": "Sony’s current flagship truly wireless earbuds featuring industry-leading active noise cancellation powered by the latest Sony V2 chip, LDAC codec support, wireless charging, Bluetooth 5.3, ambient sound modes, and up to 36 hours battery life including charging case. Known for refined fit and detailed soundstage.",
         "imagePath": "SonyÂ WFâ1000XM5â¯ANC Earbuds"
       },
@@ -601,7 +601,7 @@
         "id": 1753857454282,
         "name": "AirPods 4",
         "price": "11,999",
-        "quantity": "12",
+        "quantity": 12,
         "description": "Apple’s newest entry-level wireless earbuds powered by the H2 chip. Offers an open-ear design, Personalized Spatial Audio, Voice Isolation, Hey Siri support, up to 5 hours per charge and up to 30 hours total using the case, IP54 dust and sweat resistance, and a smaller USB‑C charging case. ANC is not available on this model. Compatible with iOS 18+ devices.",
         "imagePath": "AirPods 4.jpg"
       },
@@ -629,9 +629,17 @@
         "id": 1754651619448,
         "name": "Red Tape Men’s Leather Formal Shoes",
         "price": "2,999",
-        "quantity": "30",
+        "quantity": 29,
         "description": "Red Tape Men’s Leather Formal Shoes",
         "imagePath": "Red Tape Menâs Leather Formal Shoes"
+      },
+      {
+        "id": 1759733459109,
+        "name": "Women Sneakers",
+        "price": "1638",
+        "quantity": "12",
+        "description": "Good Quality",
+        "imagePath": "shopping.webp"
       }
     ],
     "Puma": [
@@ -639,10 +647,11 @@
         "id": 1754651704688,
         "name": "Puma Unisex Smash v2 Sneakers",
         "price": "3,299",
-        "quantity": "21",
+        "quantity": 18,
         "description": "Elevate your casual look with the Puma Smash v2 sneakers. Designed with a soft synthetic leather upper, these shoes offer classic style with a modern twist. The padded collar, cushioned sole, and durable rubber outsole ensure comfort and grip all day long. Perfect for everyday wear, these sneakers combine fashion and function effortlessly.",
         "imagePath": "Puma Unisex Smash v2 Sneakers"
       }
     ]
-  }
+  },
+  "Jeans": {}
 }

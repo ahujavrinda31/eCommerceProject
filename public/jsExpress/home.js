@@ -1,3 +1,13 @@
+setInterval(() => {
+  fetch("/session-status")
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.email !== window.currentEmail) {
+        window.location.href = "/login";
+      }
+    });
+}, 3000);      
+
 const viewCartBtn = document.getElementById("view-cart");
 const cartContainer = document.getElementById("cart-container");
 document.querySelectorAll(".add-to-cart").forEach((btn) => {
@@ -24,11 +34,14 @@ document.querySelectorAll(".add-to-cart").forEach((btn) => {
         const stockElem = productElem.querySelector(".prod-qty");
         if (stockElem && result.newProductQty !== undefined)
           stockElem.innerHTML = `<strong>Quantity:</strong> ${result.newProductQty}`;
+        if(cartContainer.style.display!=="none"){
+          loadCart();
+        }
       });
   });
 });
-
-viewCartBtn.addEventListener("click", function () {
+viewCartBtn.addEventListener("click",loadCart);
+ function loadCart() {
   fetch("/cart")
     .then((res) => res.json())
     .then((data) => {
@@ -82,11 +95,11 @@ viewCartBtn.addEventListener("click", function () {
                       }
                     }
                     let billDiv = document.getElementById("total-bill");
-                    if (!billDiv) {
-                      billDiv = document.createElement("div");
-                      billDiv.id = "total-bill";
-                      cartContainer.appendChild(billDiv);
-                    }
+                    // if (!billDiv) {
+                    //   billDiv = document.createElement("div");
+                    //   billDiv.id = "total-bill";
+                    //   cartContainer.appendChild(billDiv);
+                    // }
                     billDiv.innerHTML = `<h3>Total Bill: ₹${
                       updated.totalBill || 0
                     }</h3>`;
@@ -125,24 +138,25 @@ viewCartBtn.addEventListener("click", function () {
         cartContainer.appendChild(totalDiv);
       }
     });
-});
+};
 
-document.querySelectorAll(".category-title").forEach((title) => {
-  title.addEventListener("click", () => {
-    document.querySelectorAll(".subcategory").forEach((element) => {
+document.querySelectorAll(".category-title").forEach((title)=>{
+  title.addEventListener("click",()=>{
+    const subcats=title.parentElement.querySelectorAll(".subcategory");
+
+    const isOpen=Array.from(subcats).some((element)=>element.style.display==="block");
+
+    document.querySelectorAll(".subcategory").forEach((element)=>{
       element.style.display = "none";
     });
 
-    // document.querySelectorAll(".products").forEach((el) => {
-    //   el.style.display = "none";
-    // });
-
-    const subcats = title.parentElement.querySelectorAll(".subcategory");
-    subcats.forEach((element) => {
-      element.style.display = "block";
-    });
-  });
-});
+    if(!isOpen){
+      subcats.forEach((element)=>{
+        element.style.display = "block";
+      })
+    }
+  })
+})
 
 document.getElementById("logout-btn").addEventListener("click", function () {
   fetch("/logout", {

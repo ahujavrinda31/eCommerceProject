@@ -66,28 +66,6 @@ app.get("/signup", (req, res) => {
   res.render("signup");
 });
 
-app.get("/admin", (req, res) => {
-  if (!req.session.isLoggedIn || req.session.admin === false)
-    return res.redirect("/login");
-
-  const email = req.session.email;
-
-  fs.readFile(USERS_FILE, "utf-8", (err, userData) => {
-    if (err) return res.send("Error reading users");
-
-    let users = JSON.parse(userData || "[]");
-    const exists = users.find((u) => u.email === email);
-    if (!exists) return res.send("User not found");
-
-    fs.readFile(PRODUCTS_FILE, "utf-8", (err, productData) => {
-      if (err) return res.send("Error reading products");
-
-      const products = JSON.parse(productData || "[]");
-      res.render("admin", { user: "Admin", name: req.session.name, products });
-    });
-  });
-});
-
 app.post("/send-otp", (req, res) => {
   const { email } = req.body;
   fs.readFile(USERS_FILE, "utf-8", (err, data) => {
@@ -286,6 +264,34 @@ app.post("/loginScript", (req, res) => {
     } else {
       return res.send("no");
     }
+  });
+});
+
+app.get("/session-status", (req, res) => {
+  res.json({ 
+    email: req.session.email || null
+  });
+});
+
+app.get("/admin", (req, res) => {
+  if (!req.session.isLoggedIn || req.session.admin === false)
+    return res.redirect("/login");
+
+  const email = req.session.email;
+
+  fs.readFile(USERS_FILE, "utf-8", (err, userData) => {
+    if (err) return res.send("Error reading users");
+
+    let users = JSON.parse(userData || "[]");
+    const exists = users.find((u) => u.email === email);
+    if (!exists) return res.send("User not found");
+
+    fs.readFile(PRODUCTS_FILE, "utf-8", (err, productData) => {
+      if (err) return res.send("Error reading products");
+
+      const products = JSON.parse(productData || "[]");
+      res.render("admin", { user: "Admin", name: req.session.name, products, email});
+    });
   });
 });
 

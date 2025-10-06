@@ -1,3 +1,13 @@
+setInterval(() => {
+  fetch("/session-status")
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.email !== window.currentEmail) {
+        window.location.href = "/login";
+      }
+    });
+}, 3000);
+
 let selectedCategory = "";
 let selectedSubCategory = "";
 

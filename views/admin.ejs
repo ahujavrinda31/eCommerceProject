@@ -1,5 +1,8 @@
+<!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8" />
+    <title>Admin</title>
     <link rel="stylesheet" href="/css/admin.css" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
@@ -24,12 +27,12 @@
 
       <div id="subcategoryInputDiv" style="margin-top: 10px">
         <select id="categorySelect">
-          <% Object.keys(products).forEach((cat) => { %>
-          <option value="<%= cat %>">
-            <%= cat.charAt(0).toUpperCase() + cat.slice(1) %>
-          </option>
-          <% }) %>
-        </select>
+  <% categories.forEach(cat => { %>
+    <option value="<%= cat.name %>"><%= cat.name %></option>
+  <% }) %>
+</select>
+
+
         <input
           type="text"
           id="newSubcategoryInput"
@@ -38,21 +41,23 @@
         <button id="submitSubcategory">Submit SubCategory</button>
       </div>
     </div>
-    <div id="view-users">
+
+    <div id="view-users" style="margin: 20px;">
       <button id="users-btn">View Registered Users</button>
       <div id="users"></div>
     </div>
 
     <div id="category-container">
-      <h3>Select the category of the product</h3>
-      <% for (let cat in products) { %>
-      <button class="category-btn" data-category="<%= cat %>">
-        <%= cat.charAt(0).toUpperCase() + cat.slice(1) %>
-      </button>
-      <% } %>
-    </div>
+  <h3>Select the category of the product</h3>
+  <% categories.forEach(cat => { %>
+    <button class="category-btn" data-category="<%= cat.name %>" data-cat-id="<%= cat._id %>">
+      <%= cat.name.charAt(0).toUpperCase() + cat.name.slice(1) %>
+    </button>
+  <% }) %>
+</div>
 
-    <div id="sub-category-container"></div>
+
+    <div id="sub-category-container" style="margin-top: 20px;"></div>
 
     <div
       style="text-align: center; padding-bottom: 20px; display: none"
@@ -66,19 +71,24 @@
       <button id="addBtn">Add Product</button>
     </div>
 
-    <div id="productList">
-      <% for (let cat in products) { %> <% for (let sub in products[cat]) { let
-      subProducts = products[cat][sub]; if (subProducts && subProducts.length >
-      0) { %>
+    <div id="productList" style="margin-top: 30px;">
+      <% 
+        for (let cat in products) { 
+          for (let sub in products[cat]) { 
+            let subProducts = products[cat][sub];
+            if (subProducts && subProducts.length > 0) {
+      %>
       <div class="subcategory-box">
         <h3><%= sub.charAt(0).toUpperCase() + sub.slice(1) %> Products</h3>
         <div class="subcategory-products">
-          <% subProducts.forEach((prod, i) => { %>
+          <% subProducts.forEach((prod) => { 
+               const catId = prod.category && prod.category._id ? prod.category._id : prod.category;
+          %>
           <div
             class="product-card"
-            data-cat="<%= cat %>"
-            data-sub="<%= sub %>"
-            data-index="<%= i %>"
+            data-id="<%= prod._id %>"
+            data-cat-id="<%= catId %>"
+            data-sub-id="<%= prod.subcategory %>"
           >
             <img
               src="/uploads/<%= prod.imagePath %>"
@@ -109,11 +119,15 @@
           <% }) %>
         </div>
       </div>
-      <% } %> <% } %> <% } %>
+      <%     } 
+          } 
+        } 
+      %>
     </div>
-    <script src="/jsExpress/product.js"></script>
+
     <script>
       window.currentEmail = "<%= email %>";
     </script>
+    <script src="/jsExpress/product.js"></script>
   </body>
 </html>

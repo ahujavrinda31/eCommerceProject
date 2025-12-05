@@ -1,10 +1,29 @@
-require("dotenv").config({ path: __dirname + "/.env" });
-const express = require("express");
-const session = require("express-session");
-const fs = require("fs");
-const path = require("path");
-const nodemailer = require("nodemailer");
-const multer = require("multer");
+import dotenv from "dotenv";
+import express from "express";
+import session from "express-session";
+import fs from "fs";
+import path from "path";
+import nodemailer from "nodemailer";
+import multer from "multer";
+import User from "./models/User.js";
+import Product from "./models/Product.js";
+import Cart from "./models/Cart.js";
+import Category from "./models/Category.js";
+import mongoose from "mongoose";
+dotenv.config();
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+mongoose.connection.on("connected", () => {
+  console.log(" Connected to MongoDB");
+});
+
+mongoose.connection.on("error", (err) => {
+  console.error(" MongoDB connection error:", err);
+});
+
+
 const app = express();
 const PORT = 4000;
 
@@ -36,10 +55,7 @@ app.use(
 
 app.use(express.static("public"));
 
-const PRODUCTS_FILE = path.join(__dirname, "database/products.json");
-const CART_FILE = path.join(__dirname, "database/cart.json");
-const USERS_FILE = path.join(__dirname, "database/users.json");
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/uploads", express.static(path.join("uploads")));
 
 const otpStore = {};
 function generateOTP() {
@@ -66,117 +82,63 @@ app.get("/signup", (req, res) => {
   res.render("signup");
 });
 
-app.post("/send-otp", (req, res) => {
-  const { email } = req.body;
-  fs.readFile(USERS_FILE, "utf-8", (err, data) => {
-    if (err) {
-      console.error("Error reading users.json:", err);
-      return res.status(500).json({ success: false, message: "Server error" });
+app.post("/send-otp",async(req,res)=>{
+  const {email}=req.body;
+  try{
+    const existingUser=await User.findOne({email});
+    if(existingUser){
+      return res.status(400).json({success:false,message:"Email already registered"});
+
     }
+    const otp=generateOTP();
+    otpStore[email]={otp,expiresAt:Date.now()+5*60*1000};
 
-    const users = JSON.parse(data || "[]");
-
-    const existingUser = users.find((user) => user.email === email);
-
-    if (existingUser) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Email already registered" });
-    }
-    const otp = generateOTP();
-    otpStore[email] = { otp, expiresAt: Date.now() + 5 * 60 * 1000 };
-
-    const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to: email,
-      subject: "Your OTP for signup",
-      text: `Your OTP is: ${otp}`,
+    const mailOptions={
+      from:process.env.EMAIL_USER,
+      to:email,
+      subject:"Your otp for signup",
+      text:`Your otp is; ${otp}`,
     };
-
-    transporter.sendMail(mailOptions, (err, info) => {
-      if (err)
-        return res.json({ success: false, message: "Failed to send otp" });
-      res.json({ success: true });
-    });
-  });
-});
-
-app.post("/verify-otp", (req, res) => {
-  const { name, email, password, passwordConfirm, admin, otp } = req.body;
-  const record = otpStore[email];
-
-  if (!record || Date.now() > record.expiresAt) {
-    return res.json({ success: false, message: "OTP expired or invalid" });
+    await transporter.sendMail(mailOptions);
+    res.json({success:true});
   }
-  if (record.otp != otp) {
-    return res.json({ success: false, message: "Incorrect OTP" });
+  catch(err){
+    console.error("Otp email error:",err);
+    return res.json({success:false,message:"Failed to send otp"});
   }
+})
 
-  fs.readFile(USERS_FILE, "utf-8", (err, data) => {
-    let users = [];
-    if (!err) {
-      try {
-        users = JSON.parse(data);
-      } catch {}
+app.post("/verify-otp",async(req,res)=>{
+  const {name,email,password,passwordConfirm,admin,otp}=req.body; 
+  const record=otpStore[email];
+
+  if(!record || Date.now()>record.expiresAt){
+    return res.json({success:false,message:"OTP expired or invalid"});
+  }
+  if(record.otp!=otp){
+    return res.json({success:false,message:"Incorrect OTP"});
+  }
+  try{
+    const newUser=new User({name,email,password,passwordConfirm,admin});
+    await newUser.save();
+
+    if(admin==="no"){
+      await Cart.create({email,items:[]});
     }
 
-    const newUser = {
-      name,
-      email,
-      password,
-      passwordConfirm,
-      admin,
-    };
+    delete otpStore[email];
+    return res.json({success:true,message:"Signup successful. Redirecting to login..."});
+  }
+  catch(err){
+    console.error("Error saving user:",err);
+    return res.json({success:false,message:"Could not save user"});
+  }
+})
 
-    users.push(newUser);
-    fs.writeFile(USERS_FILE, JSON.stringify(users, null, 2), "utf-8", (err) => {
-      if (err)
-        return res.json({ success: false, message: "Could not save user" });
-
-      if (admin === "no") {
-        fs.readFile(CART_FILE, "utf-8", (err, data) => {
-          let cart = {};
-          if (!err) {
-            try {
-              cart = JSON.parse(data);
-            } catch {
-              cart = {};
-            }
-          }
-          cart[email] = [];
-          fs.writeFile(
-            CART_FILE,
-            JSON.stringify(cart, null, 2),
-            "utf-8",
-            () => {
-              delete otpStore[email];
-              return res.json({
-                success: true,
-                message: "Signup successful. Redirecting to login...",
-              });
-            }
-          );
-        });
-      } else {
-        delete otpStore[email];
-        return res.json({
-          success: true,
-          message: "Signup successful. Redirecting to login...",
-        });
-      }
-    });
-  });
-});
-
-app.post("/forgot-password/send-otp", (req, res) => {
+app.post("/forgot-password/send-otp", async (req, res) => {
   const { email } = req.body;
-
-  fs.readFile(USERS_FILE, "utf-8", (err, data) => {
-    if (err)
-      return res.status(500).json({ success: false, message: "Server error" });
-
-    const users = JSON.parse(data || "[]");
-    const user = users.find((u) => u.email === email);
+  try {
+    const user = await User.findOne({ email });
     if (!user) return res.json({ success: false, message: "User not found" });
 
     const otp = generateOTP();
@@ -189,83 +151,56 @@ app.post("/forgot-password/send-otp", (req, res) => {
       text: `Your OTP to reset password is: ${otp}`,
     };
 
-    transporter.sendMail(mailOptions, (err, info) => {
-      if (err) {
-        console.error("OTP email error:", err);
-        return res.json({ success: false, message: "Failed to send OTP" });
-      }
-      return res.json({ success: true });
-    });
-  });
+    await transporter.sendMail(mailOptions);
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.json({ success: false, message: "Failed to send OTP" });
+  }
 });
 
-app.post("/forgot-password/verify", (req, res) => {
-  const { email, otp, newPassword } = req.body;
-  const record = otpStore[email];
+app.post("/forgot-password/verify",async(req,res)=>{
+  const {email,otp,newPassword}=req.body;
+  const record=otpStore[email];
 
-  if (!record || Date.now() > record.expiresAt) {
+  if (!record || Date.now() > record.expiresAt)
     return res.json({ success: false, message: "OTP expired or invalid" });
-  }
-  if (record.otp != otp) {
+  if (record.otp != otp)
     return res.json({ success: false, message: "Incorrect OTP" });
+
+  try{
+    const user=await User.findOneAndUpdate({email},{password:newPassword,passwordConfirm:newPassword});
+    if(!user){
+      return res.json({success:false,message:"User not found"});
+    }
+    delete otpStore[email]; 
+    return res.json({success:true,message:"Password updated. Please login."});
   }
+  catch(err){
+    console.error("Error updating password:",err);
+    return res.json({success:false,message:"Failed to update password"});
+  }
+})
 
-  fs.readFile(USERS_FILE, "utf-8", (err, data) => {
-    if (err) return res.json({ success: false, message: "Server error" });
-
-    let users = JSON.parse(data || "[]");
-    const index = users.findIndex((u) => u.email === email);
-    if (index === -1)
-      return res.json({ success: false, message: "User not found" });
-
-    users[index].password = newPassword;
-    users[index].passwordConfirm = newPassword;
-
-    fs.writeFile(USERS_FILE, JSON.stringify(users, null, 2), "utf-8", (err) => {
-      if (err)
-        return res.json({
-          success: false,
-          message: "Failed to update password",
-        });
-
-      delete otpStore[email];
-      return res.json({
-        success: true,
-        message: "Password updated. Please login.",
-      });
-    });
-  });
-});
-
-app.post("/loginScript", (req, res) => {
-  const { emailLogin, passwordLogin } = req.body;
-  fs.readFile(USERS_FILE, "utf-8", (err, data) => {
-    if (err) {
-      return res.status(500).send("Internal server error");
+app.post("/loginScript",async(req,res)=>{
+  const {emailLogin,passwordLogin}=req.body;
+  try{
+    const user=await User.findOne({email:emailLogin,password:passwordLogin});
+    if(!user){
+      return res.status(400).send("Invalid credentials");
     }
-    let users = [];
-    try {
-      users = JSON.parse(data);
-    } catch {
-      users = [];
-    }
-    const user = users.find(
-      (u) => u.email === emailLogin && u.password === passwordLogin
-    );
-    if (!user) return res.status(400).send("Invalid credentials");
+    req.session.email=user.email;
+    req.session.name=user.name;
+    req.session.admin=user.admin==="yes";
+    req.session.isLoggedIn=true;
 
-    req.session.email = user.email;
-    req.session.name = user.name;
-    req.session.admin = user.admin === "yes";
-    req.session.isLoggedIn = true;
-
-    if (req.session.admin) {
-      return res.send("yes");
-    } else {
-      return res.send("no");
-    }
-  });
-});
+    res.send(req.session.admin ? "yes" : "no");
+  }
+  catch(err){
+    console.error("Login error:",err);
+    return res.status(500).send("Internal server error");
+  }
+})
 
 app.get("/session-status", (req, res) => {
   res.json({ 
@@ -273,81 +208,95 @@ app.get("/session-status", (req, res) => {
   });
 });
 
-app.get("/admin", (req, res) => {
-  if (!req.session.isLoggedIn || req.session.admin === false)
+
+app.get("/admin", async (req, res) => {
+  if (!req.session.isLoggedIn || req.session.admin === false) {
     return res.redirect("/login");
+  }
 
-  const email = req.session.email;
+  try {
+    const email = req.session.email;
+    const user = await User.findOne({ email });
+    if (!user) return res.send("User not found");
 
-  fs.readFile(USERS_FILE, "utf-8", (err, userData) => {
-    if (err) return res.send("Error reading users");
+    const categories = await Category.find().lean();
 
-    let users = JSON.parse(userData || "[]");
-    const exists = users.find((u) => u.email === email);
-    if (!exists) return res.send("User not found");
+    const products = await Product.find()
+      .populate("category", "name subcategories")
+      .lean();
 
-    fs.readFile(PRODUCTS_FILE, "utf-8", (err, productData) => {
-      if (err) return res.send("Error reading products");
+    const grouped = {};
+    for (const prod of products) {
+      const catName = prod.category?.name ?? String(prod.category);
 
-      const products = JSON.parse(productData || "[]");
-      res.render("admin", { user: "Admin", name: req.session.name, products, email});
-    });
-  });
-});
+      let subName = String(prod.subcategory || "");
+      if (prod.category?.subcategories) {
+        const sub = prod.category.subcategories.find(
+          (s) => String(s._id) === String(prod.subcategory)
+        );
+        if (sub?.name) subName = sub.name;
+      }
 
-app.post("/addProduct", upload.single("image"), function (req, res) {
-  const { name, price, quantity, description, category, subcategory } =
-    req.body;
-  const imagePath = req.file.filename;
-
-  fs.readFile(PRODUCTS_FILE, "utf8", function (err, data) {
-    let products = {};
-    if (!err && data) {
-      try {
-        products = JSON.parse(data);
-      } catch {}
+      if (!grouped[catName]) grouped[catName] = {};
+      if (!grouped[catName][subName]) grouped[catName][subName] = [];
+      grouped[catName][subName].push(prod);
     }
 
-    if (!products[category]) products[category] = {};
-    if (!products[category][subcategory]) products[category][subcategory] = [];
+    return res.render("admin", {
+      name: req.session.name,
+      email: req.session.email,
+      products: grouped,
+      categories, 
+    });
 
-    products[category][subcategory].push({
-      id: Date.now(),
+  } catch (err) {
+    console.error("Error fetching admin data:", err);
+    return res.send("Error reading products");
+  }
+});
+
+app.post("/addProduct",upload.single("image"),async(req,res)=>{
+  try{
+    const {name,price,quantity,description,category,subcategory}=req.body;
+    const imagePath=req.file.filename;
+
+    const categoryDoc=await Category.findOne({name:category});
+    if(!categoryDoc) return res.status(400).send("Category not found");
+
+    const subDoc=categoryDoc.subcategories.find(sub=>sub.name===subcategory);
+    if(!subDoc) return res.status(400).send("Subcategory not found");
+
+    const newProduct=new Product({
+      id:Date.now(),
       name,
       price,
       quantity,
       description,
       imagePath,
+      category:categoryDoc._id,
+      subcategory:subDoc._id
     });
+    await newProduct.save();
+    res.redirect("/admin");
+  }
+  catch(err){
+    console.error("Error adding product:",err);
+    return res.status(500).send("Error saving product");
+  }
+})
 
-    fs.writeFile(
-      PRODUCTS_FILE,
-      JSON.stringify(products, null, 2),
-      function (err) {
-        if (err) return res.status(500).send("Error saving product");
-        res.redirect("/admin");
-      }
-    );
-  });
-});
 
-app.post("/updateProduct", upload.single("image"), function (req, res) {
-  const { name, price, quantity, description, category, subcategory, index } =
-    req.body;
-  const newImage = req.file;
+app.post("/updateProduct", upload.single("image"), async (req, res) => {
+  try {
+    const { id, name, price, quantity, description } = req.body;
+    const newImage = req.file ? req.file.filename : null;
 
-  fs.readFile(PRODUCTS_FILE, "utf8", function (err, data) {
-    if (err) return res.json({ success: false });
-
-    let products = JSON.parse(data);
-    let product = products[category][subcategory][index];
-
-    let newImagePath = null;
+    const product = await Product.findById(id);
+    if (!product) return res.json({ success: false, message: "Product not found" });
 
     if (newImage) {
-      fs.unlink("uploads/" + product.imagePath, () => {});
-      product.imagePath = newImage.filename;
-      newImagePath = newImage.filename;
+      fs.unlink(`uploads/${product.imagePath}`, () => {});
+      product.imagePath = newImage;
     }
 
     product.name = name;
@@ -355,457 +304,269 @@ app.post("/updateProduct", upload.single("image"), function (req, res) {
     product.quantity = quantity;
     product.description = description;
 
-    fs.writeFile(
-      PRODUCTS_FILE,
-      JSON.stringify(products, null, 2),
-      function (err) {
-        if (err) return res.json({ success: false });
-        res.json({ success: true, newImagePath });
-      }
-    );
-  });
+    await product.save();
+    res.json({ success: true, newImagePath: newImage });
+
+  } catch (err) {
+    console.error("Error updating product:", err);
+    return res.json({ success: false, message: "Error updating product" });
+  }
 });
 
-app.delete("/deleteProduct", (req, res) => {
-  const { category, subcategory, index } = req.body;
+app.delete("/deleteProduct", async (req, res) => {
+  try {
+    const { id } = req.body;
 
-  fs.readFile(PRODUCTS_FILE, "utf-8", (err, data) => {
-    if (err) return res.json({ success: false });
+    const product = await Product.findById(id);
+    if (!product) return res.json({ success:false, message:"Product not found" });
 
-    let products = JSON.parse(data);
-    const prod = products[category][subcategory][index];
+    fs.unlink(`uploads/${product.imagePath}`, () => {});
 
-    fs.unlink("uploads/" + prod.imagePath, () => {});
+    await Product.findByIdAndDelete(id);
 
-    products[category][subcategory].splice(index, 1);
+    res.json({ success:true });
 
-    fs.writeFile(PRODUCTS_FILE, JSON.stringify(products, null, 2), (err) => {
-      if (err) return res.json({ success: false });
-      res.json({ success: true });
-    });
-  });
+  } catch (err) {
+    console.error("Error deleting product:", err);
+    return res.json({ success:false, message:"Error deleting product" });
+  }
 });
 
-app.get("/get-subcategories/:category", (req, res) => {
-  const category = req.params.category;
 
-  fs.readFile(PRODUCTS_FILE, "utf-8", (err, products) => {
-    if (err)
-      return res.json({ success: false, message: "Failed to read file" });
+app.get("/get-subcategories/:category", async (req, res) => {
+  try {
+    const categoryName = req.params.category;
+    const categoryDoc = await Category.findOne({ name: categoryName });
+    if (!categoryDoc) return res.json({ success: false, message: "Category not found" });
 
-    const parsedProducts = JSON.parse(products);
-    const categoryData = parsedProducts[category];
-    if (!categoryData) {
-      return res.json({ success: false, message: "Category not found" });
-    }
-
-    const subcategories = Object.keys(categoryData);
-    res.json({ success: true, subcategories });
-  });
+    const subcategories = categoryDoc.subcategories.map(sub => sub.name);
+    return res.json({ success: true, subcategories });
+  } catch (err) {
+    console.error("Get subcategories error:", err);
+    return res.json({ success: false, message: "Error fetching subcategories" });
+  }
 });
 
-app.post("/add-category", (req, res) => {
-  const { category } = req.body;
 
-  fs.readFile(PRODUCTS_FILE, "utf-8", (err, data) => {
-    if (err)
-      return res.json({
-        success: false,
-        message: "Error reading products.json",
-      });
+app.post("/add-category",async(req,res)=>{
+  try{
+    const {category}=req.body;
+    const existing=await Category.findOne({name:category});
+    if(existing) return res.json({success:false,message:"Category already exists"});
 
-    let products = {};
-    try {
-      products = JSON.parse(data || "{}");
-    } catch (parseErr) {
-      return res.json({
-        success: false,
-        message: "Error parsing products.json",
-      });
+    const newCategory=new Category({name:category,subcategories:[]});
+    await newCategory.save();
+    return res.json({success:true,message:"Category added successfully"});
+  }
+  catch(err){
+    console.error("Error adding category:",err);
+    return res.json({success:false,message:"Failed to add category"});
+  }
+})
+
+app.post("/add-subcategory",async(req,res)=>{
+  try{
+    const {category,subcategory}=req.body;
+    const categoryDoc=await Category.findOne({name:category});
+     if (!categoryDoc) return res.json({ success: false, message: "Category not found" });
+
+     const exists=categoryDoc.subcategories.find(sub=>sub.name===subcategory);
+     if(exists) return res.json({success:false,message:"Subcategory already exists"});
+
+     categoryDoc.subcategories.push({name:subcategory});
+     await categoryDoc.save();
+
+     return res.json({success:true,message:"Subcategory added successfully"});  
+  }
+  catch (err) {
+    console.error("Add subcategory error:", err);
+    return res.json({ success: false, message: "Error adding subcategory" });
+  }
+})
+
+app.get("/get-users", async (req, res) => {
+  try {
+    //  Check session login & admin
+    if (!req.session.isLoggedIn || req.session.admin === false) {
+      return res.redirect("/login");
     }
 
-    if (products.hasOwnProperty(category)) {
-      return res.json({ success: false, message: "Category already exists" });
-    }
+    //  Fetch all users where admin = "no"
+    const normalUsers = await User.find({ admin: "no" });
 
-    products[category] = {};
-
-    fs.writeFile(PRODUCTS_FILE, JSON.stringify(products, null, 2), (err) => {
-      if (err)
-        return res.json({
-          success: false,
-          message: "Failed to write new category",
-        });
-
-      return res.json({
-        success: true,
-        message: "Category added successfully",
-        products,
-      });
-    });
-  });
+    //  Send to frontend
+    return res.json({ user: normalUsers });
+  } catch (err) {
+    console.error("Error fetching users from MongoDB:", err);
+    return res.status(500).json({ message: "Server error" });
+  }
 });
 
-app.post("/add-subcategory", (req, res) => {
-  const { category, subcategory } = req.body;
-
-  fs.readFile(PRODUCTS_FILE, "utf-8", (err, data) => {
-    if (err)
-      return res.json({
-        success: false,
-        message: "Error reading products.json",
-      });
-
-    let products = {};
-    try {
-      products = JSON.parse(data || "{}");
-    } catch (parseErr) {
-      return res.json({
-        success: false,
-        message: "Error parsing products.json",
-      });
-    }
-
-    if (!products[category]) {
-      return res.json({ success: false, message: "Category does not exist" });
-    }
-
-    if (products[category][subcategory]) {
-      return res.json({
-        success: false,
-        message: "Subcategory already exists",
-      });
-    }
-
-    products[category][subcategory] = [];
-
-    fs.writeFile(PRODUCTS_FILE, JSON.stringify(products, null, 2), (err) => {
-      if (err)
-        return res.json({
-          success: false,
-          message: "Failed to add subcategory",
-        });
-
-      return res.json({
-        success: true,
-        message: "Subcategory added successfully",
-        products,
-      });
-    });
-  });
-});
-
-app.get("/get-users", (req, res) => {
-  if (!req.session.isLoggedIn || req.session.admin === false)
-    return res.redirect("/login");
-  fs.readFile(USERS_FILE, "utf-8", (err, data) => {
-    if (err) {
-      console.error("Error reading users.json: ", err);
-      return res.status(500).json({ message: "Server error" });
-    }
-
-    let users = [];
-    if (data) {
-      try {
-        users = JSON.parse(data);
-      } catch (parseErr) {
-        console.log("Error parsing users.json: ", parseErr);
-        return res.status(500).json({ message: "Server error" });
-      }
-    }
-    const normalUsers=users.filter(u=>u.admin=="no");
-    res.json({user:normalUsers});
-  });
-});
-
-app.get("/home", (req, res) => {
+app.get("/home", async (req, res) => {
   if (req.session.isLoggedIn && req.session.admin === false) {
-    fs.readFile(PRODUCTS_FILE, "utf-8", (err, data) => {
-      if (err) return res.status(500).send("Could not read products");
+    try {
+      const products = await Product.find()
+      .populate("category", "name subcategories")
+      .lean();
+      const grouped = {};
+for (const prod of products) {
+  const catName = prod.category && prod.category.name ? prod.category.name : String(prod.category);
+  let subName = String(prod.subcategory || "");
+  if (prod.category && Array.isArray(prod.category.subcategories)) {
+    const sub = prod.category.subcategories.find(s => String(s._id) === String(prod.subcategory));
+    if (sub && sub.name) subName = sub.name;
+  }
 
-      const products = JSON.parse(data);
-
-      res.render("home", {
-        email: req.session.email,
-        name: req.session.name,
-        products,
-      });
-    });
+  if (!grouped[catName]) grouped[catName] = {};
+  if (!grouped[catName][subName]) grouped[catName][subName] = [];
+  grouped[catName][subName].push(prod);
+}
+res.render("home", { name: req.session.name, email: req.session.email, products: grouped });
+    } catch (err) {
+      res.status(500).send("Could not read products");
+    }
   } else {
     res.redirect("/login");
   }
 });
 
-app.post("/add-to-cart", (req, res) => {
-  const email = req.session.email;
-  const productId = req.body.id;
+app.post("/add-to-cart", async (req, res) => {
+  try {
+    const userEmail = req.session.email;  
+    const productId = req.body.id;
 
-  fs.readFile(CART_FILE, "utf-8", (err, cartData) => {
-    if (err) return res.status(500).json({ message: "Server error" });
+    if (!userEmail)
+      return res.status(401).json({ message: "User not logged in" });
 
-    let cart = {};
-    if (cartData) cart = JSON.parse(cartData);
+    const product = await Product.findOne({ id: productId });
+    if (!product) return res.status(404).json({ message: "Product not found" });
 
-    if (!cart[email]) {
-      cart[email] = [];
+    if (product.quantity <= 0) {
+      return res.json({ message: "Out of stock" });
+    }
+    let userCart = await Cart.findOne({ userEmail });
+
+    if (!userCart) {
+      userCart = new Cart({ userEmail, items: [] }); 
     }
 
-    const userCart = cart[email];
-
-    const alreadyInCart = userCart.find((item) => item.id == productId);
-    if (alreadyInCart) {
+    const existingItem = userCart.items.find(item => item.id == productId);
+    if (existingItem) {
       return res.json({ message: "Product already in cart" });
     }
 
-    fs.readFile(PRODUCTS_FILE, "utf-8", (err, productsData) => {
-      if (err) return res.status(500).json({ message: "Server error" });
+    userCart.items.push({ id: productId, quantity: 1 });
+    product.quantity -= 1;
 
-      const products = JSON.parse(productsData);
-      let productToAdd = null;
-      let foundCat = null;
-      let foundSub = null;
-      let foundIndex = null;
+    await userCart.save();
+    await product.save();
 
-      outer: for (const category in products) {
-        for (const subcategory in products[category]) {
-          const index = products[category][subcategory].findIndex(
-            (p) => p.id == productId
-          );
-          if (index != -1) {
-            productToAdd = products[category][subcategory][index];
-            foundCat = category;
-            foundSub = subcategory;
-            foundIndex = index;
-            break outer;
-          }
-        }
-      }
-      if (!productToAdd) {
-        return res.status(404).json({ message: "Product not found" });
-      }
-
-      if (productToAdd.quantity <= 0) {
-        return res.json({ message: "Out of stock" });
-      }
-      products[foundCat][foundSub][foundIndex].quantity--;
-
-      const cartItem = {
-        id: productToAdd.id,
-        quantity: 1,
-      };
-
-      userCart.push(cartItem);
-      cart[email] = userCart;
-
-      fs.writeFile(CART_FILE, JSON.stringify(cart, null, 2), (err) => {
-        if (err)
-          return res.status(500).json({ message: "Failed to save cart" });
-        fs.writeFile(
-          PRODUCTS_FILE,
-          JSON.stringify(products, null, 2),
-          (err) => {
-            if (err)
-              return res
-                .status(500)
-                .json({ message: "Failed to update product stock" });
-
-            res.json({
-              message: "Product added to cart",
-              newProductQty: products[foundCat][foundSub][foundIndex].quantity,
-            });
-          }
-        );
-      });
+    res.json({
+      message: "Product added to cart",
+      newProductQty: product.quantity
     });
-  });
-});
-
-app.get("/cart", (req, res) => {
-  fs.readFile(CART_FILE, "utf8", (err, cartData) => {
-    if (err) return res.json({ cart: [], totalBill: 0 });
-
-    const cart = JSON.parse(cartData);
-    const userCart = cart[req.session.email] || [];
-    fs.readFile(PRODUCTS_FILE, "utf-8", (err, productData) => {
-      if (err) return res.json({ cart: [], totalBill: 0 });
-
-      const products = JSON.parse(productData);
-      let fullCart = [];
-      let totalBill = 0;
-
-      userCart.forEach((cartItem) => {
-        let foundProduct = null;
-
-        outer: for (const category in products) {
-          for (const subcategory in products[category]) {
-            const match = products[category][subcategory].find(
-              (p) => p.id == cartItem.id
-            );
-            if (match) {
-              foundProduct = match;
-              break outer;
-            }
-          }
-        }
-        if (foundProduct) {
-          const price =
-            parseFloat(String(foundProduct.price).replace(/[^0-9.]/g, "")) || 0;
-
-          fullCart.push({
-            id: foundProduct.id,
-            name: foundProduct.name,
-            price: price,
-            description: foundProduct.description,
-            image: foundProduct.imagePath,
-            quantity: cartItem.quantity,
-          });
-          totalBill += price * cartItem.quantity;
-        }
-      });
-      return res.json({ cart: fullCart, totalBill: totalBill || 0 });
-    });
-  });
-});
-
-app.post("/update-cart", (req, res) => {
-  if (!req.session.email) {
-    return res
-      .status(401)
-      .json({ success: false, message: "User not logged in" });
+  } catch (err) {
+    console.error("Error adding to cart:", err);
+    return res.status(500).json({ message: "Server error" });
   }
-
-  const { id, change } = req.body;
-  const email = req.session.email;
-
-  fs.readFile(CART_FILE, "utf-8", (err, cartData) => {
-    if (err)
-      return res
-        .status(500)
-        .json({ success: false, message: "Failed to read cart file" });
-
-    let cart = JSON.parse(cartData);
-    if (!cart[email])
-      return res
-        .status(404)
-        .json({ success: false, message: "Cart not found" });
-
-    let userCart = cart[email];
-    const cartIndex = userCart.findIndex((item) => item.id == id);
-    if (cartIndex == -1)
-      return res
-        .status(404)
-        .json({ success: false, message: "Item not in cart" });
-
-    fs.readFile(PRODUCTS_FILE, "utf-8", (err, productData) => {
-      if (err)
-        return res
-          .status(500)
-          .json({ success: false, message: "Failed to read products file" });
-
-      let products = JSON.parse(productData);
-      let product = null;
-      let foundCat = null;
-      let foundSub = null;
-      let foundIndex = null;
-      outer: for (const category in products) {
-        for (const subcategory in products[category]) {
-          const index = products[category][subcategory].findIndex(
-            (p) => p.id == id
-          );
-          if (index !== -1) {
-            product = products[category][subcategory][index];
-            foundCat = category;
-            foundSub = subcategory;
-            foundIndex = index;
-            break outer;
-          }
-        }
-      }
-
-      if (!product)
-        return res
-          .status(404)
-          .json({ success: false, message: "Product not found" });
-
-      if (change === 1) {
-        if (product.quantity > 0) {
-          userCart[cartIndex].quantity += 1;
-          product.quantity -= 1;
-        } else {
-          return res
-            .status(400)
-            .json({ success: false, message: "Product out of stock" });
-        }
-      } else if (change === -1) {
-        userCart[cartIndex].quantity -= 1;
-        product.quantity += 1;
-
-        if (userCart[cartIndex].quantity === 0) {
-          userCart.splice(cartIndex, 1);
-        }
-      } else {
-        return res
-          .status(400)
-          .json({ success: false, message: "Invalid operation" });
-      }
-
-      cart[email] = userCart;
-
-      let totalBill = 0;
-      userCart.forEach((item) => {
-        let foundProduct = null;
-        outer: for (const category in products) {
-          for (const subcategory in products[category]) {
-            const match = products[category][subcategory].find(
-              (p) => p.id == item.id
-            );
-            if (match) {
-              foundProduct = match;
-              break outer;
-            }
-          }
-        }
-        if (foundProduct) {
-          const price =
-            parseFloat(String(foundProduct.price).replace(/[^0-9.]/g, "")) || 0;
-          totalBill += price * item.quantity;
-        }
-      });
-
-      fs.writeFile(CART_FILE, JSON.stringify(cart, null, 2), "utf-8", (err) => {
-        if (err)
-          return res
-            .status(500)
-            .json({ success: false, message: "Failed to update cart file" });
-
-        fs.writeFile(
-          PRODUCTS_FILE,
-          JSON.stringify(products, null, 2),
-          "utf-8",
-          (err) => {
-            if (err)
-              return res.status(500).json({
-                success: false,
-                message: "Failed to update product file",
-              });
-
-            res.json({
-              success: true,
-              message: "Cart updated successfully",
-              newQty:
-                userCart[cartIndex] && userCart[cartIndex].quantity
-                  ? userCart[cartIndex].quantity
-                  : 0,
-              newProductQty: product.quantity,
-              totalBill: totalBill || 0,
-              cartEmpty: userCart.length === 0,
-            });
-          }
-        );
-      });
-    });
-  });
 });
+
+app.get("/cart",async(req,res)=>{
+  try{
+    const userEmail=req.session.email;
+    if(!userEmail){
+      return res.json({cart:[],totalBill:0});
+    }
+    const userCart=await Cart.findOne({userEmail});
+    if(!userCart || userCart.items.length===0){
+      return res.json({cart:[],totalBill:0});
+    }
+
+    let fullCart=[];
+    let totalBill=0;
+
+    for(const item of userCart.items){
+      const product=await Product.findOne({id:item.id}).lean();
+      if(!product) continue;
+
+      const price=parseFloat(String(product.price).replace(/[^0-9.]/g,"")) || 0;
+      fullCart.push({
+        id:product.id,
+        name:product.name,
+        price:price,
+        description:product.description,
+        image:product.imagePath,
+        quantity:item.quantity
+      });
+      totalBill+=price*item.quantity;
+    }
+    return res.json({cart:fullCart,totalBill:totalBill || 0});
+  }
+  catch(err){
+    console.error("Error fetching cart:",err);  
+    return res.json({cart:[],totalBill:0});
+  }
+})
+
+app.post("/update-cart",async(req,res)=>{
+  try{
+    const userEmail=req.session.email;
+    const {id,change}=req.body;
+
+    if(!userEmail){ 
+      return res.status(401).json({success:false,message:"User not logged in"});
+    }
+
+    const userCart = await Cart.findOne({ userEmail });
+    if (!userCart) {
+      return res.status(404).json({ success: false, message: "Cart not found" });
+    }
+
+    const cartIndex=userCart.items.findIndex(item=>item.id==id);
+    if(cartIndex==-1){
+      return res.status(404).json({ success: false, message: "Item not in cart" });
+    }
+
+    const product=await Product.findOne({id});
+    if(!product){
+      return res.status(404).json({ success: false, message: "Product not found" });
+    }
+
+    if(change===1){
+      if(product.quantity>0){
+        userCart.items[cartIndex].quantity+=1;
+        product.quantity-=1;
+      }else{
+        return res.status(400).json({ success: false, message: "Product out of stock" });
+      }
+    }else if(change===-1){
+      userCart.items[cartIndex].quantity-=1;
+      product.quantity+=1;
+      if(userCart.items[cartIndex].quantity===0){
+        userCart.items.splice(cartIndex,1);
+      }
+    }
+    else{
+      return res.status(400).json({ success: false, message: "Invalid operation" });
+    }
+    await userCart.save();
+    await product.save();
+
+    let totalBill=0;
+    for(const item of userCart.items){
+      const prod = await Product.findOne({ id: item.id }).lean();
+      if (!prod) continue;
+      const price =
+        parseFloat(String(prod.price).replace(/[^0-9.]/g, "")) || 0;
+      totalBill += price * item.quantity;
+    }
+    res.json({success:true,message:"Cart updated successfully",newQty:userCart.items[cartIndex] && userCart.items[cartIndex].quantity ? userCart.items[cartIndex].quantity : 0,newProductQty:product.quantity,totalBill:totalBill || 0,cartEmpty:userCart.items.length===0});
+  }
+  catch (err) {
+    console.error("Error updating cart:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+})
 
 app.post("/logout", (req, res) => {
   req.session.destroy((err) => {

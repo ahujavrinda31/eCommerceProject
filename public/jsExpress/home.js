@@ -95,11 +95,6 @@ viewCartBtn.addEventListener("click",loadCart);
                       }
                     }
                     let billDiv = document.getElementById("total-bill");
-                    // if (!billDiv) {
-                    //   billDiv = document.createElement("div");
-                    //   billDiv.id = "total-bill";
-                    //   cartContainer.appendChild(billDiv);
-                    // }
                     billDiv.innerHTML = `<h3>Total Bill: ₹${
                       updated.totalBill || 0
                     }</h3>`;

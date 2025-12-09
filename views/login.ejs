@@ -1,58 +1,42 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>       
     <link rel="stylesheet" href="/css/login.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
   <body>
-    <form id="loginForm">
-      <label
-        for="lemail"
-        style="font-size: 20px; margin-top: 100px"
-        >Email</label
-      >
-      <input type="email" id="lemail" name="lemail" /><br /><br />
-      <label for="lpass" style="font-size: 20px;">Password</label>
-      <input type="password" id="lpass" name="lpass" /><br /><br />
-      <button type="submit" onclick="loginValidation()">Login</button>
-    </form>
-    <p style="text-align: center">
-      <a href="#" id="forgotLink" style="color: black;">Forgot Password?</a>
-    </p>
-    <div
-      id="forgotForm"
-      style="display: none;"
-    >
-      <input
-        type="email"
-        id="forgotEmail"
-        placeholder="Enter your registered email"
-        style="font-size: 20px; margin-top: 100px"
-      />
-      <input
-        type="password"
-        id="newPass"
-        placeholder="New Password"
-        style="font-size: 20px;"
-      />
-      <input
-        type="password"
-        id="confirmNewPass"
-        placeholder="Confirm New Password"
-        style="font-size: 20px;"
-      />
-      <div id="otpInputBox" style="display: none">
-        <input
-          type="text"
-          id="forgotOtp"
-          placeholder="Enter OTP"
-          style="font-size: 20px;"
-        />
+    <div class="login-container">
+      <h1 class="heading">E-Commerce</h1>
+
+      <form id="loginForm">
+        <label for="lemail">Email</label>
+        <input type="email" id="lemail" name="lemail" placeholder="Enter your email" />
+
+        <label for="lpass">Password</label>
+        <input type="password" id="lpass" name="lpass" placeholder="Enter your password" />
+
+        <button type="submit" onclick="loginValidation()">Login</button>
+      </form>
+
+      <p class="forgot-text">
+        <a href="#" id="forgotLink">Forgot Password?</a>
+      </p>
+
+      <div id="forgotForm">
+        <input type="email" id="forgotEmail" placeholder="Enter your registered email" />
+        <input type="password" id="newPass" placeholder="New Password" />
+        <input type="password" id="confirmNewPass" placeholder="Confirm New Password" />
+        <div id="otpInputBox" style="display: none;">
+          <input type="text" id="forgotOtp" placeholder="Enter OTP" />
+        </div>
+        <button id="forgotSubmitBtn">Send OTP</button>
       </div>
-      <button id="forgotSubmitBtn">Send OTP</button>
     </div>
 
     <script src="/jsExpress/loginScript.js"></script>
   </body>
 </html>
+  

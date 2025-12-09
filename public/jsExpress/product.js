@@ -110,7 +110,7 @@ document.getElementById("addBtn").addEventListener("click", function (event) {
     method: "POST",
     body: formData,
   })
-    .then((res) => res.json ? res.json() : Promise.resolve({ ok: res.ok }))
+    .then((res) => res.json())
     .then((data) => {
       if ((data && data.success) || data.ok) {
         window.location.reload();
@@ -281,30 +281,6 @@ document.getElementById("submitSubcategory").addEventListener("click", () => {
       Swal.fire(data.message || "", "", data.success ? "success" : "error").then(() => {
         if (data.success) location.reload();
       });
-    });
-});
-
-const users = document.getElementById("users");
-document.getElementById("users-btn").addEventListener("click", () => {
-  fetch("/get-users")
-    .then((res) => res.json())
-    .then((data) => {
-      users.innerHTML = "";
-      if (!data.user || data.user.length === 0) {
-        users.innerHTML = "<p>No registered users</p>";
-      } else {
-        data.user.forEach((u) => {
-          const div = document.createElement("div");
-          div.classList.add("registered-user");
-          div.innerHTML = `<p><strong>Name: ${escapeHtml(u.name)}</strong></p>
-            <p><strong>Email: ${escapeHtml(u.email)}</strong></p>`;
-          users.appendChild(div);
-        });
-      }
-    })
-    .catch((err) => {
-      console.error("Get users error:", err);
-      users.innerHTML = "<p>Unable to fetch users</p>";
     });
 });
 

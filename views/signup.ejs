@@ -1,44 +1,42 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signup</title>
     <link rel="stylesheet" href="/css/signup.css" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
   <body>
-    <div id="signupContainer">
+    <div class="signup-container">
+      <h1 class="heading">E-Commerce Signup</h1>
+
       <form id="signupForm">
-        <label for="sname" style="margin-top: 115px; font-size: 20px"
-          >Username</label
-        >
-        <input type="text" , id="sname" , name="sname" /><br /><br />
-        <label for="semail" style="font-size: 20px">Email</label>
-        <input type="email" , id="semail" , name="semail" /><br /><br />
-        <label for="spass" style="font-size: 20px">Password</label>
-        <input type="password" , id="spass" , name="spass" /><br /><br />
-        <label for="confirmpass" style="font-size: 20px"
-          >Confirm Password</label
-        >
-        <input
-          type="password"
-          ,
-          id="confirmpass"
-          ,
-          name="confirmpass"
-        /><br /><br />
-        <label for="check">Admin?</label>
-        <input
-          type="checkbox"
-          id="check"
-          name="check"
-        />
-      </form>
-      <div id="otpSection" style="display: none">
-        <label style="margin-left: 500px;">Enter OTP</label>
-        <input type="text" id="otpInput"/>
-      </div>
-      <div class="btn">
+        <label for="sname">Username</label>
+        <input type="text" id="sname" name="sname" placeholder="Enter your username" />
+
+        <label for="semail">Email</label>
+        <input type="email" id="semail" name="semail" placeholder="Enter your email" />
+
+        <label for="spass">Password</label>
+        <input type="password" id="spass" name="spass" placeholder="Enter your password" />
+
+        <label for="confirmpass">Confirm Password</label>
+        <input type="password" id="confirmpass" name="confirmpass" placeholder="Confirm your password" />
+
+        <label for="check" class="admin-label">
+          <input type="checkbox" id="check" name="check" /> Admin?
+        </label>
+
         <button type="submit" id="submitBtn">Send OTP</button>
+      </form>
+
+      <div id="otpSection">
+        <label>Enter OTP</label>
+        <input type="text" id="otpInput" placeholder="Enter OTP" />
       </div>
     </div>
+
     <script src="/jsExpress/signupScript.js"></script>
   </body>
 </html>

@@ -23,7 +23,6 @@ mongoose.connection.on("error", (err) => {
   console.error(" MongoDB connection error:", err);
 });
 
-
 const app = express();
 const PORT = 4000;
 
@@ -82,58 +81,60 @@ app.get("/signup", (req, res) => {
   res.render("signup");
 });
 
-app.post("/send-otp",async(req,res)=>{
-  const {email}=req.body;
-  try{
-    const existingUser=await User.findOne({email});
-    if(existingUser){
-      return res.status(400).json({success:false,message:"Email already registered"});
-
+app.post("/send-otp", async (req, res) => {
+  const { email } = req.body;
+  try {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Email already registered" });
     }
-    const otp=generateOTP();
-    otpStore[email]={otp,expiresAt:Date.now()+5*60*1000};
+    const otp = generateOTP();
+    otpStore[email] = { otp, expiresAt: Date.now() + 5 * 60 * 1000 };
 
-    const mailOptions={
-      from:process.env.EMAIL_USER,
-      to:email,
-      subject:"Your otp for signup",
-      text:`Your otp is; ${otp}`,
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Your otp for signup",
+      text: `Your otp is; ${otp}`,
     };
     await transporter.sendMail(mailOptions);
-    res.json({success:true});
+    res.json({ success: true });
+  } catch (err) {
+    console.error("Otp email error:", err);
+    return res.json({ success: false, message: "Failed to send otp" });
   }
-  catch(err){
-    console.error("Otp email error:",err);
-    return res.json({success:false,message:"Failed to send otp"});
-  }
-})
+});
 
-app.post("/verify-otp",async(req,res)=>{
-  const {name,email,password,passwordConfirm,admin,otp}=req.body; 
-  const record=otpStore[email];
+app.post("/verify-otp", async (req, res) => {
+  const { name, email, password, passwordConfirm, admin, otp } = req.body;
+  const record = otpStore[email];
 
-  if(!record || Date.now()>record.expiresAt){
-    return res.json({success:false,message:"OTP expired or invalid"});
+  if (!record || Date.now() > record.expiresAt) {
+    return res.json({ success: false, message: "OTP expired or invalid" });
   }
-  if(record.otp!=otp){
-    return res.json({success:false,message:"Incorrect OTP"});
+  if (record.otp != otp) {
+    return res.json({ success: false, message: "Incorrect OTP" });
   }
-  try{
-    const newUser=new User({name,email,password,passwordConfirm,admin});
+  try {
+    const newUser = new User({ name, email, password, passwordConfirm, admin });
     await newUser.save();
 
-    if(admin==="no"){
-      await Cart.create({email,items:[]});
+    if (admin === "no") {
+      await Cart.create({ userEmail:email, items: [] });
     }
 
     delete otpStore[email];
-    return res.json({success:true,message:"Signup successful. Redirecting to login..."});
+    return res.json({
+      success: true,
+      message: "Signup successful. Redirecting to login...",
+    });
+  } catch (err) {
+    console.error("Error saving user:", err);
+    return res.json({ success: false, message: "Could not save user" });
   }
-  catch(err){
-    console.error("Error saving user:",err);
-    return res.json({success:false,message:"Could not save user"});
-  }
-})
+});
 
 app.post("/forgot-password/send-otp", async (req, res) => {
   const { email } = req.body;
@@ -159,55 +160,61 @@ app.post("/forgot-password/send-otp", async (req, res) => {
   }
 });
 
-app.post("/forgot-password/verify",async(req,res)=>{
-  const {email,otp,newPassword}=req.body;
-  const record=otpStore[email];
+app.post("/forgot-password/verify", async (req, res) => {
+  const { email, otp, newPassword } = req.body;
+  const record = otpStore[email];
 
   if (!record || Date.now() > record.expiresAt)
     return res.json({ success: false, message: "OTP expired or invalid" });
   if (record.otp != otp)
     return res.json({ success: false, message: "Incorrect OTP" });
 
-  try{
-    const user=await User.findOneAndUpdate({email},{password:newPassword,passwordConfirm:newPassword});
-    if(!user){
-      return res.json({success:false,message:"User not found"});
+  try {
+    const user = await User.findOneAndUpdate(
+      { email },
+      { password: newPassword, passwordConfirm: newPassword }
+    );
+    if (!user) {
+      return res.json({ success: false, message: "User not found" });
     }
-    delete otpStore[email]; 
-    return res.json({success:true,message:"Password updated. Please login."});
+    delete otpStore[email];
+    return res.json({
+      success: true,
+      message: "Password updated. Please login.",
+    });
+  } catch (err) {
+    console.error("Error updating password:", err);
+    return res.json({ success: false, message: "Failed to update password" });
   }
-  catch(err){
-    console.error("Error updating password:",err);
-    return res.json({success:false,message:"Failed to update password"});
-  }
-})
-
-app.post("/loginScript",async(req,res)=>{
-  const {emailLogin,passwordLogin}=req.body;
-  try{
-    const user=await User.findOne({email:emailLogin,password:passwordLogin});
-    if(!user){
-      return res.status(400).send("Invalid credentials");
-    }
-    req.session.email=user.email;
-    req.session.name=user.name;
-    req.session.admin=user.admin==="yes";
-    req.session.isLoggedIn=true;
-
-    res.send(req.session.admin ? "yes" : "no");
-  }
-  catch(err){
-    console.error("Login error:",err);
-    return res.status(500).send("Internal server error");
-  }
-})
-
-app.get("/session-status", (req, res) => {
-  res.json({ 
-    email: req.session.email || null
-  });
 });
 
+app.post("/loginScript", async (req, res) => {
+  const { emailLogin, passwordLogin } = req.body;
+  try {
+    const user = await User.findOne({
+      email: emailLogin,
+      password: passwordLogin,
+    });
+    if (!user) {
+      return res.status(400).send("Invalid credentials");
+    }
+    req.session.email = user.email;
+    req.session.name = user.name;
+    req.session.admin = user.admin === "yes";
+    req.session.isLoggedIn = true;
+
+    res.send(req.session.admin ? "yes" : "no");
+  } catch (err) {
+    console.error("Login error:", err);
+    return res.status(500).send("Internal server error");
+  }
+});
+
+app.get("/session-status", (req, res) => {
+  res.json({
+    email: req.session.email || null,
+  });
+});
 
 app.get("/admin", async (req, res) => {
   if (!req.session.isLoggedIn || req.session.admin === false) {
@@ -246,44 +253,68 @@ app.get("/admin", async (req, res) => {
       name: req.session.name,
       email: req.session.email,
       products: grouped,
-      categories, 
+      categories,
     });
-
   } catch (err) {
     console.error("Error fetching admin data:", err);
     return res.send("Error reading products");
   }
 });
 
-app.post("/addProduct",upload.single("image"),async(req,res)=>{
-  try{
-    const {name,price,quantity,description,category,subcategory}=req.body;
-    const imagePath=req.file.filename;
+app.post("/addProduct", upload.single("image"), async (req, res) => {
+  try {
+    const {
+      name,
+      price,
+      quantity,
+      description,
+      categoryId,
+      category,
+      subcategoryId,
+      subcategory,
+    } = req.body;
 
-    const categoryDoc=await Category.findOne({name:category});
-    if(!categoryDoc) return res.status(400).send("Category not found");
+    const imagePath = req.file ? req.file.filename : null;
 
-    const subDoc=categoryDoc.subcategories.find(sub=>sub.name===subcategory);
-    if(!subDoc) return res.status(400).send("Subcategory not found");
+    const finalCategoryId = categoryId || category;
+    const finalSubcategoryId = subcategoryId || subcategory;
 
-    const newProduct=new Product({
-      id:Date.now(),
+    if (!finalCategoryId) {
+      return res.status(400).json({ success: false, message: "Category missing" });
+    }
+    if (!finalSubcategoryId) {
+      return res.status(400).json({ success: false, message: "Subcategory missing" });
+    }
+
+    const categoryDoc = await Category.findById(finalCategoryId);
+    if (!categoryDoc) {
+      return res.status(400).json({ success: false, message: "Category not found" });
+    }
+
+    const subDoc = categoryDoc.subcategories.id(finalSubcategoryId);
+    if (!subDoc) {
+      return res.status(400).json({ success: false, message: "Subcategory not found" });
+    }
+
+    const newProduct = new Product({
+      id: Date.now(),
       name,
       price,
       quantity,
       description,
       imagePath,
-      category:categoryDoc._id,
-      subcategory:subDoc._id
+      category: categoryDoc._id,
+      subcategory: subDoc._id,
     });
+
     await newProduct.save();
-    res.redirect("/admin");
+
+    return res.json({ success: true, message: "Product added" });
+  } catch (err) {
+    console.error("Error adding product:", err);
+    return res.status(500).json({ success: false, message: "Server error" });
   }
-  catch(err){
-    console.error("Error adding product:",err);
-    return res.status(500).send("Error saving product");
-  }
-})
+});
 
 
 app.post("/updateProduct", upload.single("image"), async (req, res) => {
@@ -292,7 +323,8 @@ app.post("/updateProduct", upload.single("image"), async (req, res) => {
     const newImage = req.file ? req.file.filename : null;
 
     const product = await Product.findById(id);
-    if (!product) return res.json({ success: false, message: "Product not found" });
+    if (!product)
+      return res.json({ success: false, message: "Product not found" });
 
     if (newImage) {
       fs.unlink(`uploads/${product.imagePath}`, () => {});
@@ -306,7 +338,6 @@ app.post("/updateProduct", upload.single("image"), async (req, res) => {
 
     await product.save();
     res.json({ success: true, newImagePath: newImage });
-
   } catch (err) {
     console.error("Error updating product:", err);
     return res.json({ success: false, message: "Error updating product" });
@@ -318,110 +349,138 @@ app.delete("/deleteProduct", async (req, res) => {
     const { id } = req.body;
 
     const product = await Product.findById(id);
-    if (!product) return res.json({ success:false, message:"Product not found" });
+    if (!product)
+      return res.json({ success: false, message: "Product not found" });
 
     fs.unlink(`uploads/${product.imagePath}`, () => {});
 
     await Product.findByIdAndDelete(id);
 
-    res.json({ success:true });
-
+    res.json({ success: true });
   } catch (err) {
     console.error("Error deleting product:", err);
-    return res.json({ success:false, message:"Error deleting product" });
+    return res.json({ success: false, message: "Error deleting product" });
   }
 });
 
-
-app.get("/get-subcategories/:category", async (req, res) => {
+app.get("/get-subcategories/:id", async (req, res) => {
   try {
-    const categoryName = req.params.category;
-    const categoryDoc = await Category.findOne({ name: categoryName });
-    if (!categoryDoc) return res.json({ success: false, message: "Category not found" });
+    const id = req.params.id;
+    let category = null;
+    if (id.match(/^[0-9a-fA-F]{24}$/)) {
+      category = await Category.findById(id);
+    }
 
-    const subcategories = categoryDoc.subcategories.map(sub => sub.name);
-    return res.json({ success: true, subcategories });
+    if (!category) {
+      category = await Category.findOne({ name: id });
+    }
+
+    if (!category) {
+      return res.json({
+        success: false,
+        message: "Category not found",
+      });
+    }
+
+    return res.json({
+      success: true,
+      subcategories: category.subcategories || [],
+    });
   } catch (err) {
-    console.error("Get subcategories error:", err);
-    return res.json({ success: false, message: "Error fetching subcategories" });
+    console.error("Subcategory fetch error:", err);
+    res.json({ success: false, message: "Server Error" });
   }
 });
 
 
-app.post("/add-category",async(req,res)=>{
-  try{
-    const {category}=req.body;
-    const existing=await Category.findOne({name:category});
-    if(existing) return res.json({success:false,message:"Category already exists"});
+app.post("/add-category", async (req, res) => {
+  try {
+    const { category } = req.body;
+    const existing = await Category.findOne({ name: category });
+    if (existing)
+      return res.json({ success: false, message: "Category already exists" });
 
-    const newCategory=new Category({name:category,subcategories:[]});
+    const newCategory = new Category({ name: category, subcategories: [] });
     await newCategory.save();
-    return res.json({success:true,message:"Category added successfully"});
+    return res.json({ success: true, message: "Category added successfully" });
+  } catch (err) {
+    console.error("Error adding category:", err);
+    return res.json({ success: false, message: "Failed to add category" });
   }
-  catch(err){
-    console.error("Error adding category:",err);
-    return res.json({success:false,message:"Failed to add category"});
-  }
-})
+});
 
-app.post("/add-subcategory",async(req,res)=>{
-  try{
-    const {category,subcategory}=req.body;
-    const categoryDoc=await Category.findOne({name:category});
-     if (!categoryDoc) return res.json({ success: false, message: "Category not found" });
+app.post("/add-subcategory", async (req, res) => {
+  try {
+    const { category, subcategory } = req.body;
+    const categoryDoc = await Category.findOne({ name: category });
+    if (!categoryDoc)
+      return res.json({ success: false, message: "Category not found" });
 
-     const exists=categoryDoc.subcategories.find(sub=>sub.name===subcategory);
-     if(exists) return res.json({success:false,message:"Subcategory already exists"});
+    const exists = categoryDoc.subcategories.find(
+      (sub) => sub.name === subcategory
+    );
+    if (exists)
+      return res.json({
+        success: false,
+        message: "Subcategory already exists",
+      });
 
-     categoryDoc.subcategories.push({name:subcategory});
-     await categoryDoc.save();
+    categoryDoc.subcategories.push({ name: subcategory });
+    await categoryDoc.save();
 
-     return res.json({success:true,message:"Subcategory added successfully"});  
-  }
-  catch (err) {
+    return res.json({
+      success: true,
+      message: "Subcategory added successfully",
+    });
+  } catch (err) {
     console.error("Add subcategory error:", err);
     return res.json({ success: false, message: "Error adding subcategory" });
   }
-})
-
-app.get("/get-users", async (req, res) => {
-  try {
-    //  Check session login & admin
-    if (!req.session.isLoggedIn || req.session.admin === false) {
-      return res.redirect("/login");
-    }
-
-    //  Fetch all users where admin = "no"
-    const normalUsers = await User.find({ admin: "no" });
-
-    //  Send to frontend
-    return res.json({ user: normalUsers });
-  } catch (err) {
-    console.error("Error fetching users from MongoDB:", err);
-    return res.status(500).json({ message: "Server error" });
-  }
 });
+
+// app.get("/get-users", async (req, res) => {
+//   try {
+//     if (!req.session.isLoggedIn || req.session.admin === false) {
+//       return res.redirect("/login");
+//     }
+//     const normalUsers = await User.find({ admin: "no" });
+
+//     return res.json({ user: normalUsers });
+//   } catch (err) {
+//     console.error("Error fetching users from MongoDB:", err);
+//     return res.status(500).json({ message: "Server error" });
+//   }
+// });
 
 app.get("/home", async (req, res) => {
   if (req.session.isLoggedIn && req.session.admin === false) {
     try {
       const products = await Product.find()
-      .populate("category", "name subcategories")
-      .lean();
+        .populate("category", "name subcategories")
+        .lean();
       const grouped = {};
-for (const prod of products) {
-  const catName = prod.category && prod.category.name ? prod.category.name : String(prod.category);
-  let subName = String(prod.subcategory || "");
-  if (prod.category && Array.isArray(prod.category.subcategories)) {
-    const sub = prod.category.subcategories.find(s => String(s._id) === String(prod.subcategory));
-    if (sub && sub.name) subName = sub.name;
-  }
+      for (const prod of products) {
+        const catName =
+          prod.category && prod.category.name
+            ? prod.category.name
+            : String(prod.category);
+        let subName = String(prod.subcategory || "");
+        if (prod.category && Array.isArray(prod.category.subcategories)) {
+          const sub = prod.category.subcategories.find(
+            (s) => String(s._id) === String(prod.subcategory)
+          );
+          if (sub && sub.name) subName = sub.name;
+        }
 
-  if (!grouped[catName]) grouped[catName] = {};
-  if (!grouped[catName][subName]) grouped[catName][subName] = [];
-  grouped[catName][subName].push(prod);
-}
-res.render("home", { name: req.session.name, email: req.session.email, products: grouped });
+        if (!grouped[catName]) grouped[catName] = {};
+        if (!grouped[catName][subName]) grouped[catName][subName] = [];
+        grouped[catName][subName].push(prod);
+      }
+      res.render("home", {
+        name: req.session.name,
+        email: req.session.email,
+        products: grouped,
+      });
     } catch (err) {
       res.status(500).send("Could not read products");
     }
@@ -432,7 +491,7 @@ res.render("home", { name: req.session.name, email: req.session.email, products:
 
 app.post("/add-to-cart", async (req, res) => {
   try {
-    const userEmail = req.session.email;  
+    const userEmail = req.session.email;
     const productId = req.body.id;
 
     if (!userEmail)
@@ -447,10 +506,10 @@ app.post("/add-to-cart", async (req, res) => {
     let userCart = await Cart.findOne({ userEmail });
 
     if (!userCart) {
-      userCart = new Cart({ userEmail, items: [] }); 
+      userCart = new Cart({ userEmail, items: [] });
     }
 
-    const existingItem = userCart.items.find(item => item.id == productId);
+    const existingItem = userCart.items.find((item) => item.id == productId);
     if (existingItem) {
       return res.json({ message: "Product already in cart" });
     }
@@ -463,7 +522,7 @@ app.post("/add-to-cart", async (req, res) => {
 
     res.json({
       message: "Product added to cart",
-      newProductQty: product.quantity
+      newProductQty: product.quantity,
     });
   } catch (err) {
     console.error("Error adding to cart:", err);
@@ -471,102 +530,121 @@ app.post("/add-to-cart", async (req, res) => {
   }
 });
 
-app.get("/cart",async(req,res)=>{
-  try{
-    const userEmail=req.session.email;
-    if(!userEmail){
-      return res.json({cart:[],totalBill:0});
+app.get("/cart", async (req, res) => {
+  try {
+    const userEmail = req.session.email;
+    if (!userEmail) {
+      return res.json({ cart: [], totalBill: 0 });
     }
-    const userCart=await Cart.findOne({userEmail});
-    if(!userCart || userCart.items.length===0){
-      return res.json({cart:[],totalBill:0});
+    const userCart = await Cart.findOne({ userEmail });
+    if (!userCart || userCart.items.length === 0) {
+      return res.json({ cart: [], totalBill: 0 });
     }
 
-    let fullCart=[];
-    let totalBill=0;
+    let fullCart = [];
+    let totalBill = 0;
 
-    for(const item of userCart.items){
-      const product=await Product.findOne({id:item.id}).lean();
-      if(!product) continue;
+    for (const item of userCart.items) {
+      const product = await Product.findOne({ id: item.id }).lean();
+      if (!product) continue;
 
-      const price=parseFloat(String(product.price).replace(/[^0-9.]/g,"")) || 0;
+      const price =
+        parseFloat(String(product.price).replace(/[^0-9.]/g, "")) || 0;
       fullCart.push({
-        id:product.id,
-        name:product.name,
-        price:price,
-        description:product.description,
-        image:product.imagePath,
-        quantity:item.quantity
+        id: product.id,
+        name: product.name,
+        price: price,
+        description: product.description,
+        image: product.imagePath,
+        quantity: item.quantity,
       });
-      totalBill+=price*item.quantity;
+      totalBill += price * item.quantity;
     }
-    return res.json({cart:fullCart,totalBill:totalBill || 0});
+    return res.json({ cart: fullCart, totalBill: totalBill || 0 });
+  } catch (err) {
+    console.error("Error fetching cart:", err);
+    return res.json({ cart: [], totalBill: 0 });
   }
-  catch(err){
-    console.error("Error fetching cart:",err);  
-    return res.json({cart:[],totalBill:0});
-  }
-})
+});
 
-app.post("/update-cart",async(req,res)=>{
-  try{
-    const userEmail=req.session.email;
-    const {id,change}=req.body;
+app.post("/update-cart", async (req, res) => {
+  try {
+    const userEmail = req.session.email;
+    const { id, change } = req.body;
 
-    if(!userEmail){ 
-      return res.status(401).json({success:false,message:"User not logged in"});
+    if (!userEmail) {
+      return res
+        .status(401)
+        .json({ success: false, message: "User not logged in" });
     }
 
     const userCart = await Cart.findOne({ userEmail });
     if (!userCart) {
-      return res.status(404).json({ success: false, message: "Cart not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Cart not found" });
     }
 
-    const cartIndex=userCart.items.findIndex(item=>item.id==id);
-    if(cartIndex==-1){
-      return res.status(404).json({ success: false, message: "Item not in cart" });
+    const cartIndex = userCart.items.findIndex((item) => item.id == id);
+    if (cartIndex == -1) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Item not in cart" });
     }
 
-    const product=await Product.findOne({id});
-    if(!product){
-      return res.status(404).json({ success: false, message: "Product not found" });
+    const product = await Product.findOne({ id });
+    if (!product) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Product not found" });
     }
 
-    if(change===1){
-      if(product.quantity>0){
-        userCart.items[cartIndex].quantity+=1;
-        product.quantity-=1;
-      }else{
-        return res.status(400).json({ success: false, message: "Product out of stock" });
+    if (change === 1) {
+      if (product.quantity > 0) {
+        userCart.items[cartIndex].quantity += 1;
+        product.quantity -= 1;
+      } else {
+        return res
+          .status(400)
+          .json({ success: false, message: "Product out of stock" });
       }
-    }else if(change===-1){
-      userCart.items[cartIndex].quantity-=1;
-      product.quantity+=1;
-      if(userCart.items[cartIndex].quantity===0){
-        userCart.items.splice(cartIndex,1);
+    } else if (change === -1) {
+      userCart.items[cartIndex].quantity -= 1;
+      product.quantity += 1;
+      if (userCart.items[cartIndex].quantity === 0) {
+        userCart.items.splice(cartIndex, 1);
       }
-    }
-    else{
-      return res.status(400).json({ success: false, message: "Invalid operation" });
+    } else {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid operation" });
     }
     await userCart.save();
     await product.save();
 
-    let totalBill=0;
-    for(const item of userCart.items){
+    let totalBill = 0;
+    for (const item of userCart.items) {
       const prod = await Product.findOne({ id: item.id }).lean();
       if (!prod) continue;
-      const price =
-        parseFloat(String(prod.price).replace(/[^0-9.]/g, "")) || 0;
+      const price = parseFloat(String(prod.price).replace(/[^0-9.]/g, "")) || 0;
       totalBill += price * item.quantity;
     }
-    res.json({success:true,message:"Cart updated successfully",newQty:userCart.items[cartIndex] && userCart.items[cartIndex].quantity ? userCart.items[cartIndex].quantity : 0,newProductQty:product.quantity,totalBill:totalBill || 0,cartEmpty:userCart.items.length===0});
-  }
-  catch (err) {
+    res.json({
+      success: true,
+      message: "Cart updated successfully",
+      newQty:
+        userCart.items[cartIndex] && userCart.items[cartIndex].quantity
+          ? userCart.items[cartIndex].quantity
+          : 0,
+      newProductQty: product.quantity,
+      totalBill: totalBill || 0,
+      cartEmpty: userCart.items.length === 0,
+    });
+  } catch (err) {
     console.error("Error updating cart:", err);
     res.status(500).json({ success: false, message: "Server error" });
   }
-})
+});
 
 app.post("/logout", (req, res) => {
   req.session.destroy((err) => {

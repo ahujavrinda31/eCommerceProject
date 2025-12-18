@@ -1,9 +1,15 @@
 function signupValidation() {
   const submitBtn = document.getElementById("submitBtn");
   const otpSection = document.getElementById("otpSection");
+  const showPass = document.getElementById("showPass");
 
   let otpSent = false;
   let userInfo = {};
+
+  showPass.addEventListener("change", () => {
+    spass.type = showPass.checked ? "text" : "password";
+    confirmpass.type = showPass.checked ? "text" : "password";
+  });
 
   submitBtn.addEventListener("click", function (e) {
     e.preventDefault();
@@ -12,9 +18,11 @@ function signupValidation() {
       const email = document.querySelector("#semail").value;
       const password = document.querySelector("#spass").value;
       const passwordConfirm = document.querySelector("#confirmpass").value;
+      const phone = document.querySelector("#sphone").value;
+const address = document.querySelector("#saddress").value;
       const check = document.querySelector("#check");
       let admin = "no";
-      if (!name || !email || !password || !passwordConfirm) {
+      if (!name || !email || !password || !passwordConfirm || !phone || !address) {
         Swal.fire("Missing Details", "Must specify all details", "warning");
         return;
       }
@@ -46,7 +54,7 @@ function signupValidation() {
       if (check.checked == true) {
         admin = "yes";
       }
-      userInfo = { name, email, password, passwordConfirm, admin };
+      userInfo = { name, email, password, passwordConfirm, phone, address, admin };
       fetch("/send-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -86,7 +94,9 @@ function signupValidation() {
               timer: 2000,
               showConfirmButton: false
             })
-            window.location.href = "/login";
+            setTimeout(()=>{
+              window.location.href = "/";
+            },2000)
           } else {
             Swal.fire("Verification Failed", data.message, "error");
           }

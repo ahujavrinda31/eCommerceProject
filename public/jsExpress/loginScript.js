@@ -3,8 +3,13 @@ function loginValidation() {
   const forgotLink = document.getElementById("forgotLink");
   const forgotForm = document.getElementById("forgotForm");
   const forgotSubmitBtn = document.getElementById("forgotSubmitBtn");
+  const showPass = document.getElementById("showPass");
 
   let otpSent = false;
+
+  showPass.addEventListener("change", () => {
+    lpass.type = showPass.checked ? "text" : "password";
+  });
 
   forgotLink.addEventListener("click", () => {
     loginForm.style.display = "none";
@@ -21,11 +26,17 @@ function loginValidation() {
     if (!email || !newPass || !confirmPass) {
       return Swal.fire("Missing Info", "All fields are required", "warning");
     }
-    if (!validateEmail(email)){
+    if (!validateEmail(email)) {
       return Swal.fire("Invalid Email", "Enter a valid email", "error");
-    } 
-    if (newPass.length < 6) return Swal.fire("Weak Password", "Password must be at least 6 characters", "warning");
-    if (newPass !== confirmPass) return Swal.fire("Mismatch", "Passwords do not match", "error");
+    }
+    if (newPass.length < 6)
+      return Swal.fire(
+        "Weak Password",
+        "Password must be at least 6 characters",
+        "warning"
+      );
+    if (newPass !== confirmPass)
+      return Swal.fire("Mismatch", "Passwords do not match", "error");
 
     if (!otpSent) {
       fetch("/forgot-password/send-otp", {
@@ -73,14 +84,16 @@ function loginValidation() {
     e.preventDefault();
     const email = document.querySelector("#lemail").value;
     const password = document.querySelector("#lpass").value;
-    if (!email || !password) return Swal.fire("Missing Fields", "All fields are required", "warning");
-    if (!validateEmail(email)) return Swal.fire("Invalid Email", "Enter a valid email", "error");
+    if (!email || !password)
+      return Swal.fire("Missing Fields", "All fields are required", "warning");
+    if (!validateEmail(email))
+      return Swal.fire("Invalid Email", "Enter a valid email", "error");
 
     fetch("http://localhost:4000/loginScript", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify({ emailLogin: email, passwordLogin: password })
+      body: JSON.stringify({ emailLogin: email, passwordLogin: password }),
     })
       .then((res) => res.text())
       .then((data) => {

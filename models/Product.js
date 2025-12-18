@@ -8,7 +8,7 @@ const productSchema=new Schema({
     description:{type:String,required:true},
     imagePath:{type:String,required:true},
 
-    category:{type:Types.ObjectId,ref:"Category",required:true},
+    category:{type:Types.ObjectId,ref:"Category",required:true,index:true},
     subcategory:{type:Types.ObjectId,ref:"Category.subcategories",required:true}    
 });
 

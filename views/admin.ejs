@@ -8,10 +8,12 @@
   </head>
   <body>
     <div class="heading">
-      <h2 style="text-align: center; color: black; margin-bottom: 50px">
-        Welcome Admin <%= name %>
-      </h2>
-      <button id="logout-btn" style="float: right">Logout</button>
+      <h2 class="welcome-text">Welcome <%= name %></h2>
+
+      <div class="header-buttons">
+        <button id="orders-button">View User Orders</button>
+        <button id="logout-btn">Logout</button>
+      </div>
     </div>
 
     <div style="text-align: center; margin-bottom: 20px">
@@ -56,17 +58,31 @@
 
     <div id="sub-category-container" style="margin-top: 20px"></div>
 
-    <div
-      style="text-align: center; padding-bottom: 20px; display: none"
-      id="container"
-    >
-      <input type="text" placeholder="Name" id="name" />
+<div id="product-modal" class="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>Add Product</h3>
+      <span class="close-modal">&times;</span>
+    </div>
+
+    <div class="modal-body">
+      <input type="text" placeholder="Product Name" id="name" />
       <input type="text" placeholder="Price" id="price" />
       <input type="text" placeholder="Quantity" id="quantity" />
-      <input type="text" placeholder="Description" id="description" />
+      <textarea
+        placeholder="Description"
+        id="description"
+        rows="4"
+      ></textarea>
       <input type="file" id="image" accept="image/*" />
+    </div>
+
+    <div class="modal-footer">
       <button id="addBtn">Add Product</button>
     </div>
+  </div>
+</div>
+
 
     <div id="productList" style="margin-top: 30px">
       <% for (let cat in products) { for (let sub in products[cat]) { let

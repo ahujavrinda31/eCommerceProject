@@ -3,33 +3,57 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login</title>       
-    <link rel="stylesheet" href="/css/login.css">
+    <title>Login</title>
+    <link rel="stylesheet" href="/css/login.css" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
   <body>
     <div class="login-container">
-      <h1 class="heading">E-Commerce</h1>
+      <h1 class="heading">Login</h1>
 
       <form id="loginForm">
         <label for="lemail">Email</label>
-        <input type="email" id="lemail" name="lemail" placeholder="Enter your email" />
+        <input
+          type="email"
+          id="lemail"
+          name="lemail"
+          placeholder="Enter your email"
+        />
 
         <label for="lpass">Password</label>
-        <input type="password" id="lpass" name="lpass" placeholder="Enter your password" />
+        <input
+          type="password"
+          id="lpass"
+          name="lpass"
+          placeholder="Enter your password"
+        />
+        <div class="show-pass">
+          <input type="checkbox" id="showPass" />
+          <label for="showPass">Show Password</label>
+        </div>
 
         <button type="submit" onclick="loginValidation()">Login</button>
       </form>
+
+      <p>Don't have an account? <a href="/signup">Sign up</a></p>
 
       <p class="forgot-text">
         <a href="#" id="forgotLink">Forgot Password?</a>
       </p>
 
       <div id="forgotForm">
-        <input type="email" id="forgotEmail" placeholder="Enter your registered email" />
+        <input
+          type="email"
+          id="forgotEmail"
+          placeholder="Enter your registered email"
+        />
         <input type="password" id="newPass" placeholder="New Password" />
-        <input type="password" id="confirmNewPass" placeholder="Confirm New Password" />
-        <div id="otpInputBox" style="display: none;">
+        <input
+          type="password"
+          id="confirmNewPass"
+          placeholder="Confirm New Password"
+        />
+        <div id="otpInputBox" style="display: none">
           <input type="text" id="forgotOtp" placeholder="Enter OTP" />
         </div>
         <button id="forgotSubmitBtn">Send OTP</button>
@@ -39,4 +63,3 @@
     <script src="/jsExpress/loginScript.js"></script>
   </body>
 </html>
-  

@@ -54,6 +54,27 @@ input:focus {
   box-shadow: 0 0 5px rgba(108, 99, 255, 0.5);
 }
 
+.show-pass {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  justify-content: flex-start;
+}
+
+.show-pass label {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #555;
+  cursor: pointer;
+}
+
+.show-pass input[type="checkbox"] {
+  width: auto;
+  cursor: pointer;
+}
+
 .admin-label {
   display: flex;
   align-items: center;

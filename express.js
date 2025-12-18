@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import express from "express";
 import session from "express-session";
+import create from "connect-mongo";
 import fs from "fs";
 import path from "path";
 import nodemailer from "nodemailer";
@@ -9,7 +10,9 @@ import User from "./models/User.js";
 import Product from "./models/Product.js";
 import Cart from "./models/Cart.js";
 import Category from "./models/Category.js";
+import Order from "./models/Order.js";
 import mongoose from "mongoose";
+
 dotenv.config();
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
@@ -40,12 +43,16 @@ const upload = multer({ storage: storage });
 app.set("view engine", "ejs");
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(
   session({
     secret: "keyboard-cat",
     resave: false,
     saveUninitialized: false,
+    store: new create({
+      mongoUrl: process.env.MONGO_URI,
+    }),
     cookie: {
       maxAge: 1000 * 60 * 60,
     },
@@ -70,10 +77,6 @@ const transporter = nodemailer.createTransport({
 });
 
 app.get("/", (req, res) => {
-  res.render("page");
-});
-
-app.get("/login", (req, res) => {
   res.render("login");
 });
 
@@ -97,7 +100,7 @@ app.post("/send-otp", async (req, res) => {
       from: process.env.EMAIL_USER,
       to: email,
       subject: "Your otp for signup",
-      text: `Your otp is; ${otp}`,
+      text: `Your otp is: ${otp}`,
     };
     await transporter.sendMail(mailOptions);
     res.json({ success: true });
@@ -108,7 +111,8 @@ app.post("/send-otp", async (req, res) => {
 });
 
 app.post("/verify-otp", async (req, res) => {
-  const { name, email, password, passwordConfirm, admin, otp } = req.body;
+  const { name, email, password, passwordConfirm, phone, address, admin, otp } =
+    req.body;
   const record = otpStore[email];
 
   if (!record || Date.now() > record.expiresAt) {
@@ -118,11 +122,19 @@ app.post("/verify-otp", async (req, res) => {
     return res.json({ success: false, message: "Incorrect OTP" });
   }
   try {
-    const newUser = new User({ name, email, password, passwordConfirm, admin });
+    const newUser = new User({
+      name,
+      email,
+      password,
+      phone,
+      address,
+      admin,
+      orders: admin === "no" ? [] : undefined,
+    });
     await newUser.save();
 
     if (admin === "no") {
-      await Cart.create({ userEmail:email, items: [] });
+      await Cart.create({ userEmail: email, items: [] });
     }
 
     delete otpStore[email];
@@ -172,7 +184,7 @@ app.post("/forgot-password/verify", async (req, res) => {
   try {
     const user = await User.findOneAndUpdate(
       { email },
-      { password: newPassword, passwordConfirm: newPassword }
+      { password: newPassword }
     );
     if (!user) {
       return res.json({ success: false, message: "User not found" });
@@ -199,6 +211,7 @@ app.post("/loginScript", async (req, res) => {
       return res.status(400).send("Invalid credentials");
     }
     req.session.email = user.email;
+    req.session.userId = user._id;
     req.session.name = user.name;
     req.session.admin = user.admin === "yes";
     req.session.isLoggedIn = true;
@@ -210,15 +223,9 @@ app.post("/loginScript", async (req, res) => {
   }
 });
 
-app.get("/session-status", (req, res) => {
-  res.json({
-    email: req.session.email || null,
-  });
-});
-
 app.get("/admin", async (req, res) => {
   if (!req.session.isLoggedIn || req.session.admin === false) {
-    return res.redirect("/login");
+    return res.redirect("/");
   }
 
   try {
@@ -280,20 +287,28 @@ app.post("/addProduct", upload.single("image"), async (req, res) => {
     const finalSubcategoryId = subcategoryId || subcategory;
 
     if (!finalCategoryId) {
-      return res.status(400).json({ success: false, message: "Category missing" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Category missing" });
     }
     if (!finalSubcategoryId) {
-      return res.status(400).json({ success: false, message: "Subcategory missing" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Subcategory missing" });
     }
 
     const categoryDoc = await Category.findById(finalCategoryId);
     if (!categoryDoc) {
-      return res.status(400).json({ success: false, message: "Category not found" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Category not found" });
     }
 
     const subDoc = categoryDoc.subcategories.id(finalSubcategoryId);
     if (!subDoc) {
-      return res.status(400).json({ success: false, message: "Subcategory not found" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Subcategory not found" });
     }
 
     const newProduct = new Product({
@@ -315,7 +330,6 @@ app.post("/addProduct", upload.single("image"), async (req, res) => {
     return res.status(500).json({ success: false, message: "Server error" });
   }
 });
-
 
 app.post("/updateProduct", upload.single("image"), async (req, res) => {
   try {
@@ -392,7 +406,6 @@ app.get("/get-subcategories/:id", async (req, res) => {
   }
 });
 
-
 app.post("/add-category", async (req, res) => {
   try {
     const { category } = req.body;
@@ -438,54 +451,120 @@ app.post("/add-subcategory", async (req, res) => {
   }
 });
 
-// app.get("/get-users", async (req, res) => {
-//   try {
-//     if (!req.session.isLoggedIn || req.session.admin === false) {
-//       return res.redirect("/login");
-//     }
-//     const normalUsers = await User.find({ admin: "no" });
-
-//     return res.json({ user: normalUsers });
-//   } catch (err) {
-//     console.error("Error fetching users from MongoDB:", err);
-//     return res.status(500).json({ message: "Server error" });
-//   }
-// });
-
 app.get("/home", async (req, res) => {
-  if (req.session.isLoggedIn && req.session.admin === false) {
-    try {
-      const products = await Product.find()
-        .populate("category", "name subcategories")
-        .lean();
-      const grouped = {};
-      for (const prod of products) {
-        const catName =
-          prod.category && prod.category.name
-            ? prod.category.name
-            : String(prod.category);
-        let subName = String(prod.subcategory || "");
-        if (prod.category && Array.isArray(prod.category.subcategories)) {
-          const sub = prod.category.subcategories.find(
-            (s) => String(s._id) === String(prod.subcategory)
-          );
-          if (sub && sub.name) subName = sub.name;
-        }
+  if (!req.session.isLoggedIn || req.session.admin !== false) {
+    return res.redirect("/");
+  }
 
-        if (!grouped[catName]) grouped[catName] = {};
-        if (!grouped[catName][subName]) grouped[catName][subName] = [];
-        grouped[catName][subName].push(prod);
-      }
-      res.render("home", {
-        name: req.session.name,
-        email: req.session.email,
-        products: grouped,
-      });
-    } catch (err) {
-      res.status(500).send("Could not read products");
+  const searchCategory = req.query.category?.trim().toUpperCase() || "";
+
+  try {
+    const products = await Product.find()
+      .populate("category", "name subcategories")
+      .lean();
+
+    const grouped = {};
+
+    for (const prod of products) {
+      const catName =
+        prod.category?.name?.toUpperCase() ||
+        String(prod.category).toUpperCase();
+
+      const subName = prod.subcategory || "";
+
+      if (!grouped[catName]) grouped[catName] = [];
+      grouped[catName].push(prod);
     }
-  } else {
-    res.redirect("/login");
+
+    let filtered = grouped;
+
+    if (searchCategory) {
+      filtered = {};
+      Object.keys(grouped).forEach((cat) => {
+        if (cat===searchCategory) {
+          filtered[cat] = grouped[cat];
+        }
+      });
+    }
+
+    res.render("home", {
+      name: req.session.name,
+      email: req.session.email,
+      products: filtered,
+      searchCategory,
+    });
+  } catch (err) {
+    res.status(500).send("Could not load products");
+  }
+});
+
+app.get("/profile", async (req, res) => {
+  if (!req.session.isLoggedIn) return res.redirect("/");
+
+  try {
+    const user = await User.findOne(
+      { email: req.session.email },
+      { password: 0 } 
+    )
+
+    if (!user) return res.redirect("/");
+
+    res.render("profile", { user });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error loading profile");
+  }
+});
+
+app.post("/update-profile", async (req, res) => {
+  if (!req.session.isLoggedIn) {
+    return res.json({ success: false, message: "Not logged in" });
+  }
+
+  const { name, phone, address } = req.body;
+  if (!name || !phone || !address) {
+    return res.json({
+      success: false,
+      message: "Name, phone and address are required"
+    });
+  }
+
+  try {
+    const updatedUser = await User.findOneAndUpdate(
+      { email: req.session.email },
+      {
+        $set: {
+          name: name.trim(),
+          phone: phone.trim(),
+          address: address.trim()
+        }
+      },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.json({
+        success: false,
+        message: "User not found"
+      });
+    }
+
+    req.session.name = updatedUser.name;
+
+    res.json({
+      success: true,
+      user: {
+        name: updatedUser.name,
+        phone: updatedUser.phone,
+        address: updatedUser.address
+      }
+    });
+  } catch (err) {
+    console.error(err);
+    res.json({
+      success: false,
+      message: "Database update failed"
+    });
   }
 });
 
@@ -643,6 +722,161 @@ app.post("/update-cart", async (req, res) => {
   } catch (err) {
     console.error("Error updating cart:", err);
     res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+app.get("/checkout/:id", async (req, res) => {
+  const productId = req.params.id;
+  // console.log("PRODUCT ID RECEIVED:", productId);
+
+  if (!mongoose.Types.ObjectId.isValid(productId)) {
+    return res.status(400).send("Invalid product ID");
+  }
+
+  const product = await Product.findById(productId);
+  const user = await User.findById(req.session.userId);
+
+  if (!product) {
+    return res.status(404).send("Product not found");
+  }
+
+  res.render("checkout", {
+    product,
+    user,
+  });
+});
+
+app.post("/place-order", async (req, res) => {
+  try {
+    const { productId, qty } = req.body;
+
+    if (!productId || !qty) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid request data",
+      });
+    }
+
+    if (!req.session.userId) {
+      return res.status(401).json({
+        success: false,
+        message: "User not logged in",
+      });
+    }
+
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
+    }
+
+    const user = await User.findById(req.session.userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    if (product.quantity < qty) {
+      return res.json({
+        success: false,
+        message: "Not enough stock",
+      });
+    }
+
+    product.quantity -= qty;
+    await product.save();
+
+    const order = new Order({
+      userId: user._id,
+      userName: user.name,
+      userEmail: user.email,
+      products: [
+        {
+          productId: product._id,
+          name: product.name,
+          qty,
+          price: product.price,
+        },
+      ],
+      totalBill: qty * product.price,
+    });
+
+    await order.save();
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error("PLACE ORDER ERROR:", err);
+    res.status(500).json({
+      success: false,
+      message: "Order failed",
+    });
+  }
+});
+
+app.get("/orders", async (req, res) => {
+  try {
+    if (!req.session.userId) {
+      return res.redirect("/");
+    }
+    const orders = await Order.find({ userId: req.session.userId }).sort({
+      createdAt: -1,
+    });
+    res.render("viewOrders", { orders });
+  } catch (err) {
+    console.error("Error fetching orders: ", err);
+    res.status(500).send("Failed to load orders");
+  }
+});
+
+app.get("/view-orders", async (req, res) => {
+  try {
+    if (!req.session.userId) {
+      return res.redirect("/");
+    }
+    const orders = await Order.find().sort({ createdAt: -1 });
+    res.render("adminViewOrders", { orders });
+  } catch (err) {
+    console.error("Error fetching orders: ", err);
+    res.status(500).send("Failed to load orders");
+  }
+});
+
+app.delete("/cancel-order/:id", async (req, res) => {
+  try {
+    if (!req.session.userId) {
+      return res.status(401).json({ success: false });
+    }
+    const order = await Order.findById(req.params.id);
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found",
+      });
+    }
+    if (order.userId.toString() !== req.session.userId.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+    for (const item of order.products) {
+      await Product.findByIdAndUpdate(item.productId, {
+        $inc: { quantity: item.qty },
+      });
+    }
+    await Order.findByIdAndDelete(order._id);
+    res.json({ success: true });
+  } catch (err) {
+    console.error("Cancel order error: ", err);
+    res.status(500).json({
+      success: false,
+      message: "Failed to cancel order",
+    });
   }
 });
 

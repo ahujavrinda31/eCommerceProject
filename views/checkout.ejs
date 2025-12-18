@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Checkout</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="/css/checkout.css" />
+  </head>
+  <body>
+
+    <div class="checkout-container">
+      <h2 id="heading">Place Order Now!</h2>
+      <div class="section">
+        <h3>Your Information</h3>
+        <p><strong>Name:</strong> <%= user.name %></p>
+        <p><strong>Phone:</strong> <%= user.phone %></p>
+        <p><strong>Address:</strong> <%= user.address %></p>
+      </div>
+
+      <div class="section">
+        <h3>Order Details</h3>
+
+        <p><strong>Product:</strong> <%= product.name %></p>
+        <p>
+          <strong>Price:</strong> ₹<span id="price"><%= product.price %></span>
+        </p>
+
+        <div class="qty-controls">
+          <button id="dec">-</button>
+          <span id="qty">1</span>
+          <button id="inc">+</button>
+        </div>
+
+        <p>
+          <strong>Total:</strong> ₹<span id="total"><%= product.price %></span>
+        </p>
+        <div id="buttons">
+          <button id="place-order">Place Order</button>
+          <button id="back">Back to Home</button>
+        </div>
+      </div>
+    </div>
+    <script>
+      const productData = {
+        id: "<%= product._id %>",
+        price: "<%= product.price %>",
+        availableQty: "<%= product.quantity %>",
+      };
+    </script>
+
+    <script src="/jsExpress/checkout.js"></script>
+  </body>
+</html>

@@ -1,0 +1,103 @@
+body {
+  font-family: "Segoe UI", sans-serif;
+  background: #f3f4f6;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.profile-card {
+  margin-top: 40px;
+  background: #ffffff;
+  width: 420px;
+  padding: 28px;
+  border-radius: 14px;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+}
+
+.profile-card h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #111;
+}
+
+.profile-field {
+  margin-bottom: 18px;
+}
+
+.label {
+  display: block;
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.value {
+  font-size: 16px;
+  font-weight: 500;
+  color: #111;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+}
+
+textarea {
+  resize: none;
+}
+
+.profile-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 25px;
+  justify-content: center;
+}
+
+.profile-actions button {
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#editBtn {
+  background: #3b82f6;
+  color: white;
+}
+
+#editBtn:hover {
+  background: #2563eb;
+}
+
+#saveBtn {
+  background: #22c55e;
+  color: white;
+}
+
+#saveBtn:hover {
+  background: #16a34a;
+}
+
+.secondary {
+  background: #6b7280;
+  color: white;
+}
+
+.secondary:hover {
+  background: #4b5563;
+}
+
+@media (max-width: 480px) {
+  .profile-card {
+    width: 90%;
+  }
+}

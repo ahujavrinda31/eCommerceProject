@@ -1,16 +1,3 @@
-setInterval(() => {
-  fetch("/session-status")
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.email !== window.currentEmail) {
-        window.location.href = "/login";
-      }
-    })
-    .catch(() => {
-      
-    });
-}, 3000);
-
 let selectedCategoryId = "";
 let selectedCategoryName = "";
 let selectedSubCategoryId = "";
@@ -135,10 +122,10 @@ document.querySelectorAll(".editBtn").forEach((btn) => {
     const imageInput = card.querySelector(".image-input");
 
     if (btn.textContent === "Edit") {
-      nameElement.innerHTML = `<input value="${escapeHtml(nameElement.textContent)}" class="name-field">`;
-      priceElement.innerHTML = `<input value="${escapeHtml(priceElement.textContent)}" class="price-field">`;
-      quantityElement.innerHTML = `<input value="${escapeHtml(quantityElement.textContent)}" class="quantity-field">`;
-      descriptionElement.innerHTML = `<input value="${escapeHtml(descriptionElement.textContent)}" class="description-field">`;
+      nameElement.innerHTML = `<input value="${nameElement.textContent}" class="name-field">`;
+      priceElement.innerHTML = `<input value="${priceElement.textContent}" class="price-field">`;
+      quantityElement.innerHTML = `<input value="${quantityElement.textContent}" class="quantity-field">`;
+      descriptionElement.innerHTML = `<input value="${descriptionElement.textContent}" class="description-field">`;
       imageInput.style.display = "block";
       btn.textContent = "Update";
     } else {
@@ -233,9 +220,28 @@ document.getElementById("logout-btn").addEventListener("click", function () {
     .then((res) => res.json())
     .then((data) => {
       if (data.success) {
-        window.location.href = "/";
+        window.location.replace("/");
       }
     });
+});
+
+const modal = document.getElementById("product-modal");
+const closeModal = document.querySelector(".close-modal");
+
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("subcategory-btn")) {
+    modal.style.display = "flex";
+  }
+});
+
+closeModal.addEventListener("click", () => {
+  modal.style.display = "none";
+});
+
+window.addEventListener("click", (e) => {
+  if (e.target === modal) {
+    modal.style.display = "none";
+  }
 });
 
 const addCategoryBtn = document.getElementById("addCategoryBtn");
@@ -284,12 +290,6 @@ document.getElementById("submitSubcategory").addEventListener("click", () => {
     });
 });
 
-function escapeHtml(unsafe) {
-  if (typeof unsafe !== "string") return unsafe;
-  return unsafe
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
+document.getElementById("orders-button").addEventListener("click",()=>{
+  window.location.href="/view-orders";
+})

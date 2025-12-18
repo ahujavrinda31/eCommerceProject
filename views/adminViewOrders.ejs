@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>View Orders</title>
+    <link rel="stylesheet" href="/css/viewOrders.css" />
+  </head>
+  <body>
+  <div class="page-header">
+    <button class="back-btn" onclick="window.location.href='/admin'">
+      Back
+    </button>
+    <h2>All Orders</h2>
+  </div>
+
+  <% if(orders.length===0) { %>
+    <p class="empty-text">You have not placed any orders yet.</p>
+  <% } else { %>
+    <div class="orders-grid">
+      <% orders.forEach((order)=>{ %>
+        <div class="order-card">
+          <p><strong>Order Placed By: </strong> <%= order.userName %></p>
+      <p>
+        <strong>Order Date: </strong>
+        <%= new Date(order.placedAt).toLocaleString() %>
+      </p>
+      <% order.products.forEach((item)=>{ %>
+      <h4><strong><%= item.name %></strong></h4>
+      <p><strong>Price: </strong> <%= item.price %></p>
+      <p><strong>Quantity: </strong> <%= item.qty %></p>
+      <% }) %>
+      <h3>Total Bill: <%=order.totalBill %></h3>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+</body>
+
+</html>

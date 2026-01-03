@@ -1,0 +1,215 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+}
+
+body {
+  background-color: #f4f6f9;
+  color: #333;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 25px;
+  background-color: white;
+  top: 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.profile-circle {
+  width: 40px; 
+  height: 40px;
+  background: #5481c5; 
+  color: white;
+  border-radius: 50%; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px; 
+}
+
+.header h2 {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.header-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.header-buttons button {
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  background: #5481c5;
+  color: white;
+  transition: background 0.3s;
+}
+
+.header-buttons button:hover {
+  background-color: #2563eb;
+}
+
+#logout-btn {
+  background-color: #e74c3c;
+}
+
+#logout-btn:hover {
+  background-color: #c0392b;
+}
+
+button {
+  padding: 8px 14px;
+  margin: 5px 5px 15px 0;
+  border: none;
+  border-radius: 5px;
+  background: #5481c5;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background-color: #1e6fd9;
+}
+
+#logout-btn {
+  background-color: #e74c3c;
+}
+
+#logout-btn:hover {
+  background-color: #c0392b;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.product-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.product-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.product-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+.product-card h3 {
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+
+.product-card p {
+  font-size: 14px;
+  margin-bottom: 4px;
+  color: #555;
+}
+
+.product-card button {
+  margin-top: 8px;
+  padding: 7px;
+  border-radius: 5px;
+  font-size: 13px;
+}
+
+.edit-btn {
+  background: #5481c5;
+  color: white;
+}
+
+.edit-btn:hover {
+  background: #5481c5;
+  color: white;
+}
+
+.delete-btn {
+  background-color: #e74c3c;
+}
+
+.delete-btn:hover {
+  background-color: #c0392b;
+}
+
+.product-card button + button {
+  margin-top: 5px;
+}
+
+.swal2-input {
+  width: 100%;
+  max-width: 400px;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+textarea.swal2-input {
+  height: 120px;
+  resize: vertical;
+}
+
+.swal2-popup {
+  overflow-x: hidden !important;
+}
+
+.swal2-file,
+.swal2-input[type="file"] {
+  max-width: 100% !important;
+  width: 100% !important;
+  box-sizing: border-box;
+}
+
+.swal2-html-container {
+  overflow-x: hidden !important;
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 20px;
+  }
+
+  button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 12px;
+  }
+
+  .product-card img {
+    height: 120px;
+  }
+}

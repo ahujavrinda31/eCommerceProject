@@ -8,29 +8,45 @@
     <link rel="stylesheet" href="/css/orders.css" />
   </head>
   <body>
-     <div class="page-header">
-    <button class="back-btn" onclick="window.location.href='/home'">
-      Back
-    </button>
-    <h2>Your Orders</h2>
-  </div>
+    <div class="page-header">
+      <button class="back-btn" onclick="window.location.href='/user'">
+        Back
+      </button>
+      <h2>Your Orders</h2>
+    </div>
     <% if(orders.length===0) { %>
-    <p>No orders placed yet.</p>
+    <p>You have not placed any orders yet.</p>
     <% } else{ %> <% orders.forEach((order)=>{ %>
     <div class="order-card">
       <p>
         <strong>Order Date: </strong>
-        <%= new Date(order.placedAt).toLocaleString() %>
+        <%= new Date(order.orderedOn).toLocaleString() %>
       </p>
       <% order.products.forEach((item)=>{ %>
-      <h4><strong><%= item.name %></strong></h4>
+      <h4><strong><%= item.name.toUpperCase() %></strong></h4>
       <p><strong>Price: </strong> <%= item.price %></p>
       <p><strong>Quantity: </strong> <%= item.qty %></p>
       <% }) %>
+      <p><strong>Order Status: </strong><%= order.status %></p>
       <h3>Total Bill: <%=order.totalBill %></h3>
-      <button class="cancel-btn" data-id="<%= order._id %>">
-        Cancel Order
-      </button>
+      <% if(order.deliveredOn) { %>
+      <p>
+        <strong>Delivered On:</strong>
+        <%= new Date(order.deliveredOn).toLocaleString() %>
+      </p>
+      <% } %>
+
+      <button
+  class="cancel-btn"
+  data-id="<%= order._id %>"
+  <%= order.status !== "Placed" ? "disabled" : "" %>
+>
+  Cancel Order
+</button>
+
+      <p id="note">
+        <strong>Note: </strong>Order cannot be cancelled once out for delivery.
+      </p>
     </div>
     <% }) %> <% } %>
     <script src="/jsExpress/viewOrders.js"></script>

@@ -1,47 +1,47 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>User Profile</title>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <link rel="stylesheet" href="/css/profile.css" />
-</head>
-<body>
-
-  <div class="profile-card">
-    <h2>Your Profile</h2>
-
-    <div class="profile-field">
-      <span class="label">Name</span>
-      <span class="value" id="nameText"><%= user.name %></span>
-      <input type="text" id="name" value="<%= user.name %>" hidden />
+  <head>
+    <title>User Profile</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="/css/profile.css" />
+  </head>
+  <body>
+    <div class="profile-header">
+      <h2>Your Profile</h2>
     </div>
 
-    <div class="profile-field">
-      <span class="label">Email</span>
-      <span class="value"><%= user.email %></span>
+    <div class="profile-wrapper">
+      <div class="profile-card">
+        <div class="profile-field">
+          <span class="label">Name</span>
+          <span class="value" id="nameText"><%= user.name %></span>
+          <input type="text" id="name" value="<%= user.name %>" hidden />
+        </div>
+
+        <div class="profile-field">
+          <span class="label">Email</span>
+          <span class="value"><%= user.email %></span>
+        </div>
+
+        <div class="profile-field">
+          <span class="label">Phone</span>
+          <span class="value" id="phoneText"><%= user.phone %></span>
+          <input type="text" id="phone" value="<%= user.phone %>" hidden />
+        </div>
+
+        <div class="profile-field full-width">
+          <span class="label">Address</span>
+          <span class="value" id="addressText"><%= user.address %></span>
+          <textarea id="address" hidden><%= user.address %></textarea>
+        </div>
+
+        <div class="profile-actions">
+          <button id="editBtn">Edit Profile</button>
+          <button id="saveBtn" hidden>Save Changes</button>
+        </div>
+      </div>
     </div>
 
-    <div class="profile-field">
-      <span class="label">Phone</span>
-      <span class="value" id="phoneText"><%= user.phone %></span>
-      <input type="text" id="phone" value="<%= user.phone %>" hidden />
-    </div>
-
-    <div class="profile-field">
-      <span class="label">Address</span>
-      <span class="value" id="addressText"><%= user.address %></span>
-      <textarea id="address" hidden><%= user.address %></textarea>
-    </div>
-
-    <div class="profile-actions">
-      <button id="editBtn">Edit Profile</button>
-      <button id="saveBtn" hidden>Save Changes</button>
-      <button onclick="window.location.href='/home'" class="secondary">
-        Back to Home
-      </button>
-    </div>
-  </div>
-
-  <script src="/jsExpress/profile.js"></script>
-</body>
+    <script src="/jsExpress/profile.js"></script>
+  </body>
 </html>

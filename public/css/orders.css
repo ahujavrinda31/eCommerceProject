@@ -103,6 +103,31 @@ button:hover {
   background: #b32937;
 }
 
+#note{
+  margin-left: 150px;
+}
+
+.cancel-btn {
+  background-color: #e74c3c;
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.cancel-btn:hover {
+  background-color: #c0392b;
+}
+
+.cancel-btn:disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
 @media (max-width: 600px) {
   .order-card {
     padding: 15px;

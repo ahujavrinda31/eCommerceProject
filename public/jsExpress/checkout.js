@@ -27,7 +27,7 @@ function update() {
 }
 
 document.getElementById("place-order").onclick = () => {
-  fetch("/place-order", {
+  fetch("/user/place-order", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ productId, qty }),
@@ -37,7 +37,7 @@ document.getElementById("place-order").onclick = () => {
       if (data.success) {
         Swal.fire({icon:"success",title:"Order Placed",timer:1500,showConfirmButton:false})
         setTimeout(()=>{
-          window.location.href = "/home";
+          window.location.href = "/user";
         },2000)
       } else {
         Swal.fire({
@@ -55,5 +55,5 @@ document.getElementById("place-order").onclick = () => {
 };
 
 document.getElementById("back").onclick=()=>{
-  window.location.href="/home"
+  window.location.href="/user"
 }

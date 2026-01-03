@@ -1,139 +1,41 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin</title>
     <link rel="stylesheet" href="/css/admin.css" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
   <body>
     <div class="heading">
-      <h2 class="welcome-text">Welcome <%= name %></h2>
+      <h2 class="welcome-text">Welcome to ExpressMart!</h2>
 
       <div class="header-buttons">
+        <button id="view-users">View Users</button>
         <button id="orders-button">View User Orders</button>
+        <button id="view-products">View Products</button>
         <button id="logout-btn">Logout</button>
       </div>
     </div>
-
-    <div style="text-align: center; margin-bottom: 20px">
-      <button id="addCategoryBtn">Add Category</button>
-      <div id="categoryInputDiv" style="display: none; margin-top: 10px">
-        <input
-          type="text"
-          id="newCategoryInput"
-          placeholder="Enter Category Name"
-        />
-        <button id="submitCategory">Submit Category</button>
-      </div>
-
-      <div id="subcategoryInputDiv" style="margin-top: 10px">
-        <select id="categorySelect">
-          <% categories.forEach(cat => { %>
-          <option value="<%= cat.name %>"><%= cat.name %></option>
-          <% }) %>
-        </select>
-
-        <input
-          type="text"
-          id="newSubcategoryInput"
-          placeholder="Enter Subcategory Name"
-        />
-        <button id="submitSubcategory">Submit SubCategory</button>
-      </div>
-    </div>
-
-    <div id="category-container">
-      <h3>Select the category of the product</h3>
-      <% categories.forEach(cat => { %>
-      <button
-        class="category-btn"
-        data-category="<%= cat.name %>"
-        data-cat-id="<%= cat._id %>"
-      >
-        <%= cat.name.charAt(0).toUpperCase() + cat.name.slice(1) %>
-      </button>
-      <% }) %>
-    </div>
-
-    <div id="sub-category-container" style="margin-top: 20px"></div>
-
-<div id="product-modal" class="modal-overlay">
-  <div class="modal-box">
-    <div class="modal-header">
-      <h3>Add Product</h3>
-      <span class="close-modal">&times;</span>
-    </div>
-
-    <div class="modal-body">
-      <input type="text" placeholder="Product Name" id="name" />
-      <input type="text" placeholder="Price" id="price" />
-      <input type="text" placeholder="Quantity" id="quantity" />
-      <textarea
-        placeholder="Description"
-        id="description"
-        rows="4"
-      ></textarea>
-      <input type="file" id="image" accept="image/*" />
-    </div>
-
-    <div class="modal-footer">
-      <button id="addBtn">Add Product</button>
-    </div>
-  </div>
-</div>
-
-
-    <div id="productList" style="margin-top: 30px">
-      <% for (let cat in products) { for (let sub in products[cat]) { let
-      subProducts = products[cat][sub]; if (subProducts && subProducts.length >
-      0) { %>
-      <div class="subcategory-box">
-        <h3><%= sub.charAt(0).toUpperCase() + sub.slice(1) %> Products</h3>
-        <div class="subcategory-products">
-          <% subProducts.forEach((prod) => { const catId = prod.category &&
-          prod.category._id ? prod.category._id : prod.category; %>
-          <div
-            class="product-card"
-            data-id="<%= prod._id %>"
-            data-cat-id="<%= catId %>"
-            data-sub-id="<%= prod.subcategory %>"
-          >
-            <img
-              src="/uploads/<%= prod.imagePath %>"
-              alt="<%= prod.name %>"
-              style="width: 100px; height: 100px"
-              class="product-img"
-            />
-            <p>
-              <strong>Name: </strong
-              ><span class="prod-name"><%= prod.name %></span>
-            </p>
-            <p>
-              <strong>Price: </strong
-              ><span class="prod-price"><%= prod.price %></span>
-            </p>
-            <p>
-              <strong>Quantity: </strong
-              ><span class="prod-quantity"><%= prod.quantity %></span>
-            </p>
-            <p>
-              <strong>Description: </strong
-              ><span class="prod-description"><%= prod.description %></span>
-            </p>
-            <input type="file" class="image-input" style="display: none" />
-            <button class="editBtn">Edit</button>
-            <button class="deleteBtn">Delete</button>
-          </div>
-          <% }) %>
+    <div class="card-container">
+      <% if (users && users.length) { %>
+        <h2 class="requests-heading">Pending Requests</h2>
+        <% users.forEach(user=>{ %>
+        <div class="user-card" id="user-<%= user._id %>">
+          <p><strong>Name: </strong><%= user.name %></p>
+          <p><strong>Email: </strong><%= user.email %></p>
+          <p><strong>Role: </strong><%= user.role %></p>
+          <button class="approve-btn" data-id="<%= user._id %>">Accept</button>
+          <button class="reject-btn" data-id="<%= user._id %>">Reject</button>
         </div>
-      </div>
-      <% } } } %>
-    </div>
+      <% }) %>
+      <% } else{ %>
+        <h4 class="no-requests">No Pending Users Requests</h4>
+      <% } %>
 
-    <script>
-      window.currentEmail = "<%= email %>";
-    </script>
-    <script src="/jsExpress/product.js"></script>
+    </div>
+    <div id="productContainer" class="product-grid"></div>
+    <script src="/jsExpress/admin.js"></script>
   </body>
 </html>

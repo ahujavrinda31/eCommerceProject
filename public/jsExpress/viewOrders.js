@@ -1,6 +1,10 @@
 document.querySelectorAll(".cancel-btn").forEach((btn) => {
   btn.addEventListener("click", () => {
+
+    if (btn.disabled) return;
+
     const orderId = btn.dataset.id;
+
     Swal.fire({
       title: "Cancel Order?",
       text: "This action cannot be undone",
@@ -9,7 +13,7 @@ document.querySelectorAll(".cancel-btn").forEach((btn) => {
       confirmButtonText: "Yes, Cancel it",
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`/cancel-order/${orderId}`, {
+        fetch(`/user/cancel-order/${orderId}`, {
           method: "DELETE",
         })
           .then((res) => res.json())

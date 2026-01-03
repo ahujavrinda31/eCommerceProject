@@ -1,13 +1,13 @@
-import { Schema, model } from "mongoose";
+import {Schema,model,Types} from "mongoose";
 
 const cartItemSchema=new Schema({
-    id:{type:String,required:true},
-    quantity:{type:Number,default:1}
-});
+    productId:{type:Types.ObjectId,ref:"Product",required:true},
+    quantity:{type:Number, default:1}
+})
 
 const cartSchema=new Schema({
-    userEmail:{type:String,required:true},
+    userId:{type:Types.ObjectId, ref:"User", required:true, unique:true},
     items:[cartItemSchema]
-});
+})
 
 export default model("Cart",cartSchema);

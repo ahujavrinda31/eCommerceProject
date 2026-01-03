@@ -127,6 +127,12 @@ button:hover {
   background: #b32937;
 }
 
+.assign-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+
 @media (max-width: 1024px) {
   body {
     grid-template-columns: repeat(2, 1fr);

@@ -95,11 +95,27 @@ function loginValidation() {
       credentials: "include",
       body: JSON.stringify({ emailLogin: email, passwordLogin: password }),
     })
-      .then((res) => res.text())
+      .then((res) => res.json())
       .then((data) => {
-        if (data === "yes") window.location.href = "/admin";
-        else if (data === "no") window.location.href = "/home";
-        else Swal.fire("Login Failed", data, "error");
+        if (!data.success) {
+          Swal.fire("Login failed", data.message, "error");
+        }
+        switch (data.role) {
+          case "admin":
+            window.location.href = "/admin";
+            break;
+          case "user":
+            window.location.href = "/user";
+            break;
+          case "seller":
+            window.location.href = "/seller";
+            break;
+          case "transporter":
+            window.location.href = "/transporter";
+            break;
+          default:
+            Swal.fire("Error", "Invalid role assigned", "error");
+        }
       });
   });
 

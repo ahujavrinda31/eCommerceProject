@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transporter</title>
+
+    <link rel="stylesheet" href="/css/transporter.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+
+  <body>
+    <div class="header">
+      <h2>Welcome to ExpressMart!</h2>
+
+      <div class="header-right">
+        <div id="profile-button" class="profile-circle">
+          <span id="profile-initial"></span>
+        </div>
+
+        <div class="header-buttons">
+          <button id="logout-btn">Logout</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-wrapper">
+      <div class="left-section">
+        <h3 class="section-title">Orders for Delivery</h3>
+
+        <% if (orders.length === 0) { %>
+        <p class="empty-text">No orders yet.</p>
+        <% } else { %>
+
+        <div class="order-grid">
+          <% orders.forEach(order => { %>
+          <div class="order-card">
+            <div class="order-header">
+              <p>
+                <strong>Order Date:</strong>
+                <%= new Date(order.orderedOn).toLocaleString() %>
+              </p>
+              <span
+                id="status-<%= order._id %>"
+                class="status <%= order.status.replaceAll(' ','-') %>"
+              >
+                <%= order.status %>
+              </span>
+            </div>
+
+            <div class="order-products">
+              <% order.products.forEach(item => { %>
+              <div class="product-row">
+                <h4><%= item.name.toUpperCase() %></h4>
+                <p>Price: <%= item.price %></p>
+                <p>Qty: <%= item.qty %></p>
+              </div>
+              <% }) %>
+            </div>
+
+            <h3 class="total-bill">Total: <%= order.totalBill %></h3>
+
+            <div class="actions" id="actions-<%= order._id %>">
+              <% if (order.status === "Placed") { %>
+              <button
+                class="primary-btn"
+                onclick="updateStatus('<%= order._id %>','Out for delivery')"
+              >
+                Mark Out for Delivery
+              </button>
+              <% } %> <% if (order.status === "Out for delivery") { %>
+              <button
+                class="danger-btn"
+                onclick="updateStatus('<%= order._id %>','Delivered')"
+              >
+                Mark Delivered
+              </button>
+              <% } %>
+            </div>
+
+            <% if (order.deliveredOn) { %>
+            <p class="delivered-on">
+              Delivered on: <%= new Date(order.deliveredOn).toLocaleString() %>
+            </p>
+            <% } %>
+          </div>
+          <% }) %>
+        </div>
+
+        <% } %>
+      </div>
+    </div>
+    <script>
+      const userInitial = "<%= name %>".charAt(0).toUpperCase();
+    </script>
+    <script src="/jsExpress/transporter.js"></script>
+  </body>
+</html>

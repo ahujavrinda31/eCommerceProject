@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>All Users</title>
+    <link rel="stylesheet" href="/css/adminUsers.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+
+  <body>
+    <div class="page-header">
+      <button class="back-btn" onclick="window.location.href='/admin'">
+        Back
+      </button>
+      <h2>All Users</h2>
+    </div>
+
+    <div class="users-container">
+      <% users.forEach(user => { %>
+        <div class="user-card" id="user-<%= user._id %>">
+          <p><strong>Name:</strong> <%= user.name %></p>
+          <p><strong>Email:</strong> <%= user.email %></p>
+          <p><strong>Role:</strong> <%= user.role.charAt(0).toUpperCase() + user.role.slice(1) %></p>
+
+          <button 
+            class="delete-btn"
+            data-id="<%= user._id %>">
+            Remove
+          </button>
+        </div>
+      <% }) %>
+    </div>
+
+    <script src="/jsExpress/admin.js"></script>
+  </body>
+</html>

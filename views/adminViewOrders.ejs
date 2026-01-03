@@ -5,36 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>View Orders</title>
     <link rel="stylesheet" href="/css/viewOrders.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
   <body>
-  <div class="page-header">
-    <button class="back-btn" onclick="window.location.href='/admin'">
-      Back
-    </button>
-    <h2>All Orders</h2>
-  </div>
+    <div class="page-header">
+      <button class="back-btn" onclick="window.location.href='/admin'">
+        Back
+      </button>
+      <h2>All Orders</h2>
+    </div>
 
-  <% if(orders.length===0) { %>
-    <p class="empty-text">You have not placed any orders yet.</p>
-  <% } else { %>
+    <% if(orders.length===0) { %>
+    <p class="empty-text">No orders yet.</p>
+    <% } else { %>
     <div class="orders-grid">
       <% orders.forEach((order)=>{ %>
-        <div class="order-card">
-          <p><strong>Order Placed By: </strong> <%= order.userName %></p>
-      <p>
-        <strong>Order Date: </strong>
-        <%= new Date(order.placedAt).toLocaleString() %>
-      </p>
-      <% order.products.forEach((item)=>{ %>
-      <h4><strong><%= item.name %></strong></h4>
-      <p><strong>Price: </strong> <%= item.price %></p>
-      <p><strong>Quantity: </strong> <%= item.qty %></p>
-      <% }) %>
-      <h3>Total Bill: <%=order.totalBill %></h3>
-        </div>
+      <div class="order-card">
+        <p>
+          <strong>Order Date: </strong>
+          <%= new Date(order.orderedOn).toLocaleString() %>
+        </p>
+        <% order.products.forEach((item)=>{ %>
+        <h4><strong><%= item.name.toUpperCase() %></strong></h4>
+        <p><strong>Price: </strong> <%= item.price %></p>
+        <p><strong>Quantity: </strong> <%= item.qty %></p>
+        <% }) %>
+        <p>
+          <% if(order.deliveredOn) { %>
+          <strong>Delivered On:</strong>
+          <%= new Date(order.deliveredOn).toLocaleString() %>
+          <% } %>
+        </p>
+        <h3>Total Bill: <%=order.totalBill %></h3>
+
+        <form class="assign-form" data-order-id="<%= order._id %>">
+          <select class="select-transporter">
+            <option value="">Select Transporter</option>
+          </select>
+          <button
+  class="assign-btn"
+  data-id="<%= order._id %>"
+  <% if (order.transporterId) { %> disabled <% } %>>
+  Assign Transporter
+</button>
+        </form>
+      </div>
       <% }) %>
     </div>
-  <% } %>
-</body>
-
+    <% } %>
+    <script src="/jsExpress/adminViewOrders.js"></script>
+  </body>
 </html>

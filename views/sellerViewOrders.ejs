@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>View Orders</title>
+    <link rel="stylesheet" href="/css/sellerOrders.css" />
+  </head>
+
+  <body>
+    <div class="page-header">
+      <button class="back-btn" onclick="window.location.href='/seller'">
+        Back
+      </button>
+      <h2>Sold Products</h2>
+    </div>
+
+    <div class="orders-container">
+      <% if (orders.length === 0) { %>
+        <p class="empty-text">No products sold yet.</p>
+      <% } else { %>
+        <% orders.forEach((order) => { %>
+          <div class="order-card">
+            <div class="order-header">
+              <p>
+                <strong>Order Date:</strong>
+                <%= new Date(order.orderedOn).toLocaleString() %>
+              </p>
+              <span class="status <%= order.status %>">
+                <%= order.status.toUpperCase() %>
+              </span>
+            </div>
+
+            <div class="products">
+              <% order.products.forEach((item) => { %>
+                <div class="product-row">
+                  <h4><%= item.name.toUpperCase() %></h4>
+                  <p>Price: <%= item.price %></p>
+                  <p>Qty: <%= item.qty %></p>
+                </div>
+              <% }) %>
+            </div>
+
+            <div class="order-footer">
+              <h3>Total: <%= order.totalBill %></h3>
+            </div>
+          </div>
+        <% }) %>
+      <% } %>
+    </div>
+  </body>
+</html>

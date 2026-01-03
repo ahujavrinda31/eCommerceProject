@@ -1,12 +1,10 @@
 import {Schema, model} from 'mongoose';
 
-const subcategorySchema=new Schema({
-    name:{type:String,required:true}
-});
-
 const categorySchema=new Schema({
-    name:{type:String,required:true,unique:true},
-    subcategories:[subcategorySchema]
-});
+    name:{type:String,required:true,unique:true,lowercase:true},
+    subcategories:[
+        {name:{type:String,required:true,lowercase:true,trim:true}}
+    ]
+})
 
 export default model("Category",categorySchema);

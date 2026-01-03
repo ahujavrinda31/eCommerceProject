@@ -20,7 +20,7 @@ saveBtn.addEventListener("click", () => {
     address: document.getElementById("address").value.trim()
   };
 
-  fetch("/update-profile", {
+  fetch("/user/update-profile", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(updatedData)

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seller</title>
+    <link rel="stylesheet" href="/css/seller.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+  <body>
+    <div class="header">
+      <div id="profile-button" class="profile-circle">
+        <span id="profile-initial"></span>
+      </div>
+
+      <h2 class="welcome-text">Welcome to ExpressMart!</h2>
+
+      <div class="header-buttons">
+        <button id="add-category-btn">Add Category</button>
+        <button id="add-subcategory">Add Subcategory</button>
+        <button id="add-product">Add Product</button>
+        <button id="sold-products-btn">Sold Products</button>
+        <button id="edit-category-btn">Edit Category</button>
+        <button id="edit-subcategory-btn">Edit Subcategory</button>
+        <button id="logout-btn">Logout</button>
+      </div>
+    </div>
+
+    <div id="productContainer" class="product-grid">
+      <% products.forEach(product => { %>
+      <div class="product-card" id="product-<%= product._id %>">
+        <img src="<%= product.imagePath %>" alt="<%= product.name %>" />
+        <h3><%= product.name.toUpperCase() %></h3>
+        <p><strong>Price: </strong> <%= product.price %></p>
+        <p><strong>Quantity: </strong> <%= product.quantity %></p>
+        <p><%= product.description %></p>
+        <button class="edit-btn" data-id="<%= product._id %>">Edit</button>
+        <button class="delete-btn" data-id="<%= product._id %>">Delete</button>
+      </div>
+      <% }) %>
+    </div>
+
+    <script>
+      const userInitial = "<%= name %>".charAt(0).toUpperCase();
+    </script>
+
+    <script src="/jsExpress/seller.js"></script>
+  </body>
+</html>

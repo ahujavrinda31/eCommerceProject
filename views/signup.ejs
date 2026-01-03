@@ -57,26 +57,32 @@
           placeholder="Enter phone number"
         />
 
-        <label for="saddress">Address</label>
-        <textarea
-          id="saddress"
-          name="saddress"
-          placeholder="Enter your address"
-        ></textarea>
+        <label>Select Role: </label>
+        <div>
+          <button class="role">Admin</button>
+          <button class="role">User</button>
+          <button class="role">Seller</button>
+          <button class="role">Transporter</button>
+        </div>
 
-        <label for="check" class="admin-label">
-          <input type="checkbox" id="check" name="check" /> Admin?
-        </label>
+        <div id="extraFields" class="extra-fields">
+  <div class="field-group" id="addressGroup">
+    <label for="saddress">Address</label>
+    <textarea id="saddress" name="saddress" placeholder="Enter address"></textarea>
+  </div>
 
+  <div class="field-group" id="gstGroup">
+    <label for="gstNo">GST Number</label>
+    <input id="gstNo" name="gstNo" placeholder="Enter GST Number" />
+  </div>
+
+  <div class="field-group" id="vehicleGroup">
+    <label for="vehicleNo">Vehicle Number</label>
+    <input id="vehicleNo" name="vehicleNo" placeholder="Enter Vehicle Number" />
+  </div>
+</div>
         <button type="submit" id="submitBtn">Send OTP</button>
       </form>
-
-      <div id="otpSection">
-        <label>Enter OTP</label>
-        <input type="text" id="otpInput" placeholder="Enter OTP" />
-      </div>
-    </div>
-
     <script src="/jsExpress/signupScript.js"></script>
   </body>
 </html>

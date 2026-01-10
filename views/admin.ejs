@@ -6,10 +6,17 @@
     <title>Admin</title>
     <link rel="stylesheet" href="/css/admin.css" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
   </head>
   <body>
     <div class="heading">
-      <h2 class="welcome-text">Welcome to ExpressMart!</h2>
+      <div>
+        <i class="fa-solid fa-cart-shopping"></i> <span style="font-weight: bold; font-size: 20px;">ExpressMart</span>
+      <!-- <h2 class="welcome-text">ExpressMart</h2> -->
+      </div>
 
       <div class="header-buttons">
         <button id="view-users">View Users</button>
@@ -20,20 +27,18 @@
     </div>
     <div class="card-container">
       <% if (users && users.length) { %>
-        <h2 class="requests-heading">Pending Requests</h2>
-        <% users.forEach(user=>{ %>
-        <div class="user-card" id="user-<%= user._id %>">
-          <p><strong>Name: </strong><%= user.name %></p>
-          <p><strong>Email: </strong><%= user.email %></p>
-          <p><strong>Role: </strong><%= user.role %></p>
-          <button class="approve-btn" data-id="<%= user._id %>">Accept</button>
-          <button class="reject-btn" data-id="<%= user._id %>">Reject</button>
-        </div>
-      <% }) %>
-      <% } else{ %>
-        <h4 class="no-requests">No Pending Users Requests</h4>
+      <h2 class="requests-heading">Pending Requests</h2>
+      <% users.forEach(user=>{ %>
+      <div class="user-card" id="user-<%= user._id %>">
+        <p><strong>Name: </strong><%= user.name %></p>
+        <p><strong>Email: </strong><%= user.email %></p>
+        <p><strong>Role: </strong><%= user.role %></p>
+        <button class="approve-btn" data-id="<%= user._id %>">Accept</button>
+        <button class="reject-btn" data-id="<%= user._id %>">Reject</button>
+      </div>
+      <% }) %> <% } else{ %>
+      <h4 class="no-requests">No Pending Users Requests</h4>
       <% } %>
-
     </div>
     <div id="productContainer" class="product-grid"></div>
     <script src="/jsExpress/admin.js"></script>

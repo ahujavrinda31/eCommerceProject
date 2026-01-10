@@ -8,6 +8,19 @@ body {
   margin: 0;
 }
 
+#profile{
+  text-align: center;
+}
+
+/* .profile-header {
+  position: sticky;
+  top: 0;
+  background: white;
+  padding: 16px 30px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  z-index: 10;
+} */
+
 .profile-header {
   position: sticky;
   top: 0;
@@ -15,11 +28,39 @@ body {
   padding: 16px 30px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.08);
   z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;  
 }
 
-.profile-header h2 {
+.profile-header .back-btn {
+  position: absolute;
+  left: 30px;
+}
+
+.profile-header i {
+  margin-right: 8px;
+  font-size: 18px;
+}
+
+/* .profile-header h2 {
   margin: 0;
   font-size: 22px;
+} */
+
+.back-btn {
+  position: absolute;
+  left: 0;
+  padding: 10px 20px;
+  background: #c74855;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.back-btn:hover {
+  background: #b32937;
 }
 
 .profile-wrapper {

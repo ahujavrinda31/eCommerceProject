@@ -9,7 +9,8 @@
   </head>
   <body>
     <div class="login-container">
-      <h1 class="heading">Login</h1>
+      <h1 class="heading">Welcome Back</h1>
+      <h5>Please login to your account</h5>
 
       <form id="loginForm">
         <label for="lemail">Email</label>
@@ -31,15 +32,18 @@
           <input type="checkbox" id="showPass" />
           <label for="showPass">Show Password</label>
         </div>
+        <p class="forgot-text">
+        <a href="#" id="forgotLink">Forgot Password?</a>
+      </p>
 
         <button type="submit" onclick="loginValidation()">Login</button>
       </form>
 
       <p>Don't have an account? <a href="/signup">Sign up</a></p>
 
-      <p class="forgot-text">
+      <!-- <p class="forgot-text">
         <a href="#" id="forgotLink">Forgot Password?</a>
-      </p>
+      </p> -->
 
       <div id="forgotForm">
         <input

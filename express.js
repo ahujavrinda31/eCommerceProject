@@ -56,6 +56,10 @@ app.get("/", (req, res) => {
   res.render("login");
 });
 
+app.get("/signup",(req,res)=>{
+  res.render("signup")
+})
+
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });

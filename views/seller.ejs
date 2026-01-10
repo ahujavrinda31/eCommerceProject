@@ -6,14 +6,21 @@
     <title>Seller</title>
     <link rel="stylesheet" href="/css/seller.css" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
   </head>
   <body>
     <div class="header">
-      <div id="profile-button" class="profile-circle">
+      <!-- <div id="profile-button" class="profile-circle">
         <span id="profile-initial"></span>
-      </div>
+      </div> -->
 
-      <h2 class="welcome-text">Welcome to ExpressMart!</h2>
+      <div>
+        <i class="fa-solid fa-cart-shopping"></i> <span style="font-weight: bold; font-size: 20px;">ExpressMart</span>
+      <!-- <h2 class="welcome-text">ExpressMart</h2> -->
+      </div>
 
       <div class="header-buttons">
         <button id="add-category-btn">Add Category</button>
@@ -23,6 +30,9 @@
         <button id="edit-category-btn">Edit Category</button>
         <button id="edit-subcategory-btn">Edit Subcategory</button>
         <button id="logout-btn">Logout</button>
+        <div id="profile-button" class="profile-circle">
+        <span id="profile-initial"></span>
+      </div>
       </div>
     </div>
 

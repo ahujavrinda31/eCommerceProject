@@ -27,10 +27,10 @@ body {
 }
 
 
-.welcome-text {
+/* .welcome-text {
   font-size: 22px;
   font-weight: bold;
-}
+} */
 
 .header-buttons {
   display: flex;

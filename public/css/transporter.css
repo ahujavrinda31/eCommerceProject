@@ -41,6 +41,21 @@ body {
   background-color: #2563eb;
 }
 
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;          
+}
+
+.brand i {
+  font-size: 20px;
+}
+
+.brand span {
+  font-weight: bold;
+  font-size: 20px;
+}
+
 .header-right {
   display: flex;
   align-items: center;
@@ -59,6 +74,14 @@ body {
   cursor: pointer;
   font-weight: bold;
   font-size: 16px; 
+}
+
+#logout-btn {
+  background-color: #c74855;
+}
+
+#logout-btn:hover {
+  background-color: #b32937;
 }
 
 .page-wrapper {

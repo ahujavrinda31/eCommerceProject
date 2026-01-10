@@ -128,7 +128,7 @@ function loadCart() {
                         const stockElem =
                           productElem.querySelector(".prod-qty");
                         if (stockElem) {
-                          stockElem.innerHTML = `<strong>Quantity:</strong> ${updated.newProductQty}`;
+                          stockElem.innerHTML = `${updated.newProductQty}`;
                         }
                       }
                     }

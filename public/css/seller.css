@@ -57,7 +57,7 @@ body {
 }
 
 .header-buttons button:hover {
-  background-color: #2563eb;
+  background: #2d528b;
 }
 
 #logout-btn {
@@ -81,15 +81,15 @@ button {
 }
 
 button:hover {
-  background-color: #1e6fd9;
+  background: #2d528b;
 }
 
 #logout-btn {
-  background-color: #e74c3c;
+  background: #c74855;
 }
 
 #logout-btn:hover {
-  background-color: #c0392b;
+  background: #b32937;
 }
 
 .product-grid {
@@ -147,16 +147,16 @@ button:hover {
 }
 
 .edit-btn:hover {
-  background: #5481c5;
+  background: #2d528b;
   color: white;
 }
 
 .delete-btn {
-  background-color: #e74c3c;
+  background: #c74855;
 }
 
 .delete-btn:hover {
-  background-color: #c0392b;
+  background: #b32937;
 }
 
 .product-card button + button {
@@ -211,5 +211,38 @@ textarea.swal2-input {
 
   .product-card img {
     height: 120px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;      
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .header > div:first-child {
+    width: 100%;
+    text-align: center;          
+  }
+
+  .header-buttons {
+    width: 100%;
+    justify-content: center;     
+  }
+
+  .profile-circle {
+    margin-top: 5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-buttons {
+    flex-direction: column;     
+    align-items: stretch;
+  }
+
+  .header-buttons button {
+    width: 100%;
   }
 }

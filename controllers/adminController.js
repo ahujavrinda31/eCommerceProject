@@ -1,11 +1,11 @@
 import User from "../models/User.js";
 import Product from "../models/Product.js";
 import Order from "../models/Order.js";
+import Cart from "../models/Cart.js";
 import nodemailer from "nodemailer";
 import fs from "fs";
 import path from "path";
 import dotenv from "dotenv";
-import { name } from "ejs";
 dotenv.config();
 
 const transporter = nodemailer.createTransport({
@@ -32,6 +32,45 @@ export const adminUsersPage = async (req, res) => {
 export const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
+    const user = await User.findById(id);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+    if (user.role == "seller") {
+      const sellerProducts = await Product.find({ sellerId: id }, { _id: 1 });
+      const sellerProductIds = sellerProducts.map((p) => p._id);
+
+      await Product.deleteMany({ sellerId: id });
+
+      if (sellerProductIds.length > 0) {
+        await Cart.updateMany(
+          {},
+          {
+            $pull: {
+              products: { productId: { $in: sellerProductIds } },
+            },
+          }
+        );
+      }
+
+      await Order.updateMany(
+        {
+          status: { $nin: ["Out for delivery", "Delivered"] },
+          "products.productId": { $in: sellerProductIds },
+        },
+        {
+          $pull: {
+            products: { productId: { $in: sellerProductIds } },
+          },
+        }
+      );
+      await Order.deleteMany({
+        status: { $nin: ["Out for delivery", "Delivered"] },
+        products: { $size: 0 },
+      });
+    }
     await User.findByIdAndDelete(id);
     res.json({ success: true });
   } catch (err) {

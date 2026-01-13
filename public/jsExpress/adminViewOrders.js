@@ -19,7 +19,6 @@ document.querySelectorAll(".assign-form").forEach(async (form) => {
 
     const transporterId = select.value;
     if (!transporterId){
-      // return alert("Select transporter");
       Swal.fire("Info","Select transporter","info");
     } 
 
@@ -32,7 +31,6 @@ document.querySelectorAll(".assign-form").forEach(async (form) => {
 
     const result = await res.json();
     if (result.success) {
-      // alert("Transporter assigned");
       Swal.fire({
         title:"Success",
         text:"Transporter assigned",

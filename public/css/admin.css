@@ -53,6 +53,14 @@ body {
   background-color: #1e6fd9;
 }
 
+#logout-btn {
+  background-color: #c74855;
+}
+
+#logout-btn:hover {
+  background-color: #b32937;
+}
+
 h2 {
   margin-bottom: 15px;
 }

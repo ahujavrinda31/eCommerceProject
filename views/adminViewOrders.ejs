@@ -45,7 +45,7 @@
           <button
   class="assign-btn"
   data-id="<%= order._id %>"
-  <% if (order.transporterId) { %> disabled <% } %>>
+  <% if (order.transporterId || order.status=="Cancelled") { %> disabled <% } %>>
   Assign Transporter
 </button>
         </form>

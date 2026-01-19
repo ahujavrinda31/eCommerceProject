@@ -10,17 +10,11 @@ import userRoutes from "./routes/userRoutes.js";
 import transporterRoutes from "./routes/transporterRoutes.js";
 
 dotenv.config();
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-mongoose.connection.on("connected", () => {
-  console.log(" Connected to MongoDB");
-});
 
-mongoose.connection.on("error", (err) => {
-  console.error(" MongoDB connection error:", err);
-});
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("Connected to MongoDB"))
+  .catch(err => console.error("MongoDB connection error: ",err));
+
 
 const app = express();
 const PORT = 4000;
@@ -28,11 +22,10 @@ const PORT = 4000;
 app.set("view engine", "ejs");
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 app.use(
   session({
-    secret: "keyboard-cat",
+    secret: process.env.SECRET_KEY,
     resave: false,
     saveUninitialized: false,
     store: new create({

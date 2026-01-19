@@ -26,12 +26,6 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-
-/* .welcome-text {
-  font-size: 22px;
-  font-weight: bold;
-} */
-
 .header-buttons {
   display: flex;
   gap: 10px;

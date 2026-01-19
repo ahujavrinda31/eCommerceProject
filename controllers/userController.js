@@ -10,7 +10,7 @@ export const getProfile = async (req, res) => {
   try {
     const user = await User.findOne(
       { email: req.session.email },
-      { password: 0 }
+      { password: 0 },
     );
 
     if (!user) return res.redirect("/");
@@ -45,7 +45,7 @@ export const updateProfile = async (req, res) => {
           address: address.trim(),
         },
       },
-      { new: true }
+      { new: true },
     );
 
     if (!updatedUser) {
@@ -94,7 +94,7 @@ export const addToCart = async (req, res) => {
     }
 
     const existingItem = userCart.items.find(
-      (item) => item.productId.toString() == productId
+      (item) => item.productId.toString() == productId,
     );
     if (existingItem) {
       return res.json({ message: "Product already in cart" });
@@ -172,7 +172,7 @@ export const updateCart = async (req, res) => {
     }
 
     const cartIndex = userCart.items.findIndex(
-      (item) => item.productId.toString() == id
+      (item) => item.productId.toString() == id,
     );
     if (cartIndex == -1) {
       return res
@@ -370,7 +370,8 @@ export const cancelOrder = async (req, res) => {
         $inc: { quantity: item.qty },
       });
     }
-    await Order.findByIdAndDelete(order._id);
+    order.status = "Cancelled";
+    await order.save();
     res.json({ success: true });
   } catch (err) {
     console.error("Cancel order error: ", err);
@@ -381,60 +382,83 @@ export const cancelOrder = async (req, res) => {
   }
 };
 
-export const buyNow=async(req,res)=>{
-   try {
+export const buyNow = async (req, res) => {
+  try {
     const { productId, quantity } = req.body;
     const userId = req.session.userId;
+
+    const qty = Number(quantity);
+
+    if (!qty || qty <= 0) {
+      return res.json({ success: false, message: "Invalid quantity" });
+    }
 
     const product = await Product.findById(productId);
     if (!product) {
       return res.json({ success: false, message: "Product not found" });
     }
 
+    const price = Number(product.price);
+
     const order = new Order({
       userId: userId,
-      products: [{
-        productId: productId,
-        name:product.name,
-        qty:quantity,
-        price: product.price,
-        sellerId:product.sellerId
-      }],
-      totalBill: product.price * quantity,
-      status: "Placed"
+      products: [
+        {
+          productId: productId,
+          name: product.name,
+          qty: qty,
+          price: product.price,
+          sellerId: product.sellerId,
+        },
+      ],
+      totalBill: price * qty,
+      status: "Placed",
     });
 
     await order.save();
 
     await Cart.updateOne(
       { userId: userId },
-      { $pull: { items: { productId: productId } } }
+      { $pull: { items: { productId: productId } } },
     );
 
     res.json({ success: true });
-
   } catch (err) {
     console.error(err);
     res.json({ success: false, message: "Order failed" });
   }
-}
+};
 
-export const getCategorySuggestions = async (req, res) => {
+export const searchProducts = async (req, res) => {
   try {
     const query = req.query.q;
 
     if (!query || query.length < 3) {
-      return res.json([]);
+      return res.json({suggestions:[],products:[]});
     }
 
     const categories = await Category.find({
-      name: { $regex: query, $options: "i" }
-    }).select("name -_id");
+      $or:[
+        {name: { $regex: query, $options: "i" }},
+        {"subcategories.name":{$regex:query,$options:"i"}}
+      ]
+    })
 
-    res.json(categories.map(c => c.name));
+    const categoryIds=categories.map(c=>c._id);
+    const products=await Product.find({
+      $or:[
+        {name:{$regex:query,$options:"i"}},
+        {subcategory:{$regex:query,$options:"i"}},
+        {categoryId:{$in:categoryIds}}
+      ]
+    }).populate("categoryId","name")
+    const suggestions=[
+      ...categories.map(c=>c.name),
+      ...products.map(p=>p.name)
+    ]
+    res.json({suggestions,products});
   } catch (err) {
     console.error("Suggestion error:", err);
     res.json([]);
   }
 };
-

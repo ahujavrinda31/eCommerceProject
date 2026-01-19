@@ -1,5 +1,5 @@
 import express from "express";
-import { getProfile, updateProfile, addToCart, getCart, updateCart, checkout, getOrders, placeOrder, cancelOrder, buyNow, getCategorySuggestions } from "../controllers/userController.js";
+import { getProfile, updateProfile, addToCart, getCart, updateCart, checkout, getOrders, placeOrder, cancelOrder, buyNow, searchProducts } from "../controllers/userController.js";
 
 const router=express.Router();
 
@@ -14,7 +14,7 @@ router.get("/profile",isUser,getProfile);
 router.get("/cart",isUser,getCart);
 router.get("/checkout/:id",isUser,checkout);
 router.get("/orders",isUser,getOrders);
-router.get("/category-suggestions", isUser,getCategorySuggestions);
+router.get("/search-products", isUser,searchProducts);
 router.post("/update-profile",updateProfile);
 router.post("/add-to-cart",addToCart);
 router.post("/update-cart",updateCart);

@@ -2,6 +2,7 @@ import User from "../models/User.js";
 import Product from "../models/Product.js";
 import Order from "../models/Order.js";
 import Cart from "../models/Cart.js";
+import Category from "../models/Category.js";
 import nodemailer from "nodemailer";
 import fs from "fs";
 import path from "path";
@@ -51,7 +52,7 @@ export const deleteUser = async (req, res) => {
             $pull: {
               products: { productId: { $in: sellerProductIds } },
             },
-          }
+          },
         );
       }
 
@@ -64,7 +65,7 @@ export const deleteUser = async (req, res) => {
           $pull: {
             products: { productId: { $in: sellerProductIds } },
           },
-        }
+        },
       );
       await Order.deleteMany({
         status: { $nin: ["Out for delivery", "Delivered"] },
@@ -126,6 +127,125 @@ export const adminPage = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).send("Server Error");
+  }
+};
+
+export const addCategory = async (req, res) => {
+  try {
+    const name = req.body.name.toLowerCase().trim();
+
+    const existingCategory = await Category.findOne({ name });
+
+    if (existingCategory) {
+      return res.json({ exists: true });
+    }
+
+    await Category.create({ name });
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error("Error adding category: ", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+export const addSubcategory = async (req, res) => {
+  try {
+    let { categoryName, subcategoryName } = req.body;
+
+    categoryName = categoryName.toLowerCase().trim();
+    subcategoryName = subcategoryName.toLowerCase().trim();
+
+    const category = await Category.findOne({ name: categoryName });
+
+    if (!category) {
+      return res.json({
+        success: false,
+        message: "Category does not exist",
+        type: "not_exists",
+      });
+    }
+
+    const exists = category.subcategories.some(
+      (sub) => sub.name == subcategoryName,
+    );
+
+    if (exists) {
+      return res.json({
+        success: false,
+        type: "exists",
+        message: "Subcategory already exists, you can use it.",
+      });
+    }
+
+    category.subcategories.push({ name: subcategoryName });
+    await category.save();
+
+    return res.json({
+      success: true,
+      message: "Subcategory added successfully",
+    });
+  } catch (err) {
+    console.error("Error adding subcategory: ", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+export const editCategory = async (req, res) => {
+  try {
+    let { oldName, newName } = req.body;
+
+    oldName = oldName.toLowerCase().trim();
+    newName = newName.toLowerCase().trim();
+
+    const category = await Category.findOne({ name: oldName });
+    if (!category) {
+      return res.json({ success: false, message: "Category not found" });
+    }
+
+    category.name = newName;
+    await category.save();
+
+    res.json({ success: true, message: "Category updated successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false });
+  }
+};
+
+export const editSubcategory = async (req, res) => {
+  try {
+    let { categoryName, oldSub, newSub } = req.body;
+
+    categoryName = categoryName.toLowerCase().trim();
+    oldSub = oldSub.toLowerCase().trim();
+    newSub = newSub.toLowerCase().trim();
+
+    const category = await Category.findOne({ name: categoryName });
+    if (!category) {
+      return res.json({ success: false, message: "Category not found" });
+    }
+
+    const sub = category.subcategories.find((s) => s.name === oldSub);
+    if (!sub) {
+      return res.json({ success: false, message: "Subcategory not found" });
+    }
+
+    sub.name = newSub;
+    await category.save();
+
+    await Product.updateMany(
+      {
+        categoryId: category._id,
+        subcategory: oldSub,
+      },
+      { $set: { subcategory: newSub } },
+    );
+
+    res.json({ success: true, message: "Subcategory updated everywhere" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false });
   }
 };
 
@@ -191,7 +311,7 @@ export const getAvailableTransporters = async (req, res) => {
   try {
     const transporters = await User.find(
       { role: "transporter" },
-      { password: 0 }
+      { password: 0 },
     ).lean();
 
     const availableTransporters = [];
@@ -239,6 +359,13 @@ export const assignTransporter = async (req, res) => {
         success: false,
         message: "Transporter already assigned",
       });
+    }
+
+    if(order.status=="Cancelled"){
+      return res.json({
+        success:false,
+        message:"Order cancelled"
+      })
     }
 
     order.transporterId = transporterId;

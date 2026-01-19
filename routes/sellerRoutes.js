@@ -1,5 +1,5 @@
 import express from "express";
-import { addCategory, addSubcategory, addProduct, getProducts, editProduct, deleteProduct, sellerViewOrders, editCategory, editSubcategory, getProfile, updateProfile } from "../controllers/sellerController.js";
+import { addProduct, getProducts, editProduct, deleteProduct, sellerViewOrders, getProfile, updateProfile } from "../controllers/sellerController.js";
 import { upload } from "../middlewares/upload.js";
 import Product from "../models/Product.js";
 
@@ -20,11 +20,7 @@ router.get("/profile",isSeller,getProfile);
 router.get("/seller-products",isSeller,getProducts);
 router.get("/sellerViewOrders",isSeller,sellerViewOrders);
 router.put("/edit-product/:id", upload.single("image"), editProduct);
-router.put("/edit-category",editCategory);
-router.put("/edit-subcategory",editSubcategory);
 router.post("/update-profile",updateProfile);
-router.post("/addCategory",addCategory);
-router.post("/addsubcategory",addSubcategory);
 router.post("/add-product",upload.single("image"),addProduct);
 router.delete("/delete-product/:id", deleteProduct);
 

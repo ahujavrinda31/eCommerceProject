@@ -24,8 +24,7 @@ document.querySelectorAll(".cancel-btn").forEach((btn) => {
                 title: "Order cancelled",
                 timer: 1500,
                 showConfirmButton: false,
-              });
-              btn.closest(".order-card").remove();
+              }).then(()=>location.reload())
             } else {
               Swal.fire("Error", data.message, "error");
             }

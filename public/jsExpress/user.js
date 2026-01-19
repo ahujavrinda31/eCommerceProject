@@ -1,8 +1,8 @@
-const profileInitialElement = document.getElementById('profile-initial');
-if (profileInitialElement && typeof userInitial !== 'undefined') {
+const profileInitialElement = document.getElementById("profile-initial");
+if (profileInitialElement && typeof userInitial !== "undefined") {
   profileInitialElement.textContent = userInitial;
   profileInitialElement.onclick = () => {
-    window.location.href="/user/profile";
+    window.location.href = "/user/profile";
   };
 }
 
@@ -79,7 +79,7 @@ function loadCart() {
 
           div.querySelector(".cart-buy-now").addEventListener("click", () => {
             const productId = item.id;
-            const quantity = item.quantity;
+            const quantity = Number(qtySpan.innerText);
 
             fetch("/user/cart-buy-now", {
               method: "POST",
@@ -122,7 +122,7 @@ function loadCart() {
                     } else {
                       qtySpan.innerText = updated.newQty;
                       const productElem = document.querySelector(
-                        `.product-card[data-id="${id}"]`
+                        `.product-card[data-id="${id}"]`,
                       );
                       if (productElem) {
                         const stockElem =
@@ -180,7 +180,7 @@ document.querySelectorAll(".category-title").forEach((title) => {
     const subcats = title.parentElement.querySelectorAll(".subcategory");
 
     const isOpen = Array.from(subcats).some(
-      (element) => element.style.display === "block"
+      (element) => element.style.display === "block",
     );
 
     document.querySelectorAll(".subcategory").forEach((element) => {
@@ -222,8 +222,7 @@ document.getElementById("view-orders").addEventListener("click", () => {
 const searchInput = document.getElementById("category-search");
 const suggestions = document.getElementById("suggestions");
 
-searchInput.addEventListener("input", async (e) => {
-  e.preventDefault();
+searchInput.addEventListener("input", async () => {
   const value = searchInput.value.trim();
 
   if (value.length < 3) {
@@ -231,23 +230,25 @@ searchInput.addEventListener("input", async (e) => {
     return;
   }
 
-  const res = await fetch(`/user/category-suggestions?q=${value}`);
-  const categories = await res.json();
+  const res = await fetch(`/user/search-products?q=${value}`);
+  const { suggestions: list } = await res.json();
 
   suggestions.innerHTML = "";
 
-  if (categories.length === 0) {
+  if (list.length === 0) {
     suggestions.style.display = "none";
     return;
   }
 
-  categories.forEach((cat) => {
+  list.forEach(text => {
     const div = document.createElement("div");
     div.className = "suggestion-item";
-    div.innerText = cat;
+    div.innerText = text;
 
     div.addEventListener("click", () => {
-      window.location.href = `/user?category=${cat}`;
+      searchInput.value = text;
+      suggestions.style.display = "none";
+      searchProducts(text);
     });
 
     suggestions.appendChild(div);
@@ -255,3 +256,37 @@ searchInput.addEventListener("input", async (e) => {
 
   suggestions.style.display = "block";
 });
+
+document.getElementById("search-btn").addEventListener("click", () => {
+  const value = searchInput.value.trim();
+  if (!value) return;
+  searchByCategory(value);
+});
+
+async function searchProducts(query) {
+  const res = await fetch(`/user/search-products?q=${query}`);
+  const {products} = await res.json();
+
+  const grid = document.querySelector(".product-grid");
+  grid.innerHTML = "";
+
+  if (products.length === 0) {
+    grid.innerHTML = "<p>No products found</p>";
+    return;
+  }
+
+  products.forEach((product) => {
+    grid.innerHTML += `
+      <div class="product-card" data-id="${product._id}">
+        <img src="${product.imagePath}" />
+        <h3>${product.name.toUpperCase()}</h3>
+        <p><strong>Category:</strong> ${product.categoryId.name.toUpperCase()}</p>
+        <p><strong>Price:</strong> ${product.price}</p>
+        <p><strong>Qty:</strong> <span class="prod-qty">${product.quantity}</span></p>
+        <p class="description">${product.description}</p>
+        <button class="add-to-cart">Add to Cart</button>
+        <button class="buy-now">Buy Now</button>
+      </div>
+    `;
+  });
+}

@@ -29,7 +29,7 @@
     <div class="page-wrapper">
       <div class="left-section">
         <div class="search-container">
-          <form action="/user" method="GET" class="search-form">
+            <div class="search-form">
             <input
               type="text"
               id="category-search"
@@ -39,9 +39,9 @@
               autocomplete="off"
             />
             <div id="suggestions" class="suggestions-box"></div>
-            <button type="submit">Search</button>
+            <button type="button" id="search-btn">Search</button>
             <a href="/user" class="view-all-btn">View All Products</a>
-          </form>
+            </div>
         </div>
         <% if (message) { %>
         <p class="no-products-msg"><%= message %></p>

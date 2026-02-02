@@ -1,4 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const toggleBtn = document.getElementById("menu-toggle");
+  const sidebar = document.getElementById("sidebar");
+
+  if (toggleBtn && sidebar) {
+    toggleBtn.addEventListener("click", () => {
+      sidebar.classList.toggle("closed");
+    });
+  }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
   const viewUsersBtn = document.getElementById("view-users");
   if (viewUsersBtn) {
     viewUsersBtn.addEventListener("click", () => {
@@ -6,15 +17,22 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  document.getElementById("view-products").addEventListener("click", () => {
-    window.location.href = "/admin/products";
-  });
+  const viewProductsBtn = document.getElementById("view-products");
+  if (viewProductsBtn) {
+    viewProductsBtn.addEventListener("click", () => {
+      window.location.href = "/admin/products";
+    });
+  }
 
-  document.getElementById("orders-button").addEventListener("click", () => {
-    window.location.href = "/admin/view-orders";
-  });
+  const ordersBtn = document.getElementById("orders-button");
+  if (ordersBtn) {
+    ordersBtn.addEventListener("click", () => {
+      window.location.href = "/admin/view-orders";
+    });
+  }
+});
 
-  const logoutBtn = document.getElementById("logout-btn");
+const logoutBtn = document.getElementById("logout-btn");
   if (logoutBtn) {
     logoutBtn.addEventListener("click", () => {
       fetch("/logout", {
@@ -30,157 +48,168 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
   }
-});
 
-document.getElementById("add-category-btn").addEventListener("click", () => {
-  Swal.fire({
-    title: "Add Category",
-    input: "text",
-    inputPlaceholder: "Add Category Name",
-    showCancelButton: true,
-    confirmButtonText: "Submit Category",
-    preConfirm: (value) => {
-      if (!value.trim()) {
-        Swal.showValidationMessage("Category name cannot be empty");
-      }
-      return value.trim();
-    },
-  }).then((result) => {
-    if (!result.isConfirmed) return;
-
-    fetch("/admin/addCategory", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ name: result.value }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.exists) {
-          Swal.fire("Category Exists", "You can use this category", "info");
-        } else if (data.success) {
-          Swal.fire("Success", "Category created successfully", "success");
-        } else {
-          Swal.fire("Error", data.message || "Error adding category", "error");
+const addCategoryBtn = document.getElementById("add-category-btn");
+if (addCategoryBtn) {
+  addCategoryBtn.addEventListener("click", () => {
+    Swal.fire({
+      title: "Add Category",
+      input: "text",
+      inputPlaceholder: "Add Category Name",
+      showCancelButton: true,
+      confirmButtonText: "Submit Category",
+      preConfirm: (value) => {
+        if (!value.trim()) {
+          Swal.showValidationMessage("Category name cannot be empty");
         }
-      });
-  });
-});
+        return value.trim();
+      },
+    }).then((result) => {
+      if (!result.isConfirmed) return;
 
-document.getElementById("add-subcategory").addEventListener("click", () => {
-  Swal.fire({
-    title: "Add Subcategory",
-    html: `
+      fetch("/admin/addCategory", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ name: result.value }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.exists) {
+            Swal.fire("Category Exists", "You can use this category", "info");
+          } else if (data.success) {
+            Swal.fire("Success", "Category created successfully", "success");
+          } else {
+            Swal.fire("Error", data.message || "Error adding category", "error");
+          }
+        });
+    });
+  });
+}
+
+const addSubcategoryBtn = document.getElementById("add-subcategory");
+if (addSubcategoryBtn) {
+  addSubcategoryBtn.addEventListener("click", () => {
+    Swal.fire({
+      title: "Add Subcategory",
+      html: `
         <input id="categoryName" class="swal2-input" placeholder="Category Name">
         <input id="subcategoryname" class="swal2-input" placeholder="Subcategory Name">`,
-    confirmButtonText: "Add Subcategory",
-    showCancelButton: true,
-    preConfirm: () => {
-      const categoryName = document.getElementById("categoryName").value.trim();
-      const subcategoryName = document
-        .getElementById("subcategoryname")
-        .value.trim();
+      confirmButtonText: "Add Subcategory",
+      showCancelButton: true,
+      preConfirm: () => {
+        const categoryName = document.getElementById("categoryName").value.trim();
+        const subcategoryName = document
+          .getElementById("subcategoryname")
+          .value.trim();
 
-      if (!categoryName || !subcategoryName) {
-        Swal.showValidationMessage("Both fields are required");
-        return false;
+        if (!categoryName || !subcategoryName) {
+          Swal.showValidationMessage("Both fields are required");
+          return false;
+        }
+
+        return { categoryName, subcategoryName };
+      },
+    }).then((result) => {
+      if (!result.isConfirmed) return;
+
+      fetch("/admin/addsubcategory", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(result.value),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success) {
+            Swal.fire("Success", data.message, "success");
+          } else if (data.type == "not_exists") {
+            Swal.fire("Category Missing", data.message, "error");
+          } else if (data.type == "exists") {
+            Swal.fire("Info", data.message, "info");
+          }
+        });
+    });
+  });
+}
+
+const editCategoryBtn = document.getElementById("edit-category-btn");
+if (editCategoryBtn) {
+  editCategoryBtn.addEventListener("click", () => {
+    Swal.fire({
+      title: "Edit Category",
+      html: `
+        <input id="oldCat" class="swal2-input" placeholder="Old Category Name">
+        <input id="newCat" class="swal2-input" placeholder="New Category Name">
+      `,
+      confirmButtonText: "Update",
+      preConfirm: () => {
+        return {
+          oldName: document.getElementById("oldCat").value.trim(),
+          newName: document.getElementById("newCat").value.trim()
+        };
       }
+    }).then(result => {
+      if (!result.isConfirmed) return;
 
-      return { categoryName, subcategoryName };
-    },
-  }).then((result) => {
-    if (!result.isConfirmed) return;
-
-    fetch("/admin/addsubcategory", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify(result.value),
-    })
-      .then((res) => res.json())
-      .then((data) => {
+      fetch("/admin/edit-category", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(result.value)
+      })
+      .then(res => res.json())
+      .then(data => {
         if (data.success) {
-          Swal.fire("Success", data.message, "success");
-        } else if (data.type == "not_exists") {
-          Swal.fire("Category Missing", data.message, "error");
-        } else if (data.type == "exists") {
-          Swal.fire("Info", data.message, "info");
+          Swal.fire("Updated", data.message, "success")
+            .then(() => window.location.reload());
+        } else {
+          Swal.fire("Error", data.message, "error");
         }
       });
-  });
-});
-
-document.getElementById("edit-category-btn").addEventListener("click", () => {
-  Swal.fire({
-    title: "Edit Category",
-    html: `
-      <input id="oldCat" class="swal2-input" placeholder="Old Category Name">
-      <input id="newCat" class="swal2-input" placeholder="New Category Name">
-    `,
-    confirmButtonText: "Update",
-    preConfirm: () => {
-      return {
-        oldName: document.getElementById("oldCat").value.trim(),
-        newName: document.getElementById("newCat").value.trim()
-      };
-    }
-  }).then(result => {
-    if (!result.isConfirmed) return;
-
-    fetch("/admin/edit-category", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify(result.value)
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        Swal.fire("Updated", data.message, "success")
-          .then(() => window.location.reload());
-      } else {
-        Swal.fire("Error", data.message, "error");
-      }
     });
   });
-});
+}
 
-document.getElementById("edit-subcategory-btn").addEventListener("click", () => {
-  Swal.fire({
-    title: "Edit Subcategory",
-    html: `
-      <input id="catName" class="swal2-input" placeholder="Category Name">
-      <input id="oldSub" class="swal2-input" placeholder="Old Subcategory">
-      <input id="newSub" class="swal2-input" placeholder="New Subcategory">
-    `,
-    confirmButtonText: "Update",
-    preConfirm: () => {
-      return {
-        categoryName: document.getElementById("catName").value.trim(),
-        oldSub: document.getElementById("oldSub").value.trim(),
-        newSub: document.getElementById("newSub").value.trim()
-      };
-    }
-  }).then(result => {
-    if (!result.isConfirmed) return;
-
-    fetch("/admin/edit-subcategory", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify(result.value)
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        Swal.fire("Updated", data.message, "success")
-          .then(() => window.location.reload());
-      } else {
-        Swal.fire("Error", data.message, "error");
+const editSubcategoryBtn = document.getElementById("edit-subcategory-btn");
+if (editSubcategoryBtn) {
+  editSubcategoryBtn.addEventListener("click", () => {
+    Swal.fire({
+      title: "Edit Subcategory",
+      html: `
+        <input id="catName" class="swal2-input" placeholder="Category Name">
+        <input id="oldSub" class="swal2-input" placeholder="Old Subcategory">
+        <input id="newSub" class="swal2-input" placeholder="New Subcategory">
+      `,
+      confirmButtonText: "Update",
+      preConfirm: () => {
+        return {
+          categoryName: document.getElementById("catName").value.trim(),
+          oldSub: document.getElementById("oldSub").value.trim(),
+          newSub: document.getElementById("newSub").value.trim()
+        };
       }
+    }).then(result => {
+      if (!result.isConfirmed) return;
+
+      fetch("/admin/edit-subcategory", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(result.value)
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          Swal.fire("Updated", data.message, "success")
+            .then(() => window.location.reload());
+        } else {
+          Swal.fire("Error", data.message, "error");
+        }
+      });
     });
   });
-});
+}
 
 document.addEventListener("click", function (e) {
   if (!e.target.classList.contains("delete-btn")) return;

@@ -19,7 +19,16 @@ const transporter = nodemailer.createTransport({
 
 export const adminUsersPage = async (req, res) => {
   try {
-    const users = await User.find({ role: { $ne: "admin" } }, { password: 0 });
+    const users = await User.find(
+      {
+        role: { $ne: "admin" },
+        $nor: [
+          { role: "seller", status: "pending" },
+          { role: "transporter", status: "pending" },
+        ],
+      },
+      { password: 0 },
+    );
     res.render("adminUsers", {
       name: req.session.name,
       users,
@@ -299,7 +308,7 @@ export const viewOrders = async (req, res) => {
     if (!req.session.userId) {
       return res.redirect("/");
     }
-    const orders = await Order.find().sort({ createdAt: -1 });
+    const orders = await Order.find().populate("products.productId","imagePath").sort({ createdAt: -1 });
     res.render("adminViewOrders", { orders });
   } catch (err) {
     console.error("Error fetching orders: ", err);
@@ -310,7 +319,7 @@ export const viewOrders = async (req, res) => {
 export const getAvailableTransporters = async (req, res) => {
   try {
     const transporters = await User.find(
-      { role: "transporter" },
+      { role: "transporter", status:"approved" },
       { password: 0 },
     ).lean();
 
@@ -361,11 +370,11 @@ export const assignTransporter = async (req, res) => {
       });
     }
 
-    if(order.status=="Cancelled"){
+    if (order.status == "Cancelled") {
       return res.json({
-        success:false,
-        message:"Order cancelled"
-      })
+        success: false,
+        message: "Order cancelled",
+      });
     }
 
     order.transporterId = transporterId;

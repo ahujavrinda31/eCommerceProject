@@ -4,62 +4,49 @@
 
 body {
   font-family: "Segoe UI", sans-serif;
-  background: #f3f4f6;
+  background: #f9fafb;
   margin: 0;
-}
-
-#profile{
-  text-align: center;
+  color: #111;
 }
 
 .profile-header {
   position: sticky;
   top: 0;
-  background: white;
-  padding: 16px 30px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  background: #ffffff;
+  padding: 18px 32px;
+  border-bottom: 1px solid #e5e7eb;
   z-index: 10;
   display: flex;
   align-items: center;
-  justify-content: center;  
-}
-
-.profile-header .back-btn {
-  position: absolute;
-  left: 30px;
+  justify-content: center;
+  font-weight: 600;
 }
 
 .profile-header i {
   margin-right: 8px;
-  font-size: 18px;
 }
 
 .back-btn {
   position: absolute;
-  left: 0;
-  padding: 10px 20px;
-  background: #c74855;
-  color: white;
-  border: none;
+  left: 20px;
+  padding: 8px 18px;
+  background: white;
+  border: 1px solid black;
   border-radius: 6px;
   cursor: pointer;
 }
 
-.back-btn:hover {
-  background: #b32937;
-}
-
 .profile-wrapper {
-  padding: 30px;
-  max-width: 1100px;
-  margin: auto;
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 24px;
 }
 
 .profile-card {
   background: #ffffff;
-  padding: 30px;
-  border-radius: 16px;
-  box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 28px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 22px;
@@ -75,24 +62,25 @@ body {
 }
 
 .label {
-  font-size: 13px;
+  font-size: 12px;
   color: #6b7280;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .value {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
-  color: #111;
 }
 
 input,
 textarea {
   width: 100%;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 15px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
 }
 
 textarea {
@@ -103,35 +91,26 @@ textarea {
   grid-column: span 2;
   display: flex;
   gap: 12px;
-  justify-content: center;
+  justify-content: flex-end;
   margin-top: 20px;
 }
 
 .profile-actions button {
   padding: 10px 18px;
-  border-radius: 8px;
   font-size: 14px;
+  border-radius: 6px;
   border: none;
   cursor: pointer;
-  transition: 0.3s;
 }
 
 #editBtn {
-  background: #3b82f6;
+  background: #111;
   color: white;
-}
-
-#editBtn:hover {
-  background: #2563eb;
 }
 
 #saveBtn {
   background: #22c55e;
   color: white;
-}
-
-#saveBtn:hover {
-  background: #16a34a;
 }
 
 @media (max-width: 700px) {
@@ -144,7 +123,7 @@ textarea {
     grid-column: span 1;
   }
 
-  .profile-wrapper {
-    padding: 15px;
+  .profile-actions {
+    justify-content: center;
   }
 }

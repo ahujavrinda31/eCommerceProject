@@ -2,142 +2,128 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Segoe UI", Arial, sans-serif;
 }
 
 body {
-  background: #f5f7fb;
-  padding: 20px;
+  background-color: #f1f3f6;
 }
 
 .page-header {
   display: flex;
   align-items: center;
-  justify-content: center;
-  position: relative;
-  margin-bottom: 30px;
+  padding: 15px 20px;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 25px;
+}
+
+.page-header h2 {
+  margin: 0 auto;
+  font-size: 20px;
+  color: #212121;
 }
 
 .back-btn {
   position: absolute;
-  left: 0;
+  left: 20px;
   padding: 8px 18px;
-  background: #c74855;
-  color: #fff;
-  border: none;
+  background: white;
+  border: 1px solid black;
   border-radius: 6px;
-  font-size: 14px;
   cursor: pointer;
-}
-
-.back-btn:hover {
-  background: #b32937;
-}
-
-.page-header h2 {
-  margin: 0;
-}
-
-h2 {
-  text-align: center;
-  margin-bottom: 25px;
-  color: #333;
-}
-
-p {
-  text-align: center;
-  color: #555;
-  margin-top: 15px;
 }
 
 .order-card {
   background: #fff;
-  max-width: 700px;
-  margin: 20px auto;
+  max-width: 900px;
+  margin: 0 auto 20px;
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
   padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-.order-card > p {
-  text-align: left;
-  font-size: 14px;
-  color: #777;
+.order-card > p:first-child {
+  font-size: 13px;
+  color: #757575;
   margin-bottom: 15px;
 }
 
 .order-card h4 {
-  margin: 10px 0 5px;
-  color: #222;
-}
-
-.order-card p strong {
-  color: #444;
+  font-size: 16px;
+  color: #212121;
+  margin-bottom: 5px;
 }
 
 .order-card p {
-  text-align: left;
-  font-size: 15px;
-  margin: 3px 0;
+  font-size: 14px;
+  color: #555;
+  margin: 2px 0;
+}
+
+.order-card p strong {
+  font-weight: 600;
+}
+
+.order-card p:last-of-type {
+  margin-top: 10px;
 }
 
 .order-card h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #212121;
   margin-top: 15px;
   text-align: right;
-  color: #527eb7;
-}
-
-button {
-  display: block;
-  margin: 30px auto;
-  padding: 10px 20px;
-  background: #c74855;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  font-size: 15px;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #b32937;
-}
-
-#note{
-  margin-left: 150px;
 }
 
 .cancel-btn {
-  background-color: #e74c3c;
-  color: white;
-  padding: 8px 14px;
-  border: none;
-  border-radius: 6px;
+  margin-left: auto;
+  margin-top: 15px;
+  padding: 7px 14px;
+  font-size: 14px;
+  background-color: #fff;
+  color: #d32f2f;
+  border: 1px solid #d32f2f;
+  border-radius: 4px;
   cursor: pointer;
-  transition: 0.3s;
 }
 
 .cancel-btn:hover {
-  background-color: #c0392b;
+  background-color: #d32f2f;
+  color: #fff;
 }
 
 .cancel-btn:disabled {
-  background-color: #ccc;
-  color: #666;
+  border-color: #ccc;
+  color: #aaa;
   cursor: not-allowed;
-  opacity: 0.7;
 }
 
-@media (max-width: 600px) {
+.cancel-btn:disabled:hover{
+  color: #aaa;
+  background-color: white;
+}
+
+#note {
+  font-size: 12px;
+  color: #777;
+  margin-top: 10px;
+}
+
+@media (max-width: 768px) {
   .order-card {
     padding: 15px;
   }
 
   .order-card h3 {
     text-align: left;
+    margin-top: 10px;
   }
 
-  button {
+  .cancel-btn {
     width: 100%;
+    margin-top: 12px;
   }
 }

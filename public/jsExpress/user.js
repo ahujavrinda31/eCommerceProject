@@ -1,16 +1,23 @@
-const profileInitialElement = document.getElementById("profile-initial");
-if (profileInitialElement && typeof userInitial !== "undefined") {
-  profileInitialElement.textContent = userInitial;
-  profileInitialElement.onclick = () => {
-    window.location.href = "/user/profile";
-  };
-}
+const toggleBtn = document.getElementById("menu-toggle");
+const sidebar = document.getElementById("sidebar");
+
+toggleBtn.addEventListener("click", () => {
+  sidebar.classList.toggle("closed");
+});
+
+const profile = document.getElementById("view-profile");
+profile.addEventListener("click", () => {
+  window.location.href = "/user/profile";
+});
 
 const viewCartBtn = document.getElementById("view-cart");
-const cartContainer = document.getElementById("cart-container");
-document.querySelectorAll(".add-to-cart").forEach((btn) => {
-  btn.addEventListener("click", function () {
-    const card = btn.closest(".product-card");
+viewCartBtn.addEventListener("click", () => {
+  window.location.href = "/user/cart";
+});
+
+document.querySelector(".product-grid").addEventListener("click", (e) => {
+  if (e.target.classList.contains("add-to-cart")) {
+    const card = e.target.closest(".product-card");
     const productId = card.dataset.id;
 
     fetch("/user/add-to-cart", {
@@ -22,158 +29,25 @@ document.querySelectorAll(".add-to-cart").forEach((btn) => {
       .then((result) => {
         Swal.fire({
           icon:
-            result.message === "Product already in cart"
-              ? "warning"
+            result.message === "Product quantity increased in cart"
+              ? "success"
               : "success",
           title: result.message,
           timer: 1500,
           showConfirmButton: false,
         });
 
-        const qtyElem = card.querySelector(".prod-qty");
         if (result.newProductQty !== undefined) {
-          qtyElem.innerText = result.newProductQty;
+          card.querySelector(".prod-qty").innerText = result.newProductQty;
         }
-
-        if (cartContainer.style.display !== "none") loadCart();
       });
-  });
-});
+  }
 
-let cartOpen = false;
-
-viewCartBtn.addEventListener("click", () => {
-  if (cartOpen) {
-    cartContainer.style.display = "none";
-    cartOpen = false;
-  } else {
-    cartContainer.style.display = "block";
-    loadCart();
-    cartOpen = true;
+  if (e.target.classList.contains("buy-now")) {
+    const productId = e.target.closest(".product-card").dataset.id;
+    window.location.href = `/user/checkout/${productId}`;
   }
 });
-
-function loadCart() {
-  fetch("/user/cart")
-    .then((res) => res.json())
-    .then((data) => {
-      cartContainer.innerHTML = "";
-      if (data.cart.length === 0) {
-        cartContainer.innerHTML = "<p>Your cart is empty</p>";
-        cartContainer.innerHTML += `<div id="total-bill"><h3>Total Bill: 0</h3></div>`;
-      } else {
-        data.cart.forEach((item) => {
-          const div = document.createElement("div");
-          div.classList.add("cart-item");
-
-          div.innerHTML = `
-          <img src="${item.image}" width="100px" height="100px" />
-            <p><strong>${item.name.toUpperCase()}</strong></p>
-            <p>Price: ${item.price}</p>
-            <p>${item.description}</p>
-            <p>Quantity: <span class="qty">${item.quantity}</span></p>
-            <button class="qty-btn" data-id="${item.id}" data-change="-1">-</button>
-            <button class="qty-btn" data-id="${item.id}"data-change="1">+</button>
-            <button class="cart-buy-now" data-id="${item.id}" data-qty="${item.quantity}">Buy Now</button>
-          `;
-
-          div.querySelector(".cart-buy-now").addEventListener("click", () => {
-            const productId = item.id;
-            const quantity = Number(qtySpan.innerText);
-
-            fetch("/user/cart-buy-now", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ productId, quantity }),
-            })
-              .then((res) => res.json())
-              .then((result) => {
-                if (result.success) {
-                  Swal.fire({
-                    icon: "success",
-                    title: "Order placed successfully",
-                    timer: 1500,
-                    showConfirmButton: false,
-                  }).then(() => {
-                    window.location.href = "/user/orders";
-                  });
-                } else {
-                  Swal.fire("Error", result.message, "error");
-                }
-              });
-          });
-
-          const qtySpan = div.querySelector(".qty");
-          div.querySelectorAll(".qty-btn").forEach((btn) => {
-            btn.addEventListener("click", function () {
-              const change = Number(btn.dataset.change);
-              const id = btn.dataset.id;
-
-              fetch("/user/update-cart", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id, change }),
-              })
-                .then((res) => res.json())
-                .then((updated) => {
-                  if (updated.success) {
-                    if (updated.newQty <= 0) {
-                      div.remove();
-                    } else {
-                      qtySpan.innerText = updated.newQty;
-                      const productElem = document.querySelector(
-                        `.product-card[data-id="${id}"]`,
-                      );
-                      if (productElem) {
-                        const stockElem =
-                          productElem.querySelector(".prod-qty");
-                        if (stockElem) {
-                          stockElem.innerHTML = `${updated.newProductQty}`;
-                        }
-                      }
-                    }
-                    let billDiv = document.getElementById("total-bill");
-                    if (billDiv) {
-                      billDiv.innerHTML = `<h3>Total Bill: ${
-                        updated.totalBill || 0
-                      }</h3>`;
-                    }
-
-                    if (updated.cartEmpty) {
-                      cartContainer.innerHTML = "<p>Your cart is empty</p>";
-                      const billDiv = document.createElement("div");
-                      billDiv.id = "total-bill";
-                      billDiv.innerHTML = `<h3>Total Bill: 0</h3>`;
-                      cartContainer.appendChild(billDiv);
-                    }
-                  } else {
-                    Swal.fire({
-                      icon: "error",
-                      title: updated.message || "Cart Update Failed",
-                      showConfirmButton: false,
-                      timer: 1500,
-                    });
-                  }
-                })
-                .catch((err) => {
-                  console.error("Update cart failed: ", err);
-                  Swal.fire({
-                    icon: "error",
-                    title: "Connection error",
-                    text: "Could not update cart",
-                  });
-                });
-            });
-          });
-          cartContainer.appendChild(div);
-        });
-        const totalDiv = document.createElement("div");
-        totalDiv.id = "total-bill";
-        totalDiv.innerHTML = `<h3>Total Bill: ${data.totalBill || 0}</h3>`;
-        cartContainer.appendChild(totalDiv);
-      }
-    });
-}
 
 document.querySelectorAll(".category-title").forEach((title) => {
   title.addEventListener("click", () => {
@@ -208,13 +82,6 @@ document.getElementById("logout-btn").addEventListener("click", function () {
     });
 });
 
-document.querySelectorAll(".buy-now").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    const productId = btn.closest(".product-card").dataset.id;
-    window.location.href = `/user/checkout/${productId}`;
-  });
-});
-
 document.getElementById("view-orders").addEventListener("click", () => {
   window.location.href = "/user/orders";
 });
@@ -240,7 +107,7 @@ searchInput.addEventListener("input", async () => {
     return;
   }
 
-  list.forEach(text => {
+  list.forEach((text) => {
     const div = document.createElement("div");
     div.className = "suggestion-item";
     div.innerText = text;
@@ -260,12 +127,12 @@ searchInput.addEventListener("input", async () => {
 document.getElementById("search-btn").addEventListener("click", () => {
   const value = searchInput.value.trim();
   if (!value) return;
-  searchByCategory(value);
+  searchProducts(value);
 });
 
 async function searchProducts(query) {
   const res = await fetch(`/user/search-products?q=${query}`);
-  const {products} = await res.json();
+  const { products } = await res.json();
 
   const grid = document.querySelector(".product-grid");
   grid.innerHTML = "";
@@ -290,3 +157,43 @@ async function searchProducts(query) {
     `;
   });
 }
+
+document.querySelectorAll(".product-card").forEach((card) => {
+  card.addEventListener("click", async (e) => {
+    if (e.target.closest("button")) return;
+
+    const productId = card.dataset.id;
+
+    const res = await fetch(`/user/product/${productId}`);
+    const product = await res.json();
+
+    Swal.fire({
+      width: 700,
+      html: `
+    <div class="product-popup">
+      
+      <div class="popup-image">
+        <img src="${product.imagePath}" alt="${product.name}" />
+      </div>
+
+      <div class="popup-info">
+        <h2>${product.name.toUpperCase()}</h2>
+        <p class="popup-price">Price: ${product.price}</p>
+
+        <p class="popup-category">
+          ${product.categoryId?.name} · ${product.subcategory}
+        </p>
+
+        <p class="popup-desc">${product.description}</p>
+
+        <p class="popup-stock">
+          Stock: <strong>${product.quantity}</strong>
+        </p>
+      </div>
+
+    </div>
+  `,
+      showConfirmButton: false,
+    });
+  });
+});

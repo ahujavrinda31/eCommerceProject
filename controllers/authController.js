@@ -122,28 +122,28 @@ export const forgotPasswordVerifyOtp = async (req, res) => {
   const { email, otp, newPassword } = req.body;
   const record = await OTP.findOne({ email });
 
-    if (!record) {
-      return res.json({ success: false, message: "OTP expired or invalid" });
-    }
+  if (!record) {
+    return res.json({ success: false, message: "OTP expired or invalid" });
+  }
 
-    if (Date.now() > record.expiresAt) {
-      await OTP.deleteOne({ email });
-      return res.json({ success: false, message: "OTP expired" });
-    }
+  if (Date.now() > record.expiresAt) {
+    await OTP.deleteOne({ email });
+    return res.json({ success: false, message: "OTP expired" });
+  }
 
-    if (record.otp !== otp) {
-      return res.json({ success: false, message: "Incorrect OTP" });
-    }
+  if (record.otp !== otp) {
+    return res.json({ success: false, message: "Incorrect OTP" });
+  }
 
   try {
     const user = await User.findOneAndUpdate(
       { email },
-      { password: newPassword }
+      { password: newPassword },
     );
     if (!user) {
       return res.json({ success: false, message: "User not found" });
     }
-    await OTP.deleteOne({email});
+    await OTP.deleteOne({ email });
     return res.json({
       success: true,
       message: "Password updated. Please login.",
@@ -168,9 +168,10 @@ export const loginScript = async (req, res) => {
     }
 
     if (user.status == "pending") {
-      return res
-        .status(403)
-        .json({ success: false, message: "Admin approval pending" });
+      return res.json({
+        success: true,
+        status: "pending",
+      });
     }
 
     if (user.password !== passwordLogin) {
@@ -215,8 +216,22 @@ export const admin = async (req, res) => {
       role: { $in: ["seller", "transporter"] },
       status: "pending",
     });
+
+    const totalUsers = await User.countDocuments({
+      $or:[
+        {role:"user"},
+        {role:{$in:["seller","transporter"]},status:"approved"}
+      ]
+    });
+    const totalOrders = await Order.countDocuments();
+    const totalProducts = await Product.countDocuments();
     res.render("admin", {
       name: req.session.name,
+      stats: {
+        totalUsers,
+        totalOrders,
+        totalProducts
+      },
       users,
     });
   } catch (err) {
@@ -228,13 +243,15 @@ export const admin = async (req, res) => {
 export const user = async (req, res) => {
   try {
     const searchCategory = req.query.category?.trim().toLowerCase();
+
+    const categories = await Category.find().sort({ name: 1 });
     let products;
-    let message="";
+    let message = "";
     if (searchCategory) {
       const category = await Category.findOne({ name: searchCategory });
       if (!category) {
-        products=[];
-        message = "No products for this category";   
+        products = [];
+        message = "No products for this category";
       } else {
         products = await Product.find({ categoryId: category._id });
         if (products.length === 0) {
@@ -256,9 +273,10 @@ export const user = async (req, res) => {
 
     res.render("user", {
       name: req.session.name,
+      categories,
       products: groupedProducts,
       searchCategory: searchCategory || "",
-      message
+      message,
     });
   } catch (err) {
     console.error(err);
@@ -269,7 +287,13 @@ export const user = async (req, res) => {
 export const seller = async (req, res) => {
   try {
     const products = await Product.find({ sellerId: req.session.userId });
-    res.render("seller", { name: req.session.name, products });
+
+    const orders=await Order.find({"products.sellerId":req.session.userId});
+
+    const totalOrders=orders.length;
+
+    const totalSales=orders.filter(o=>o.status=="Delivered").reduce((sum,o)=>sum+o.totalBill,0); 
+    res.render("seller", { name: req.session.name, products, stats:{totalOrders,totalSales,totalProducts:products.length} });
   } catch (err) {
     console.error(err);
     res.status(500).send("Server error");
@@ -283,7 +307,7 @@ export const transporterRole = async (req, res) => {
     }
 
     const transporterId = new mongoose.Types.ObjectId(
-      String(req.session.userId)
+      String(req.session.userId),
     );
 
     const orders = await Order.find({
@@ -298,4 +322,8 @@ export const transporterRole = async (req, res) => {
     console.error("Error fetching transporter orders:", err);
     res.status(500).send("Failed to load orders");
   }
+};
+
+export const waitApproval = async (req, res) => {
+  res.render("wait-approval");
 };

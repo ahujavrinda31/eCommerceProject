@@ -4,13 +4,25 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Signup</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="/css/signup.css" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
   <body>
+    <div class="signup-wrapper">
+      <div class="signup-image">
+        <img
+      src="https://img.freepik.com/premium-photo/ecommerce-market-shopping-online-vector-illustration_776674-1060954.jpg?w=1480"
+      alt="image"
+    />
+      </div>
     <div class="signup-container">
       <h1 class="heading">Signup</h1>
-      <h5>Hello there, signup to continue.</h5>
 
       <form id="signupForm">
         <label for="sname">Username</label>
@@ -37,19 +49,6 @@
           placeholder="Enter your password"
         />
 
-        <label for="confirmpass">Confirm Password</label>
-        <input
-          type="password"
-          id="confirmpass"
-          name="confirmpass"
-          placeholder="Confirm your password"
-        />
-
-        <div class="show-pass">
-          <input type="checkbox" id="showPass" />
-          <label for="showPass">Show Password</label>
-        </div>
-
         <label for="sphone">Phone</label>
         <input
           type="text"
@@ -58,19 +57,17 @@
           placeholder="Enter phone number"
         />
 
+        <label for="saddress">Address</label>
+    <input id="saddress" name="saddress" placeholder="Enter address"/>
+
         <label>Select Role: </label>
-        <div>
-          <button class="role">Admin</button>
+        <div class="role-btn">
           <button class="role">User</button>
           <button class="role">Seller</button>
           <button class="role">Transporter</button>
         </div>
 
         <div id="extraFields" class="extra-fields">
-  <div class="field-group" id="addressGroup">
-    <label for="saddress">Address</label>
-    <textarea id="saddress" name="saddress" placeholder="Enter address"></textarea>
-  </div>
 
   <div class="field-group" id="gstGroup">
     <label for="gstNo">GST Number</label>
@@ -84,6 +81,7 @@
 </div>
         <button type="submit" id="submitBtn">Send OTP</button>
       </form>
+      </div>
     <script src="/jsExpress/signupScript.js"></script>
   </body>
 </html>

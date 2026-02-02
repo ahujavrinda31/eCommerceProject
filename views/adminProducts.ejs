@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <title>All Products</title>
-    <link rel="stylesheet" href="/css/admin.css" />
+    <link rel="stylesheet" href="/css/adminProducts.css" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
   <body>
@@ -22,20 +22,19 @@
 
         <h3><%= p.name.toUpperCase() %></h3>
 
-        <p><strong>Price:</strong> <%= p.price %></p>
-        <p><strong>Quantity:</strong> <%= p.quantity %></p>
-        <p><%= p.description %></p>
+        <p class="price-quantity">
+          <span><strong>Price: </strong><%= p.price %></span>
+          <span><strong>Quantity: </strong><%= p.quantity %></span>
+        </p>
 
-        <p>
-          <strong>Category:</strong> <%=
+        <p class="category-info">
+          <span><strong>Category:</strong> <%=
           p.categoryId.name.charAt(0).toUpperCase()+p.categoryId.name.slice(1)
           %>
+          </span>
+          <span><strong>Subcategory: </strong><%= p.subcategory.charAt(0).toUpperCase()+p.subcategory.slice(1) %></span>
         </p>
-        <p>
-          <strong>Subcategory:</strong> <%=
-          p.subcategory.charAt(0).toUpperCase()+p.subcategory.slice(1) %>
-        </p>
-        <p><strong>Seller:</strong> <%= p.sellerId.name %></p>
+        <p class="seller"><strong>Seller:</strong> <%= p.sellerId.name %></p>
 
         <button class="delete-btn" data-id="<%= p._id %>">Delete</button>
       </div>

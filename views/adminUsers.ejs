@@ -15,20 +15,28 @@
     </div>
 
     <div class="users-container">
-      <% users.forEach(user => { %>
-        <div class="user-card" id="user-<%= user._id %>">
-          <p><strong>Name:</strong> <%= user.name %></p>
-          <p><strong>Email:</strong> <%= user.email %></p>
-          <p><strong>Role:</strong> <%= user.role.charAt(0).toUpperCase() + user.role.slice(1) %></p>
+  <div class="users-header">
+    <span>Name</span>
+    <span>Email</span>
+    <span>Role</span>
+    <span>Action</span>
+  </div>
 
-          <button 
-            class="delete-btn"
-            data-id="<%= user._id %>">
-            Remove
-          </button>
-        </div>
-      <% }) %>
+  <% users.forEach(user => { %>
+    <div class="user-row" id="user-<%= user._id %>">
+      <span><%= user.name %></span>
+      <span><%= user.email %></span>
+      <span class="role"><%= user.role %></span>
+
+      <button 
+        class="delete-btn"
+        data-id="<%= user._id %>">
+        Remove
+      </button>
     </div>
+  <% }) %>
+</div>
+
 
     <script src="/jsExpress/admin.js"></script>
   </body>

@@ -1,0 +1,147 @@
+:root {
+  --sidebar-open: 230px;
+  --sidebar-closed: 70px;
+}
+
+.sidebar {
+  width: var(--sidebar-open);
+  transition: width 0.3s ease;
+}
+
+.sidebar.closed {
+  width: var(--sidebar-closed);
+}
+
+.page-wrapper {
+  margin-left: var(--sidebar-open);
+  margin-top: 60px;
+  transition: margin-left 0.3s ease;
+}
+
+.sidebar.closed ~ .page-wrapper {
+  margin-left: var(--sidebar-closed);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden; 
+}
+
+.top-header {
+  height: 60px;
+  background: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.left-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.page-wrapper {
+  margin-left: 230px;
+  margin-top: 60px;
+  height: calc(100vh - 60px);
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  overflow-y: auto;
+  background: #f5f7fb;
+}
+
+.left-section {
+  flex: 1;
+}
+
+.site-name {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+#menu-toggle {
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.sidebar {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  width: 230px;
+  height: calc(100vh - 60px);
+  background: linear-gradient(180deg, #1f2937, #111827);
+  padding: 15px 10px;  
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.35s ease;
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebar button {
+  background: transparent;
+  border: none;
+  color: #e5e7eb;
+  text-align: left;
+  padding: 12px;
+  font-size: 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.sidebar button:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateX(4px);
+}
+.sidebar.closed {
+  transform: translateX(-100%);
+}
+
+.site-name {
+  font-weight: 600;
+  font-size: 18px;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+}
+
+#logout-btn {
+  background-color: #c74855;
+  padding: 10px;
+  width: 100px;
+  color: white;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+#logout-btn:hover {
+  background-color: #b32937;
+}

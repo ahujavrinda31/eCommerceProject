@@ -2,164 +2,135 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Segoe UI", Arial, sans-serif;
 }
 
 body {
   background: #f5f7fb;
-  padding: 20px;
-}
-
-h2 {
-  text-align: center;
-  margin-bottom: 25px;
   color: #333;
 }
 
-p {
-  text-align: center;
-  color: #555;
-  margin-top: 15px;
-}
-
-body > .order-card,
-.order-card {
-  background: #fff;
-}
-
-body {
-  background: #f5f7fb;
-  padding: 20px;
-}
-
 .page-header {
+  position: sticky;
+  top: 0;
+  background: #fff;
+  padding: 15px 20px;
+  border-bottom: 1px solid #ddd;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
-  margin-bottom: 30px;
+  z-index: 100;
 }
 
 .page-header h2 {
   margin: 0;
-  color: #333;
+  font-size: 1.6rem;
 }
 
 .back-btn {
   position: absolute;
-  left: 0;
-  padding: 10px 20px;
-  background: #c74855;
-  color: white;
-  border: none;
+  left: 20px;
+  padding: 8px 18px;
+  background: white;
+  border: 1px solid black;
   border-radius: 6px;
   cursor: pointer;
 }
 
-.back-btn:hover {
-  background: #b32937;
+.admin-content {
+  padding: 30px 20px;
 }
 
 .empty-text {
   text-align: center;
-  color: #555;
-  margin-top: 20px;
+  font-size: 16px;
+  color: #777;
 }
 
 .orders-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-
-h2,
-p,
-button {
-  grid-column: 1 / -1;
+  gap: 25px;
 }
 
 .order-card {
+  background: #fff;
+  border-radius: 12px;
   padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
 }
 
-.order-card > p {
-  text-align: left;
+.order-card > p:first-child {
   font-size: 14px;
   color: #777;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .order-card h4 {
-  margin: 10px 0 5px;
+  margin-top: 12px;
+  font-size: 15px;
   color: #222;
 }
 
-.order-card p strong {
-  color: #444;
+.order-card p {
+  font-size: 14px;
+  margin: 4px 0;
+  color: #555;
 }
 
-.order-card p {
-  text-align: left;
-  font-size: 15px;
-  margin: 3px 0;
+.order-card hr {
+  margin: 12px 0;
+  border: none;
+  border-top: 1px solid #eee;
 }
 
 .order-card h3 {
   margin-top: 15px;
   text-align: right;
-  color: #527eb7;
+  font-size: 16px;
+  color: #2f6fed;
 }
 
-button {
-  margin: 30px auto;
-  padding: 10px 25px;
+.assign-form {
+  margin-top: auto;
+  display: flex;
+  gap: 10px;
+}
+
+.select-transporter {
+  flex: 1;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.assign-btn {
+  padding: 9px 18px;
   background: #c74855;
   color: #fff;
   border: none;
   border-radius: 6px;
-  font-size: 15px;
   cursor: pointer;
 }
 
-button:hover {
+.assign-btn:hover {
   background: #b32937;
 }
 
 .assign-btn:disabled {
-  background-color: #ccc;
+  background: #ccc;
   cursor: not-allowed;
 }
 
-
-@media (max-width: 1024px) {
-  body {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 600px) {
-  body {
-    grid-template-columns: 1fr;
-  }
-
-  .order-card h3 {
-    text-align: left;
-  }
-
-  button {
-    width: 100%;
-  }
-}
-
-@media (max-width: 1024px) {
+@media (max-width: 1100px) {
   .orders-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 700px) {
   .orders-grid {
     grid-template-columns: 1fr;
   }

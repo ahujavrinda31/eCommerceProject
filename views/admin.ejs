@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin</title>
     <link rel="stylesheet" href="/css/admin.css" />
+    <link rel="stylesheet" href="/css/adminPage.css"/>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link
       rel="stylesheet"
@@ -12,37 +13,72 @@
     />
   </head>
   <body>
-    <div class="heading">
-      <div>
-        <i class="fa-solid fa-cart-shopping"></i> <span style="font-weight: bold; font-size: 20px;">ExpressMart</span>
-      </div>
+    <%- include('./partials/adminHeader'); %>
 
-      <div class="header-buttons">
-        <button id="view-users">View Users</button>
-        <button id="orders-button">View User Orders</button>
-        <button id="add-category-btn">Add Category</button>
-        <button id="add-subcategory">Add Subcategory</button>
-        <button id="edit-category-btn">Edit Category</button>
-        <button id="edit-subcategory-btn">Edit Subcategory</button>
-        <button id="view-products">View Products</button>
-        <button id="logout-btn">Logout</button>
-      </div>
+    <div class="admin-layout">
+      <%- include('./partials/adminSidebar'); %>
+    <div class="dashboard-content">
+  <div class="quick-actions">
+
+    <div class="action-card" onclick="window.location.href='/admin/users'">
+      <span>View Users</span>
+      <i class="fa-solid fa-arrow-right"></i>
+       <div class="card-stat">Total Users: <%= stats.totalUsers %></div>
     </div>
-    <div class="card-container">
-      <% if (users && users.length) { %>
-      <h2 class="requests-heading">Pending Requests</h2>
-      <% users.forEach(user=>{ %>
-      <div class="user-card" id="user-<%= user._id %>">
-        <p><strong>Name: </strong><%= user.name %></p>
-        <p><strong>Email: </strong><%= user.email %></p>
-        <p><strong>Role: </strong><%= user.role %></p>
-        <button class="approve-btn" data-id="<%= user._id %>">Accept</button>
-        <button class="reject-btn" data-id="<%= user._id %>">Reject</button>
-      </div>
-      <% }) %> <% } else{ %>
-      <h4 class="no-requests">No Pending Users Requests</h4>
-      <% } %>
+
+    <div class="action-card" onclick="window.location.href='/admin/view-orders'">
+      <span>View User Orders</span>
+      <i class="fa-solid fa-arrow-right"></i>
+       <div class="card-stat">Total Orders: <%= stats.totalOrders %></div>
     </div>
+
+    <div class="action-card" onclick="window.location.href='/admin/products'">
+      <span>View Products</span>
+      <i class="fa-solid fa-arrow-right"></i>
+       <div class="card-stat">Available Products: <%= stats.totalProducts %></div>
+    </div>
+
+  </div>
+
+  <div class="requests-section">
+    <h3>Pending Requests</h3>
+
+    <table class="requests-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% if (users && users.length) { %>
+          <% users.forEach(user => { %>
+            <tr id="user-<%= user._id %>">
+              <td><%= user.name %></td>
+              <td><%= user.email %></td>
+              <td id="user-role"><%= user.role %></td>
+              <td>
+                <button class="approve-btn" data-id="<%= user._id %>">Approve</button>
+                <button class="reject-btn" data-id="<%= user._id %>">Reject</button>
+              </td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr>
+            <td colspan="4" class="no-data">
+              No pending user requests
+            </td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+
     <div id="productContainer" class="product-grid"></div>
     <script src="/jsExpress/admin.js"></script>
   </body>

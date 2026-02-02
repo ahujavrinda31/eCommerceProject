@@ -1,0 +1,140 @@
+:root {
+  --header-height: 60px;
+  --sidebar-open: 230px;
+  --sidebar-closed: 70px;
+}
+
+.top-header {
+  height: var(--header-height);
+  background: #ffffff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  z-index: 1000;
+}
+
+.left-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.site-name {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+#menu-toggle {
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.right-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-circle {
+  width: 40px;
+  height: 40px;
+  background: #5481c5;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+
+.sidebar {
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
+  width: var(--sidebar-open);
+  height: calc(100vh - var(--header-height));
+  background: linear-gradient(180deg, #1f2937, #111827);
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transform: translateX(0);
+  transition: transform 0.35s ease;
+}
+
+.sidebar button {
+  background: none;
+  border: none;
+  color: #e5e7eb;
+  padding: 12px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.25s ease;
+}
+
+.sidebar button i {
+  font-size: 16px;
+  min-width: 20px;
+}
+
+.sidebar button:hover {
+  background: rgba(255,255,255,0.12);
+}
+
+.sidebar.closed {
+  width: 0;
+  transform: translateX(-100%);
+}
+
+.sidebar.closed span {
+  display: none;
+}
+
+.sidebar button {
+  background: none;
+  border: none;
+  color: #e5e7eb;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.25s ease;
+}
+
+.sidebar button i {
+  font-size: 16px;
+  min-width: 20px;
+}
+
+.sidebar.closed button {
+  display: none;
+}
+
+.sidebar.closed button i {
+  font-size: 18px;
+}
+
+.page-wrapper {
+  margin-top: var(--header-height);
+  margin-left: var(--sidebar-open);
+  padding: 25px;
+  transition: margin-left 0.35s ease;
+}
+
+.sidebar.closed ~ .page-wrapper {
+  margin-left: 0;
+}

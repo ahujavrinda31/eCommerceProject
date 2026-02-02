@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>User</title>
     <link rel="stylesheet" href="/css/user.css" />
+    <link rel="stylesheet" href="/css/userPage.css"/>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link
       rel="stylesheet"
@@ -12,19 +13,8 @@
     />
   </head>
   <body>
-    <div class="header">
-      <div class="brand">
-        <i class="fa-solid fa-cart-shopping"></i>
-        <span>ExpressMart</span>
-      </div>
-      <div class="header-buttons">
-        <button id="view-orders">View Orders</button>
-        <button id="logout-btn">Logout</button>
-        <div id="profile-button" class="profile-circle">
-          <span id="profile-initial"></span>
-        </div>
-      </div>
-    </div>
+    <%- include ('./partials/userHeader'); %>
+    <%- include ('./partials/userSidebar'); %>
 
     <div class="page-wrapper">
       <div class="left-section">
@@ -34,7 +24,7 @@
               type="text"
               id="category-search"
               name="category"
-              placeholder="Search by category..."
+              placeholder="Search products..."
               value="<%= searchCategory %>"
               autocomplete="off"
             />
@@ -52,39 +42,23 @@
           products[cat].forEach((product) => { %>
 
           <div class="product-card" data-id="<%= product._id %>">
-            <img src="<%= product.imagePath %>" />
+            <div class="product-image">
+              <img src="<%= product.imagePath %>" />
+            </div>
 
-            <h3><%= product.name.toUpperCase() %></h3>
+            <div class="product-info">
+              <h3><%= product.name.toUpperCase() %></h3>
+              <p><strong>Price:</strong> <%= product.price %></p>
+            </div>
 
-            <p>
-              <strong>Category:</strong> <%=
-              cat.charAt(0).toUpperCase()+cat.slice(1) %>
-            </p>
-            <p><strong>Price:</strong> <%= product.price %></p>
-            <p>
-              <strong>Qty:</strong>
-              <span class="prod-qty"> <%= product.quantity %> </span>
-            </p>
-
-            <p class="description"><%= product.description %></p>
-
-            <button class="add-to-cart">Add to Cart</button>
-            <button class="buy-now">Buy Now</button>
+            <div class="product-actions">
+              <button class="add-to-cart"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
+              <button class="buy-now"><i class="fa-solid fa-bolt"></i> Buy Now</button>
+            </div>
           </div>
-
           <% }) %> <% }) %>
         </div>
       </div>
-
-      <div class="right-section">
-        <button id="view-cart" class="cart-btn">View Cart</button>
-        <div id="cart-container"></div>
-      </div>
-    </div>
-
-    <script>
-      const userInitial = "<%= name %>".charAt(0).toUpperCase();
-    </script>
     <script src="/jsExpress/user.js"></script>
   </body>
 </html>

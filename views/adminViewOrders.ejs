@@ -6,6 +6,10 @@
     <title>View Orders</title>
     <link rel="stylesheet" href="/css/viewOrders.css" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
   </head>
   <body>
     <div class="page-header">
@@ -15,6 +19,7 @@
       <h2>All Orders</h2>
     </div>
 
+    <main class="admin-content">
     <% if(orders.length===0) { %>
     <p class="empty-text">No orders yet.</p>
     <% } else { %>
@@ -29,6 +34,9 @@
         <h4><strong><%= item.name.toUpperCase() %></strong></h4>
         <p><strong>Price: </strong> <%= item.price %></p>
         <p><strong>Quantity: </strong> <%= item.qty %></p>
+        <% if(order.status=="Cancelled") { %>
+          <p><strong>Status: </strong>Cancelled</p>
+        <% } %>
         <% }) %>
         <p>
           <% if(order.deliveredOn) { %>
@@ -37,6 +45,7 @@
           <% } %>
         </p>
         <h3>Total Bill: <%=order.totalBill %></h3>
+        <hr>
 
         <form class="assign-form" data-order-id="<%= order._id %>">
           <select class="select-transporter">
@@ -53,6 +62,7 @@
       <% }) %>
     </div>
     <% } %>
+    </main>
     <script src="/jsExpress/adminViewOrders.js"></script>
   </body>
 </html>

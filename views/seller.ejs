@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Seller</title>
     <link rel="stylesheet" href="/css/seller.css" />
+    <link rel="stylesheet" href="/css/sellerPage.css"/>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link
       rel="stylesheet"
@@ -12,39 +13,77 @@
     />
   </head>
   <body>
-    <div class="header">
+     <%- include("./partials/sellerHeader"); %>
+     <%- include("./partials/sellerSidebar"); %>
+    
+    <main class="page-wrapper">
+      
+      <div class="stats-container">
 
-      <div>
-        <i class="fa-solid fa-cart-shopping"></i> <span style="font-weight: bold; font-size: 20px;">ExpressMart</span>
-      </div>
-
-      <div class="header-buttons">
-        <button id="add-product">Add Product</button>
-        <button id="sold-products-btn">Sold Products</button>
-        <button id="logout-btn">Logout</button>
-        <div id="profile-button" class="profile-circle">
-        <span id="profile-initial"></span>
-      </div>
-      </div>
+  <div class="stat-card">
+    <div class="stat-icon orders">
+      <i class="fa-solid fa-cart-shopping"></i>
     </div>
+    <div class="stat-info">
+      <p style="color: #3b82f6;">Total Orders</p>
+      <h2>7</h2>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon sales">
+      <i class="fa-solid fa-indian-rupee-sign"></i>
+    </div>
+    <div class="stat-info">
+      <p style="color: #22c55e;">Total Sales</p>
+      <h2>89999</h2>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon products">
+      <i class="fa-solid fa-box"></i>
+    </div>
+    <div class="stat-info">
+      <p style="color: #f59e0b;">Total Products</p>
+      <h2>5</h2>
+    </div>
+  </div>
+</div>
+
+     <div class="search-container">
+      <div class="search-box">
+        <div class="search-input-wrapper">
+          <input
+            type="text"
+            id="product-search"
+            placeholder="Search product by name..."
+            autocomplete="off"
+          />
+      <div id="suggestions" class="suggestions-list"></div>
+    </div>
+
+    <button id="search-btn">Search</button>
+    <button id="view-all-btn" class="secondary-btn">View All Products</button>
+  </div>
+</div>
 
     <div id="productContainer" class="product-grid">
       <% products.forEach(product => { %>
-      <div class="product-card" id="product-<%= product._id %>">
+      <div class="product-card" id="product-<%= product._id %>" data-id="<%= product._id %>">
         <img src="<%= product.imagePath %>" alt="<%= product.name %>" />
         <h3><%= product.name.toUpperCase() %></h3>
+        <div class="price-qty">
         <p><strong>Price: </strong> <%= product.price %></p>
         <p><strong>Quantity: </strong> <%= product.quantity %></p>
+        </div>
         <p><%= product.description %></p>
-        <button class="edit-btn" data-id="<%= product._id %>">Edit</button>
-        <button class="delete-btn" data-id="<%= product._id %>">Delete</button>
+        <button class="edit-btn" data-id="<%= product._id %>"></button>
+        <button class="delete-btn" data-id="<%= product._id %>"></button>
       </div>
       <% }) %>
     </div>
-
-    <script>
-      const userInitial = "<%= name %>".charAt(0).toUpperCase();
-    </script>
+  </main>
 
     <script src="/jsExpress/seller.js"></script>
   </body>

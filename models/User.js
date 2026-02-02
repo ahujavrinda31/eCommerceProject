@@ -11,9 +11,7 @@ const userSchema = new Schema({
   role: { type: String, enum: ["user", "admin", "seller", "transporter"] },
   address: {
     type: String,
-    required: function () {
-      this.role != "admin";
-    },
+    required:true
   },
   vehicleNo: {
     type: String,

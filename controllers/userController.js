@@ -4,6 +4,7 @@ import Cart from "../models/Cart.js";
 import Order from "../models/Order.js";
 import Category from "../models/Category.js";
 import mongoose from "mongoose";
+import { name } from "ejs";
 export const getProfile = async (req, res) => {
   if (!req.session.isLoggedIn) return res.redirect("/");
 
@@ -97,7 +98,17 @@ export const addToCart = async (req, res) => {
       (item) => item.productId.toString() == productId,
     );
     if (existingItem) {
-      return res.json({ message: "Product already in cart" });
+      existingItem.quantity+=1
+      product.quantity-=1
+
+      await userCart.save();
+      await product.save();
+
+      return res.json({
+        message:"Product quantity increased in cart",
+        newProductQty:product.quantity,
+        cartQty:existingItem.quantity
+      })
     }
 
     userCart.items.push({ productId: product._id, quantity: 1 });
@@ -233,6 +244,61 @@ export const updateCart = async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
+export const removeFromCart=async(req,res)=>{
+  try{
+    const userId=req.session.userId;
+    const {productId}=req.body;
+
+    if(!userId){
+      return res.status(401).json({message:"User not logged in"})
+    }
+
+    const cart=await Cart.findOne({userId});
+    if(!cart){
+      return res.json({success:false,message:"Cart not found"})
+    }
+
+    const itemIndex=cart.items.findIndex(
+      item=>item.productId.toString()==productId
+    );
+
+    if (itemIndex==-1){
+      return res.json({success:false,message:"Item not in cart"})
+    }
+
+    const item=cart.items[itemIndex];
+
+    const product=await Product.findById(productId);
+    if(product){
+      product.quantity+=item.quantity;
+      await product.save();
+    }
+
+    cart.items.splice(itemIndex,1);
+    await cart.save();
+
+    let totalBill = 0;
+    for (const cartItem of cart.items) {
+      const prod = await Product.findById(cartItem.productId);
+      if (prod) {
+        totalBill += prod.price * cartItem.quantity;
+      }
+    }
+
+    res.json({
+      success: true,
+      message: "Product removed from cart",
+      restoredQty: product ? product.quantity : null,
+      cartEmpty: cart.items.length === 0,
+      totalBill
+    });
+  }
+  catch(err){
+    console.error("Error removing product from cart: ",err);
+    res.status(500).json({success:false,message:"Server error"})
+  }
+}
 
 export const checkout = async (req, res) => {
   const productId = req.params.id;
@@ -462,3 +528,86 @@ export const searchProducts = async (req, res) => {
     res.json([]);
   }
 };
+
+export const userCartPage=async(req,res)=>{
+  res.render("cart",{name:req.session.name});
+}
+
+export const getUserCartData = async (req, res) => {
+  try {
+    const userId = req.session.userId;
+    if (!userId) {
+      return res.json({ cart: [], totalBill: 0 });
+    }
+    const userCart = await Cart.findOne({ userId });
+    if (!userCart || userCart.items.length === 0) {
+      return res.json({ cart: [], totalBill: 0 });
+    }
+
+    let fullCart = [];
+    let totalBill = 0;
+
+    for (const item of userCart.items) {
+      const product = await Product.findById(item.productId).lean();
+      if (!product) continue;
+
+      const price =
+        parseFloat(String(product.price).replace(/[^0-9.]/g, "")) || 0;
+      fullCart.push({
+        id: product._id,
+        name: product.name,
+        price: price,
+        description: product.description,
+        image: product.imagePath,
+        quantity: item.quantity,
+      });
+      totalBill += price * item.quantity;
+    }
+    return res.json({ cart: fullCart, totalBill: totalBill || 0 });
+  } catch (err) {
+    console.error("Error fetching cart:", err);
+    return res.json({ cart: [], totalBill: 0 });
+  }
+};
+
+export const cartPlaceOrder = async (req, res) => {
+  try {
+    const userId = req.session.userId;
+    const cart = await Cart.findOne({userId}).populate("items.productId");
+
+    if (cart.length==0) {
+      return res.json({ success: false, message: "Cart is empty" });
+    }
+
+    const totalAmount = cart.items.reduce(
+      (sum, item) => sum + item.productId.price * item.quantity,
+      0
+    );
+
+    const order = new Order({
+      userId,
+      items: cart.items.map((item) => ({
+        productId: item.id,
+        quantity: item.quantity,
+        price: item.price,
+      })),
+      totalBill:totalAmount,
+      status: "Placed",
+      createdAt: new Date(),
+    });
+
+    await order.save();
+
+    await Cart.deleteOne({userId});
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.json({ success: false, message: "Order failed" });
+  }
+};
+
+export const getProductDetails=async(req,res)=>{
+  const product=await Product.findById(req.params.id).populate("categoryId","name");
+  res.json(product);
+}

@@ -33,7 +33,7 @@ function loginValidation() {
       return Swal.fire(
         "Weak Password",
         "Password must be at least 6 characters",
-        "warning"
+        "warning",
       );
     if (newPass !== confirmPass)
       return Swal.fire("Mismatch", "Passwords do not match", "error");
@@ -97,6 +97,11 @@ function loginValidation() {
     })
       .then((res) => res.json())
       .then((data) => {
+        if (data.status === "pending") {
+          window.location.href = "/wait-approval";
+          return;
+        }
+        
         if (!data.success) {
           Swal.fire("Login failed", data.message, "error");
         }

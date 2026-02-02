@@ -10,6 +10,7 @@ const isAdmin=(req,res,next)=>{
     next();
 }
 
+
 router.get("/products",isAdmin,viewAllProducts);
 router.get("/view-orders", isAdmin,viewOrders);
 router.get("/users",isAdmin,adminUsersPage);

@@ -229,3 +229,17 @@ export const sellerViewOrders = async (req, res) => {
     res.render("sellerViewOrders", { orders: [] });
   }
 };
+
+export const searchProducts= async (req, res) => {
+  const { q } = req.query;
+  const sellerId = req.session.userId;
+
+  if (!q || q.length < 3) return res.json([]);
+
+  const products = await Product.find({
+    sellerId,
+    name: { $regex: q, $options: "i" }
+  })
+
+  res.json(products);
+};

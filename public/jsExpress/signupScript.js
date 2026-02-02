@@ -1,24 +1,16 @@
 function signupValidation() {
   const submitBtn = document.getElementById("submitBtn");
-  const showPass = document.getElementById("showPass");
 
   const spass = document.getElementById("spass");
-  const confirmpass = document.getElementById("confirmpass");
 
   const roleButtons = document.querySelectorAll(".role");
 
-  const addressField = document.getElementById("saddress");
   const gstNoField = document.getElementById("gstNo");
   const vehicleNoField = document.getElementById("vehicleNo");
 
   let otpSent = false;
   let userInfo = {};
   let selectedRole = "";
-
-  showPass.addEventListener("change", () => {
-    spass.type = showPass.checked ? "text" : "password";
-    confirmpass.type = showPass.checked ? "text" : "password";
-  });
 
   roleButtons.forEach((btn) => {
     btn.addEventListener("click", (e) => {
@@ -29,40 +21,19 @@ function signupValidation() {
 
       selectedRole = btn.textContent.toLowerCase();
 
-      const addressGroup = document.getElementById("addressGroup");
       const gstGroup = document.getElementById("gstGroup");
       const vehicleGroup = document.getElementById("vehicleGroup");
 
-      addressGroup.style.display = "none";
       gstGroup.style.display = "none";
       vehicleGroup.style.display = "none";
 
-      if (selectedRole === "user") {
-        addressGroup.style.display = "flex";
-      }
 
       if (selectedRole === "seller") {
-        addressGroup.style.display = "flex";
         gstGroup.style.display = "flex";
       }
 
       if (selectedRole === "transporter") {
-        addressGroup.style.display = "flex";
         vehicleGroup.style.display = "flex";
-      }
-
-      if (selectedRole === "user") {
-        addressGroup.hidden = false;
-      }
-
-      if (selectedRole === "seller") {
-        addressGroup.hidden = false;
-        gstGroup.hidden = false;
-      }
-
-      if (selectedRole === "transporter") {
-        addressGroup.hidden = false;
-        vehicleGroup.hidden = false;
       }
     });
   });
@@ -73,15 +44,14 @@ function signupValidation() {
     const name = document.getElementById("sname").value.trim();
     const email = document.getElementById("semail").value.trim();
     const password = spass.value;
-    const passwordConfirm = confirmpass.value;
     const phone = document.getElementById("sphone").value.trim();
+    const address=document.getElementById("saddress").value.trim();
 
-    const address = addressField.value.trim();
     const gstNo = gstNoField.value.trim();
     const vehicleNo = vehicleNoField.value.trim();
 
     if (!otpSent) {
-      if (!name || !email || !password || !passwordConfirm || !phone) {
+      if (!name || !email || !password || !phone || !address) {
         Swal.fire("Missing Details", "Must specify all details", "warning");
         return;
       }
@@ -101,34 +71,24 @@ function signupValidation() {
         return;
       }
 
-      if (password !== passwordConfirm) {
-        Swal.fire("Mismatch", "Passwords do not match", "error");
-        return;
-      }
-
-      if (!/^[789]\d{9}$/.test(phone)) {
+      if (!/^[6789]\d{9}$/.test(phone)) {
         Swal.fire(
           "Invalid Phone",
-          "Phone must be 10 digits and start with 7, 8, or 9",
+          "Phone must be 10 digits and start with 6, 7, 8, or 9",
           "error"
         );
         return;
       }
 
-      if (selectedRole === "user" && !address) {
-        Swal.fire("Address Required", "Enter address", "warning");
+      if (selectedRole === "seller" && (!gstNo || !gstNo.length==15)) {
+        Swal.fire("Missing Details", "GST required and should be of 15 characters", "warning");
         return;
       }
 
-      if (selectedRole === "seller" && (!address || !gstNo)) {
-        Swal.fire("Missing Details", "Address & GST required", "warning");
-        return;
-      }
-
-      if (selectedRole === "transporter" && (!address || !vehicleNo)) {
+      if (selectedRole === "transporter" && (!vehicleNo)) {
         Swal.fire(
           "Missing Details",
-          "Address & Vehicle No required",
+          "Vehicle No required",
           "warning"
         );
         return;
@@ -178,7 +138,12 @@ function signupValidation() {
                 .then((data) => {
                   if (data.success) {
                     Swal.fire("Signup Successful", "", "success");
-                    setTimeout(() => (window.location.href = "/"), 1500);
+                    if(userInfo.role=="seller" || userInfo.role=="transporter"){
+                      setTimeout(() => (window.location.href = "/wait-approval"), 1500);
+                    }
+                    else{
+                      setTimeout(() => (window.location.href = "/"), 1500);
+                    }
                   } else {
                     Swal.fire("Invalid OTP", "Try again", "error");
                   }

@@ -13,15 +13,24 @@
   </head>
   <body>
     <div class="header">
-      <button id="back-btn">Back</button>
+      <button id="back-btn"><i class="fa-solid fa-arrow-left"></i></button>
       <div id="heading">
         <i class="fa-solid fa-cart-shopping"></i> Your Cart
       </div>
     </div>
 
-    <div id="cart-container"></div>
-
-    <div id="total-bill"></div>
+    <div class="cart-layout">
+      <div class="cart-table-wrapper">
+        <div class="cart-table-header">
+          <span>Product</span>
+          <span>Price</span>
+          <span>Quantity</span>
+          <span>Actions</span>
+        </div>
+        <div id="cart-container"></div>
+      </div>
+      <div id="total-bill"></div>
+    </div>
 
     <script src="/jsExpress/cart.js"></script>
   </body>

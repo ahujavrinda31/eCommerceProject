@@ -109,21 +109,26 @@ textarea {
 }
 
 #saveBtn {
-  background: #22c55e;
+  background: #374151;
   color: white;
 }
 
-@media (max-width: 700px) {
-  .profile-card {
-    grid-template-columns: 1fr;
-  }
+.section-title {
+  grid-column: span 2;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  margin-top: 10px;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 6px;
+}
 
-  .profile-field.full-width,
-  .profile-actions {
-    grid-column: span 1;
-  }
+.readonly .value {
+  color: #6b7280;
+}
 
-  .profile-actions {
-    justify-content: center;
-  }
+.hint {
+  font-size: 12px;
+  color: #9ca3af;
+  margin-top: 4px;
 }

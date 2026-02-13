@@ -199,17 +199,3 @@ body {
   font-size: 16px;
   color: #777;
 }
-
-@media (max-width: 600px) {
-  .header {
-    flex-direction: column;
-    gap: 10px;
-    text-align: center;
-  }
-
-  .header-buttons {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-}

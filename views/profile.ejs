@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>User Profile</title>
+    <title>Profile</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="/css/profile.css" />
     <link
@@ -11,21 +11,26 @@
   </head>
   <body>
     <div class="profile-header">
-        <i class="fa-solid fa-user"></i> Your Profile
-      <button onclick="history.back()" class="back-btn">Back</button>
+      <i class="fa-solid fa-user"></i> Your Profile
+      <button onclick="history.back()" class="back-btn"><i class="fa-solid fa-arrow-left"></i></button>
     </div>
 
     <div class="profile-wrapper">
       <div class="profile-card">
+        <div class="section-title">Account Information</div>
+
+        <div class="profile-field full-width readonly">
+          <span class="label">Email</span>
+          <span class="value"><%= user.email %></span>
+          <span class="hint">Email cannot be changed</span>
+        </div>
+
+        <div class="section-title">Personal Information</div>
+
         <div class="profile-field">
           <span class="label">Name</span>
           <span class="value" id="nameText"><%= user.name %></span>
           <input type="text" id="name" value="<%= user.name %>" hidden />
-        </div>
-
-        <div class="profile-field">
-          <span class="label">Email</span>
-          <span class="value"><%= user.email %></span>
         </div>
 
         <div class="profile-field">

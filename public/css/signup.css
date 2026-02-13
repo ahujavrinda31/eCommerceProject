@@ -140,17 +140,3 @@ button:hover {
   display: none;
   flex-direction: column;
 }
-
-@media (max-width: 480px) {
-  .signup-container {
-    padding: 30px 20px;
-  }
-
-  .heading {
-    font-size: 28px;
-  }
-
-  input, button {
-    font-size: 16px;
-  }
-}

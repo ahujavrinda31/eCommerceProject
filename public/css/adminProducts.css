@@ -120,15 +120,3 @@ body {
 .product-card .delete-btn:hover {
   background-color: #a71d2a;
 }
-
-@media screen and (max-width: 900px) {
-  .product-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media screen and (max-width: 600px) {
-  .product-grid {
-    grid-template-columns: 1fr;
-  }
-}

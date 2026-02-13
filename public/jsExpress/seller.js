@@ -5,6 +5,9 @@ toggle.addEventListener("click", () => {
   sidebar.classList.toggle("closed");
 });
 
+const productGrid=document.querySelector(".product-grid");
+const initialProductsHTML=productGrid.innerHTML;
+
 const profile = document.getElementById("view-profile");
 profile.addEventListener("click", () => {
   window.location.href = "/seller/profile";
@@ -17,6 +20,12 @@ const viewAllBtn = document.getElementById("view-all-btn");
 
 searchInput.addEventListener("input", async () => {
   const value = searchInput.value.trim();
+
+  if(value.length==0){
+    suggestions.style.display="none";
+    productGrid.innerHTML=initialProductsHTML;
+    return;
+  }
 
   if (value.length < 3) {
     suggestions.innerHTML = "";
@@ -54,6 +63,7 @@ searchInput.addEventListener("input", async () => {
 document.getElementById("search-btn").addEventListener("click", () => {
   const value = searchInput.value.trim();
   if (!value) return;
+  suggestions.style.display = "none";
   searchProducts(value);
 });
 
@@ -227,10 +237,16 @@ document.querySelectorAll(".edit-btn").forEach((btn) => {
         Swal.fire("Updated", data.message, "success");
         const card = document.getElementById(`product-${productId}`);
         card.querySelector("h3").textContent = data.updated.name;
-        card.querySelector("p:nth-of-type(1)").textContent =
-          "Price: " + data.updated.price;
-        card.querySelector("p:nth-of-type(2)").textContent =
-          "Qty: " + data.updated.quantity;
+        const priceP=card.querySelector("p:nth-of-type(1)");
+        priceP.textContent="Price: "+data.updated.price;
+        priceP.style.fontWeight="bold";
+        const qtyQ=card.querySelector("p:nth-of-type(2)");
+        qtyQ.textContent="Qty: "+data.updated.quantity;
+        qtyQ.style.fontWeight="bold";
+        // card.querySelector("p:nth-of-type(1)").textContent =
+        //   "Price: " + data.updated.price;
+        // card.querySelector("p:nth-of-type(2)").textContent =
+        //   "Qty: " + data.updated.quantity;
         card.querySelector("p:nth-of-type(3)").textContent =
           data.updated.description;
         if (data.updated.imagePath)

@@ -313,30 +313,3 @@ body {
 .popup-stock {
   font-size: 14px;
 }
-
-@media (max-width: 900px) {
-  .page-wrapper {
-    flex-direction: column;
-  }
-}
-
-@media (max-width: 600px) {
-  .header {
-    flex-direction: column;
-    gap: 8px;
-    text-align: center;
-  }
-
-  .header-buttons {
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .search-form input {
-    width: 100%;
-  }
-
-  .product-card img {
-    height: 120px;
-  }
-}

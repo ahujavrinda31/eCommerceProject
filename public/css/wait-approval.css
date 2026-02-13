@@ -1,0 +1,48 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  background: #f8f9fb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #111;
+}
+
+.approval-container {
+  background: #fff;
+  padding: 40px 50px;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.approval-container h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.approval-container p {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+.approval-container p:last-child {
+  margin-bottom: 0;
+}
+
+.approval-icon {
+  font-size: 42px;
+  color: #111;
+  margin-bottom: 20px;
+}

@@ -255,34 +255,3 @@ h2 {
 h4 {
   color: #777;
 }
-
-@media (max-width: 768px) {
-  .heading {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 15px;
-  }
-
-  .header-buttons {
-    width: 100%;
-    justify-content: flex-start;
-  }
-
-  .header-buttons button {
-    flex: 1;
-  }
-}
-
-@media (max-width: 480px) {
-  body {
-    padding: 12px;
-  }
-
-  .welcome-text {
-    font-size: 18px;
-  }
-
-  .product-card img {
-    height: 150px;
-  }
-}

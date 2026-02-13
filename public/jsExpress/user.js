@@ -5,6 +5,9 @@ toggleBtn.addEventListener("click", () => {
   sidebar.classList.toggle("closed");
 });
 
+const productGrid=document.querySelector(".product-grid");
+const initialProductsHTML=productGrid.innerHTML;
+
 const profile = document.getElementById("view-profile");
 profile.addEventListener("click", () => {
   window.location.href = "/user/profile";
@@ -92,6 +95,12 @@ const suggestions = document.getElementById("suggestions");
 searchInput.addEventListener("input", async () => {
   const value = searchInput.value.trim();
 
+  if(value.length==0){
+    suggestions.style.display="none";
+    productGrid.innerHTML=initialProductsHTML;
+    return;
+  }
+
   if (value.length < 3) {
     suggestions.style.display = "none";
     return;
@@ -127,6 +136,9 @@ searchInput.addEventListener("input", async () => {
 document.getElementById("search-btn").addEventListener("click", () => {
   const value = searchInput.value.trim();
   if (!value) return;
+
+  // suggestions.innerHTML="";
+  suggestions.style.display="none";
   searchProducts(value);
 });
 
@@ -138,62 +150,68 @@ async function searchProducts(query) {
   grid.innerHTML = "";
 
   if (products.length === 0) {
-    grid.innerHTML = "<p>No products found</p>";
+    grid.innerHTML = `<p class="no-products-msg">No products found</p>`;
     return;
   }
 
   products.forEach((product) => {
     grid.innerHTML += `
       <div class="product-card" data-id="${product._id}">
-        <img src="${product.imagePath}" />
-        <h3>${product.name.toUpperCase()}</h3>
-        <p><strong>Category:</strong> ${product.categoryId.name.toUpperCase()}</p>
-        <p><strong>Price:</strong> ${product.price}</p>
-        <p><strong>Qty:</strong> <span class="prod-qty">${product.quantity}</span></p>
-        <p class="description">${product.description}</p>
-        <button class="add-to-cart">Add to Cart</button>
-        <button class="buy-now">Buy Now</button>
+        <div class="product-image">
+          <img src="${product.imagePath}" alt="${product.name}" />
+        </div>
+        <div class="product-info">
+          <h3>${product.name.toUpperCase()}</h3>
+          <p class="price">Price: ${product.price}</p>  
+        </div>
+        <div class="product-actions">
+          <button class="add-to-cart">
+            <i class="fa-solid fa-cart-plus"></i> Add to Cart
+          </button>
+          <button class="buy-now">
+            <i class="fa-solid fa-bolt"></i> Buy Now
+          </button>
+        </div>
       </div>
     `;
   });
 }
 
-document.querySelectorAll(".product-card").forEach((card) => {
-  card.addEventListener("click", async (e) => {
-    if (e.target.closest("button")) return;
+document.querySelector(".product-grid").addEventListener("click", async (e) => {
+  const card = e.target.closest(".product-card");
+  if (!card) return;
 
-    const productId = card.dataset.id;
+  if (e.target.closest("button")) return;
 
-    const res = await fetch(`/user/product/${productId}`);
-    const product = await res.json();
+  const productId = card.dataset.id;
 
-    Swal.fire({
-      width: 700,
-      html: `
-    <div class="product-popup">
-      
-      <div class="popup-image">
-        <img src="${product.imagePath}" alt="${product.name}" />
+  const res = await fetch(`/user/product/${productId}`);
+  const product = await res.json();
+
+  Swal.fire({
+    width: 700,
+    html: `
+      <div class="product-popup">
+        <div class="popup-image">
+          <img src="${product.imagePath}" alt="${product.name}" />
+        </div>
+
+        <div class="popup-info">
+          <h2>${product.name.toUpperCase()}</h2>
+          <p class="popup-price">Price: ${product.price}</p>
+
+          <p class="popup-category">
+            ${product.categoryId?.name} · ${product.subcategory}
+          </p>
+
+          <p class="popup-desc">${product.description}</p>
+
+          <p class="popup-stock">
+            Stock: <strong>${product.quantity}</strong>
+          </p>
+        </div>
       </div>
-
-      <div class="popup-info">
-        <h2>${product.name.toUpperCase()}</h2>
-        <p class="popup-price">Price: ${product.price}</p>
-
-        <p class="popup-category">
-          ${product.categoryId?.name} · ${product.subcategory}
-        </p>
-
-        <p class="popup-desc">${product.description}</p>
-
-        <p class="popup-stock">
-          Stock: <strong>${product.quantity}</strong>
-        </p>
-      </div>
-
-    </div>
-  `,
-      showConfirmButton: false,
-    });
+    `,
+    showConfirmButton: false,
   });
 });

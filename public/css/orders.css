@@ -111,19 +111,3 @@ body {
   color: #777;
   margin-top: 10px;
 }
-
-@media (max-width: 768px) {
-  .order-card {
-    padding: 15px;
-  }
-
-  .order-card h3 {
-    text-align: left;
-    margin-top: 10px;
-  }
-
-  .cancel-btn {
-    width: 100%;
-    margin-top: 12px;
-  }
-}

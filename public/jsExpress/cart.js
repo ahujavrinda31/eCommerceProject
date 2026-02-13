@@ -7,8 +7,10 @@ function loadCart() {
     .then((data) => {
       cartContainer.innerHTML = "";
       if (data.cart.length === 0) {
-        cartContainer.innerHTML = "<p>Your cart is empty</p>";
-        cartContainer.innerHTML += `<div id="total-bill"><h3>Total Bill: 0</h3></div>`;
+        cartContainer.innerHTML = "<p style='text-align: center; padding: 40px;'>Your cart is empty</p>";
+        const billDiv = document.getElementById("total-bill");
+        billDiv.innerHTML="";
+        billDiv.style.display = "none";
       } else {
         data.cart.forEach((item) => {
           const div = document.createElement("div");
@@ -16,24 +18,23 @@ function loadCart() {
 
           div.innerHTML = `
   <div class="cart-card">
-    <img class="cart-img" src="${item.image}" />
-
-    <div class="cart-info">
+    <div class="cart-product">
+      <img class="cart-img" src="${item.image}" />
       <h3>${item.name.toUpperCase()}</h3>
-      <p class="price">Price: ${item.price}</p>
-      
-
-      <div class="qty-controls">
-        <button class="qty-btn" data-id="${item.id}" data-change="-1">−</button>
-        <span class="qty">${item.quantity}</span>
-        <button class="qty-btn" data-id="${item.id}" data-change="1">+</button>
-      </div>
-
-      <button class="cart-buy-now" data-id="${item.id}">Buy Now</button>
-      <button class="remove-from-cart" data-id="${item.id}">Remove</button>
+    </div>
+    <p class="price">${item.price}</p>
+    <div class="qty-controls">
+      <button class="qty-btn" data-id="${item.id}" data-change="-1">−</button>
+      <span class="qty">${item.quantity}</span>
+      <button class="qty-btn" data-id="${item.id}" data-change="1">+</button>
+    </div>
+    <div class="cart-actions">
+      <button class="cart-buy-now" data-id="${item.id}"><i class="fa-solid fa-bolt"></i> Buy Now</button>
+      <button class="remove-from-cart" data-id="${item.id}"> <i class="fa-solid fa-trash"></i> Remove</button>
     </div>
   </div>
 `;
+          const qtySpan = div.querySelector(".qty");
           div.querySelector(".cart-buy-now").addEventListener("click", () => {
             const productId = item.id;
             const quantity = Number(qtySpan.innerText);
@@ -60,7 +61,6 @@ function loadCart() {
               });
           });
 
-          const qtySpan = div.querySelector(".qty");
           div.querySelectorAll(".qty-btn").forEach((btn) => {
             btn.addEventListener("click", function () {
               const change = Number(btn.dataset.change);
@@ -89,19 +89,34 @@ function loadCart() {
                         }
                       }
                     }
-                    let checkoutTotal = document.getElementById("checkout-total");
+                    let checkoutTotal =
+                      document.getElementById("checkout-total");
+                    let subtotal = document.getElementById("subtotal");
                     if (checkoutTotal) {
-                      checkoutTotal.innerHTML = `<h3>Total Bill: ${
-                        updated.totalBill || 0
-                      }</h3>`;
+                      const total = updated.totalBill || 0;
+                      checkoutTotal.innerHTML = `${total}`;
+                      if (subtotal) {
+                        subtotal.innerHTML = `${total}`;
+                      }
                     }
 
                     if (updated.cartEmpty) {
-                      cartContainer.innerHTML = "<p>Your cart is empty</p>";
-                      const billDiv = document.createElement("div");
-                      billDiv.id = "total-bill";
-                      billDiv.innerHTML = `<h3>Total Bill: 0</h3>`;
-                      cartContainer.appendChild(billDiv);
+                      cartContainer.innerHTML = "<p style='text-align: center; padding: 40px;'>Your cart is empty</p>";
+                      const billDiv = document.getElementById("total-bill");
+                      // billDiv.className = "summary-card";
+                      // billDiv.innerHTML = `<h3>Order Summary</h3>
+                      //   <div class="checkout-row">
+                      //     <span>Shipping:</span>
+                      //     <span>Free</span>
+                      //   </div>
+                      //   <div class="checkout-row checkout-total">
+                      //     <span>Total:</span>
+                      //     <span>0</span>
+                      //   </div>
+                      //   <button id="place-order-btn" disabled>Place Order</button>`;
+                      // cartContainer.appendChild(billDiv);
+                      billDiv.innerHTML="";
+                      billDiv.style.display = "none";
                     }
                   } else {
                     Swal.fire({
@@ -155,14 +170,32 @@ function loadCart() {
                       }
                     }
 
-                    const billDiv = document.getElementById("total-bill");
+                    const billDiv = document.querySelector(".summary-card");
                     if (billDiv) {
-                      billDiv.innerHTML = `<h3>Total Bill: ${result.totalBill || 0}</h3>`;
+                      const checkoutTotal = billDiv.querySelector("#checkout-total");
+                      const subtotal = billDiv.querySelector("#subtotal");
+                      if (checkoutTotal) {
+                        checkoutTotal.innerHTML = `${result.totalBill || 0}`;
+                      }
+                      if (subtotal) {
+                        subtotal.innerHTML = `${result.totalBill || 0}`;
+                      }
                     }
 
                     if (result.cartEmpty) {
-                      cartContainer.innerHTML = "<p>Your cart is empty</p>";
-                      cartContainer.innerHTML += `<div id="total-bill"><h3>Total Bill: 0</h3></div>`;
+                      cartContainer.innerHTML = "<p style='text-align: center; padding: 40px;'>Your cart is empty</p>";
+                      const billDiv = document.getElementById("total-bill");
+                      billDiv.className = "summary-card";
+                      billDiv.innerHTML = `<h3>Order Summary</h3>
+                        <div class="checkout-row">
+                          <span>Shipping:</span>
+                          <span>Free</span>
+                        </div>
+                        <div class="checkout-row checkout-total">
+                          <span>Total:</span>
+                          <span>0</span>
+                        </div>
+                        <button id="place-order-btn" disabled>Place Order</button>`;
                     }
                   } else {
                     Swal.fire("Error", result.message, "error");
@@ -175,42 +208,58 @@ function loadCart() {
             });
         });
 
-        const checkoutDiv=document.createElement("div");
-        checkoutDiv.className="checkout-box";
+        const totalBillDiv = document.getElementById("total-bill");
+        totalBillDiv.className = "summary-card";
 
-        checkoutDiv.innerHTML=`<h3 id="checkout-total">Total Bill: ${data.totalBill}</h3>
+        totalBillDiv.innerHTML = `<h3>Order Summary</h3>
+        <div class="checkout-row">
+          <span>Shipping:</span>
+          <span>Free</span>
+        </div>
+        <div class="checkout-row checkout-total">
+          <span>Total:</span>
+          <span id="checkout-total">${data.totalBill}</span>
+        </div>
         <button id="place-order-btn">Place Order</button>`;
 
-        cartContainer.appendChild(checkoutDiv);
+        document
+          .getElementById("place-order-btn")
+          .addEventListener("click", () => {
+            fetch("/user/cart-data")
+              .then((res) => res.json())
+              .then((data) => {
+                const items = data.cart.map((item) => ({
+                  productId: item.id,
+                  qty: item.quantity,
+                }));
 
-        document.getElementById("place-order-btn").addEventListener("click",()=>{
-          fetch("/user/cart-place-order",{
-            method:"POST",
-            headers:{"Content-Type":"application/json"}
-          })
-          .then((res)=>res.json())
-          .then((result)=>{
-            if(result.success){
-              Swal.fire({
-                icon:"success",
-                title:"Order Placed Successfully",
-                timer:1500,
-                showConfirmButton:false
+                return fetch("/user/cart-place-order", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ items }),
+                });
               })
-              .then(()=>{
-                window.location.href="/user/orders";
-              })
-            }
-            else{
-              Swal.fire("Error",result.message,"error")
-            }
-          })
-        })
+              .then((res) => res.json())
+              .then((result) => {
+                if (result.success) {
+                  Swal.fire({
+                    icon: "success",
+                    title: "Order Placed Successfully",
+                    timer: 1500,
+                    showConfirmButton: false,
+                  }).then(() => {
+                    window.location.href = "/user/orders";
+                  });
+                } else {
+                  Swal.fire("Error", result.message, "error");
+                }
+              });
+          });
       }
     });
 }
 
 document.addEventListener("DOMContentLoaded", loadCart);
-document.getElementById("back-btn").addEventListener("click",()=>{
-  window.location.href="/user";
-})
+document.getElementById("back-btn").addEventListener("click", () => {
+  window.location.href = "/user";
+});

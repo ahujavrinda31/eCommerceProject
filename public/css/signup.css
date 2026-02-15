@@ -140,3 +140,66 @@ button:hover {
   display: none;
   flex-direction: column;
 }
+
+@media (max-width: 1024px) {
+  .signup-wrapper {
+    width: 800px;
+    height: 550px;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    height: auto;
+    overflow: visible;
+    padding: 20px 0;
+  }
+  .signup-wrapper {
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    box-shadow: none;
+    background: transparent;
+  }
+  .signup-image {
+    width: 100%;
+    height: 250px;
+  }
+  .signup-container {
+    width: 100%;
+    height: auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 0;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  }
+  .heading {
+    font-size: 18px;
+  }
+  label {
+    font-size: 13px;
+  }
+  input, .role {
+    font-size: 13px;
+    padding: 6px;
+  }
+  #submitBtn {
+    font-size: 16px;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .signup-wrapper {
+    width: 100%;
+  }
+  .signup-image {
+    height: 200px;
+  }
+  .signup-container {
+    padding: 15px;
+  }
+  .heading {
+    font-size: 16px;
+  }
+}

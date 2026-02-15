@@ -138,3 +138,79 @@
 .sidebar.closed ~ .page-wrapper {
   margin-left: 0;
 }
+
+@media (max-width: 1024px) {
+  :root {
+    --sidebar-open: 200px;
+  }
+  .page-wrapper {
+    margin-left: 200px;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --header-height: 55px;
+    --sidebar-open: 70px;
+  }
+  .top-header {
+    height: 55px;
+    padding: 0 12px;
+  }
+  .site-name {
+    font-size: 16px;
+  }
+  .sidebar {
+    width: 70px;
+  }
+  .sidebar button {
+    padding: 10px;
+    justify-content: center;
+  }
+  .sidebar button span {
+    display: none;
+  }
+  .sidebar button i {
+    font-size: 14px;
+  }
+  .page-wrapper {
+    margin-left: 70px;
+    padding: 15px;
+    margin-top: 55px;
+  }
+  .profile-circle {
+    width: 35px;
+    height: 35px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --sidebar-open: 0;
+  }
+  .sidebar {
+    width: 0;
+    transform: translateX(-100%);
+  }
+  .sidebar.closed {
+    transform: translateX(-100%);
+  }
+  .top-header {
+    padding: 0 10px;
+  }
+  .site-name {
+    font-size: 14px;
+  }
+  .page-wrapper {
+    margin-left: 0;
+    padding: 12px;
+    margin-top: 55px;
+  }
+  .profile-circle {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+}

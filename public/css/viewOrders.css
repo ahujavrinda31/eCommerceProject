@@ -47,6 +47,104 @@ body {
   color: #777;
 }
 
+@media (max-width: 1024px) {
+  .orders-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    padding: 12px 15px;
+  }
+  .page-header h2 {
+    font-size: 18px;
+  }
+  .back-btn {
+    left: 15px;
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+  .admin-content {
+    padding: 20px 15px;
+  }
+  .orders-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  .order-card {
+    padding: 15px;
+  }
+  .order-card > p:first-child {
+    font-size: 12px;
+  }
+  .order-card h4 {
+    font-size: 13px;
+  }
+  .order-card p {
+    font-size: 12px;
+  }
+  .order-card h3 {
+    font-size: 14px;
+  }
+  .select-transporter {
+    padding: 6px;
+    font-size: 12px;
+  }
+  .assign-btn {
+    padding: 6px 12px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-header {
+    padding: 10px 12px;
+  }
+  .page-header h2 {
+    font-size: 16px;
+  }
+  .back-btn {
+    left: 10px;
+    padding: 5px 10px;
+  }
+  .admin-content {
+    padding: 15px 10px;
+  }
+  .orders-grid {
+    gap: 10px;
+  }
+  .order-card {
+    padding: 12px;
+  }
+  .order-card > p:first-child {
+    font-size: 11px;
+  }
+  .order-card h4 {
+    font-size: 12px;
+  }
+  .order-card p {
+    font-size: 11px;
+  }
+  .order-card h3 {
+    font-size: 13px;
+  }
+  .assign-form {
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+  .select-transporter {
+    flex: 1 1 100%;
+    padding: 5px;
+    font-size: 11px;
+  }
+  .assign-btn {
+    flex: 1 1 100%;
+    padding: 5px;
+    font-size: 10px;
+  }
+}
+
 .orders-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

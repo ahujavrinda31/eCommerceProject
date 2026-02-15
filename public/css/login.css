@@ -136,3 +136,63 @@ button:hover {
 #otpInputBox {
   margin-top: 15px;
 }
+
+@media (max-width: 1024px) {
+  .login-image img {
+    width: 320px;
+    height: 450px;
+  }
+  .login-container {
+    max-width: 350px;
+    height: 480px;
+  }
+}
+
+@media (max-width: 768px) {
+  .login-wrapper {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .login-image img {
+    width: 100%;
+    height: 300px;
+    max-width: 400px;
+  }
+  .login-container {
+    max-width: 100%;
+    height: auto;
+    padding: 30px 20px;
+  }
+  .heading {
+    font-size: 24px;
+    margin-bottom: 15px;
+  }
+  label {
+    font-size: 14px;
+  }
+  input {
+    font-size: 14px;
+    padding: 10px 8px;
+  }
+  button {
+    font-size: 16px;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-wrapper {
+    padding: 10px;
+  }
+  .login-container {
+    max-width: 100%;
+    padding: 20px 15px;
+    height: auto;
+  }
+  .heading {
+    font-size: 20px;
+  }
+  #heading {
+    margin-right: 0;
+  }
+}

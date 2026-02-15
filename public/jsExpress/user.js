@@ -137,7 +137,6 @@ document.getElementById("search-btn").addEventListener("click", () => {
   const value = searchInput.value.trim();
   if (!value) return;
 
-  // suggestions.innerHTML="";
   suggestions.style.display="none";
   searchProducts(value);
 });

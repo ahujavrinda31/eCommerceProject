@@ -86,3 +86,73 @@ body {
   color: black;
   border: 1px solid black;
 }
+
+@media (max-width: 1024px) {
+  .users-container {
+    max-width: 900px;
+  }
+  .users-header,
+  .user-row {
+    grid-template-columns: 1.5fr 2fr 1.2fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    padding: 12px 15px;
+  }
+  .page-header h2 {
+    font-size: 18px;
+  }
+  .back-btn {
+    left: 15px;
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+  .users-container {
+    max-width: 100%;
+    margin: 20px 15px;
+    border-radius: 8px;
+  }
+  .users-header,
+  .user-row {
+    grid-template-columns: 1fr 1.5fr 0.8fr 0.8fr;
+    padding: 12px 15px;
+    font-size: 12px;
+  }
+  .users-header {
+    font-weight: 600;
+  }
+  .delete-btn {
+    padding: 5px 8px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-header {
+    padding: 10px 12px;
+  }
+  .page-header h2 {
+    font-size: 16px;
+  }
+  .back-btn {
+    left: 10px;
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+  .users-container {
+    margin: 15px 10px;
+    border-radius: 6px;
+  }
+  .users-header,
+  .user-row {
+    grid-template-columns: 1fr 1fr 0.7fr 0.7fr;
+    padding: 10px 10px;
+    font-size: 11px;
+  }
+  .delete-btn {
+    padding: 4px 6px;
+    font-size: 10px;
+  }
+}

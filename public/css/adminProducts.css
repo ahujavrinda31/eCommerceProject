@@ -120,3 +120,81 @@ body {
 .product-card .delete-btn:hover {
   background-color: #a71d2a;
 }
+
+@media (max-width: 1024px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    padding: 12px 15px;
+  }
+  .page-header h2 {
+    font-size: 18px;
+  }
+  .back-btn {
+    left: 15px;
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+  .product-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+    padding: 15px;
+  }
+  .product-card {
+    padding: 12px;
+  }
+  .product-card img {
+    max-width: 120px;
+    max-height: 120px;
+  }
+  .product-card h3 {
+    font-size: 14px;
+  }
+  .product-card p {
+    font-size: 12px;
+  }
+  .product-card .delete-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-header {
+    padding: 10px 12px;
+  }
+  .page-header h2 {
+    font-size: 16px;
+  }
+  .back-btn {
+    left: 10px;
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+  .product-grid {
+    gap: 10px;
+    padding: 10px;
+  }
+  .product-card {
+    padding: 10px;
+  }
+  .product-card img {
+    max-width: 100px;
+    max-height: 100px;
+  }
+  .product-card h3 {
+    font-size: 12px;
+  }
+  .product-card p {
+    font-size: 11px;
+  }
+  .product-card .delete-btn {
+    padding: 5px 8px;
+    font-size: 11px;
+  }
+}

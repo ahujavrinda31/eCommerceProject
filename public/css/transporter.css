@@ -84,6 +84,109 @@ body {
   background-color: #b32937;
 }
 
+@media (max-width: 1024px) {
+  .order-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 12px 15px;
+    flex-wrap: wrap;
+  }
+  .header h2 {
+    font-size: 18px;
+  }
+  .header-buttons button {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  .page-wrapper {
+    padding: 15px;
+  }
+  .section-title {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+  .order-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  .order-card {
+    padding: 12px;
+  }
+  .order-header {
+    font-size: 12px;
+  }
+  .status {
+    font-size: 11px;
+    padding: 3px 8px;
+  }
+  .product-row h4 {
+    font-size: 13px;
+  }
+  .product-row p {
+    font-size: 12px;
+  }
+  .total-bill {
+    font-size: 14px;
+  }
+  .primary-btn, .danger-btn {
+    padding: 6px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 10px 12px;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .header h2 {
+    font-size: 16px;
+  }
+  .profile-circle {
+    width: 35px;
+    height: 35px;
+    font-size: 14px;
+  }
+  .header-buttons button {
+    padding: 5px 8px;
+    font-size: 11px;
+  }
+  .page-wrapper {
+    padding: 12px;
+  }
+  .section-title {
+    font-size: 16px;
+  }
+  .order-grid {
+    gap: 12px;
+  }
+  .order-card {
+    padding: 10px;
+  }
+  .order-header {
+    font-size: 11px;
+  }
+  .product-row h4 {
+    font-size: 12px;
+  }
+  .product-row p {
+    font-size: 11px;
+  }
+  .total-bill {
+    font-size: 13px;
+  }
+  .primary-btn, .danger-btn {
+    padding: 5px;
+    font-size: 11px;
+  }
+}
+
 .page-wrapper {
   padding: 20px;
 }

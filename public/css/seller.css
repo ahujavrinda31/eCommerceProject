@@ -394,3 +394,145 @@ button:hover {
   padding: 0 !important;
   overflow-x: hidden;
 }
+
+@media (max-width: 1024px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .stats-container {
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+  .stat-card {
+    flex: 1 1 calc(50% - 10px);
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 12px 15px;
+    flex-wrap: wrap;
+  }
+  .header h2 {
+    font-size: 18px;
+  }
+  .header-buttons {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .header-buttons button {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  .stats-container {
+    gap: 12px;
+    flex-direction: column;
+  }
+  .stat-card {
+    padding: 15px;
+    gap: 12px;
+  }
+  .stat-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+  .stat-info h2 {
+    font-size: 20px;
+  }
+  .search-box {
+    margin-bottom: 15px;
+  }
+  #product-search {
+    height: 40px;
+    font-size: 13px;
+  }
+  .product-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .product-card {
+    grid-template-columns: 100px 1fr 40px;
+    padding: 12px 14px;
+    gap: 12px;
+  }
+  .product-card img {
+    width: 100px;
+    height: 100px;
+  }
+  .product-card h3 {
+    font-size: 16px;
+  }
+  button {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  .swal2-popup {
+    width: 90% !important;
+  }
+  .swal2-input,
+  .swal2-textarea,
+  .swal2-file {
+    width: 90% !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 10px 12px;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .header h2 {
+    font-size: 16px;
+  }
+  .header-buttons {
+    width: 100%;
+  }
+  .header-buttons button {
+    padding: 5px 8px;
+    font-size: 11px;
+    flex: 1;
+  }
+  .stats-container {
+    gap: 10px;
+  }
+  .stat-card {
+    padding: 12px;
+    gap: 10px;
+  }
+  .stat-icon {
+    width: 35px;
+    height: 35px;
+    font-size: 16px;
+  }
+  .stat-info p {
+    font-size: 12px;
+  }
+  .stat-info h2 {
+    font-size: 18px;
+  }
+  #product-search {
+    height: 36px;
+    font-size: 12px;
+    margin-bottom: 8px;
+  }
+  .product-card {
+    grid-template-columns: 80px 1fr 36px;
+    padding: 10px;
+  }
+  .product-card img {
+    width: 80px;
+    height: 80px;
+  }
+  .product-card h3 {
+    font-size: 14px;
+  }
+  .product-card p {
+    font-size: 12px;
+  }
+  .edit-btn, .delete-btn {
+    width: 32px;
+    height: 32px;
+  }
+}

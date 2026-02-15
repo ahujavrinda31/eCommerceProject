@@ -237,16 +237,10 @@ document.querySelectorAll(".edit-btn").forEach((btn) => {
         Swal.fire("Updated", data.message, "success");
         const card = document.getElementById(`product-${productId}`);
         card.querySelector("h3").textContent = data.updated.name;
-        const priceP=card.querySelector("p:nth-of-type(1)");
-        priceP.textContent="Price: "+data.updated.price;
-        priceP.style.fontWeight="bold";
-        const qtyQ=card.querySelector("p:nth-of-type(2)");
-        qtyQ.textContent="Qty: "+data.updated.quantity;
-        qtyQ.style.fontWeight="bold";
-        // card.querySelector("p:nth-of-type(1)").textContent =
-        //   "Price: " + data.updated.price;
-        // card.querySelector("p:nth-of-type(2)").textContent =
-        //   "Qty: " + data.updated.quantity;
+        card.querySelector("p:nth-of-type(1)").textContent =
+          "Price: " + data.updated.price;
+        card.querySelector("p:nth-of-type(2)").textContent =
+          "Qty: " + data.updated.quantity;
         card.querySelector("p:nth-of-type(3)").textContent =
           data.updated.description;
         if (data.updated.imagePath)

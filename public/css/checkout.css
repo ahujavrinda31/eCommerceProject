@@ -95,3 +95,70 @@ body {
 #back:hover{
     background: #b32937;
 }
+
+@media (max-width: 768px) {
+  #heading {
+    margin-top: 15px;
+    font-size: 20px;
+  }
+  .checkout-container {
+    width: 95%;
+    max-width: 100%;
+    margin: 20px auto;
+    padding: 20px;
+  }
+  .section {
+    margin-bottom: 20px;
+  }
+  .section h3 {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+  .section p {
+    font-size: 14px;
+  }
+  .qty-controls button {
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+  }
+  .qty-controls #qty {
+    width: 25px;
+    font-size: 16px;
+  }
+  #place-order, #back {
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    align-items: flex-start;
+    padding-top: 20px;
+  }
+  #heading {
+    font-size: 18px;
+    margin-top: 10px;
+  }
+  .checkout-container {
+    width: 100%;
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 8px;
+  }
+  .section {
+    margin-bottom: 15px;
+  }
+  .section h3 {
+    font-size: 14px;
+  }
+  .section p {
+    font-size: 13px;
+  }
+  #place-order, #back {
+    font-size: 13px;
+  }
+}

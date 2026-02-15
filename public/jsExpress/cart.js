@@ -103,18 +103,6 @@ function loadCart() {
                     if (updated.cartEmpty) {
                       cartContainer.innerHTML = "<p style='text-align: center; padding: 40px;'>Your cart is empty</p>";
                       const billDiv = document.getElementById("total-bill");
-                      // billDiv.className = "summary-card";
-                      // billDiv.innerHTML = `<h3>Order Summary</h3>
-                      //   <div class="checkout-row">
-                      //     <span>Shipping:</span>
-                      //     <span>Free</span>
-                      //   </div>
-                      //   <div class="checkout-row checkout-total">
-                      //     <span>Total:</span>
-                      //     <span>0</span>
-                      //   </div>
-                      //   <button id="place-order-btn" disabled>Place Order</button>`;
-                      // cartContainer.appendChild(billDiv);
                       billDiv.innerHTML="";
                       billDiv.style.display = "none";
                     }

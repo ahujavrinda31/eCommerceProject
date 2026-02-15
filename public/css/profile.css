@@ -132,3 +132,85 @@ textarea {
   color: #9ca3af;
   margin-top: 4px;
 }
+
+@media (max-width: 1024px) {
+  .profile-wrapper {
+    max-width: 800px;
+    padding: 0 20px;
+  }
+  .profile-card {
+    gap: 18px;
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-header {
+    padding: 15px 20px;
+    font-size: 16px;
+  }
+  .back-btn {
+    left: 15px;
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+  .profile-wrapper {
+    margin: 30px auto;
+    padding: 0 15px;
+  }
+  .profile-card {
+    grid-template-columns: 1fr;
+    gap: 15px;
+    padding: 20px;
+  }
+  .profile-field.full-width {
+    grid-column: span 1;
+  }
+  .profile-actions {
+    grid-column: span 1;
+    flex-direction: column;
+  }
+  .profile-actions button {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+  .section-title {
+    grid-column: span 1;
+    font-size: 12px;
+  }
+  input, textarea {
+    font-size: 13px;
+    padding: 8px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-header {
+    flex-wrap: wrap;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .back-btn {
+    left: 10px;
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+  .profile-wrapper {
+    margin: 20px auto;
+    padding: 0 10px;
+  }
+  .profile-card {
+    padding: 15px;
+    gap: 12px;
+  }
+  .label {
+    font-size: 11px;
+  }
+  .value {
+    font-size: 13px;
+  }
+  .profile-actions button {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+}

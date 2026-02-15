@@ -111,3 +111,77 @@ body {
   color: #777;
   margin-top: 10px;
 }
+
+@media (max-width: 1024px) {
+  .order-card {
+    max-width: 800px;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    padding: 12px 15px;
+  }
+  .page-header h2 {
+    font-size: 18px;
+  }
+  .back-btn {
+    left: 15px;
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+  .order-card {
+    max-width: 100%;
+    margin: 0 auto 15px;
+    padding: 15px;
+    border-radius: 8px;
+  }
+  .order-card h4 {
+    font-size: 14px;
+  }
+  .order-card p {
+    font-size: 12px;
+  }
+  .order-card h3 {
+    font-size: 14px;
+    text-align: center;
+    margin-top: 10px;
+  }
+  .cancel-btn {
+    width: 100%;
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-header {
+    padding: 10px 12px;
+  }
+  .page-header h2 {
+    font-size: 16px;
+  }
+  .back-btn {
+    left: 10px;
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+  .order-card {
+    margin: 0 auto 10px;
+    padding: 12px;
+    border-radius: 6px;
+  }
+  .order-card h4 {
+    font-size: 13px;
+  }
+  .order-card p {
+    font-size: 11px;
+  }
+  .order-card h3 {
+    font-size: 13px;
+  }
+  .cancel-btn {
+    padding: 5px 8px;
+    font-size: 11px;
+  }
+}

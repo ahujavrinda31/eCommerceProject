@@ -38,6 +38,9 @@
             <div class="products">
               <% order.products.forEach((item) => { %>
                 <div class="product-row">
+                  <% if (item.productId) { %>
+          <img src="<%= item.productId.imagePath %>" alt="<%= item.name %>" width="80">
+        <% } %>
                   <h4><%= item.name.toUpperCase() %></h4>
                   <p>Price: <%= item.price %></p>
                   <p>Qty: <%= item.qty %></p>

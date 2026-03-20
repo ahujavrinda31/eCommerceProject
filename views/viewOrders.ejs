@@ -27,6 +27,9 @@
         <%= new Date(order.orderedOn).toLocaleString() %>
       </p>
       <% order.products.forEach((item)=>{ %>
+        <% if (item.productId) { %>
+          <img src="<%= item.productId.imagePath %>" alt="<%= item.name %>" width="80">
+        <% } %>
       <h4><strong><%= item.name.toUpperCase() %></strong></h4>
       <p><strong>Price: </strong> <%= item.price %></p>
       <p><strong>Quantity: </strong> <%= item.qty %></p>

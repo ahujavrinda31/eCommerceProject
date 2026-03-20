@@ -221,9 +221,22 @@ export const sellerViewOrders = async (req, res) => {
 
     const orders = await Order.find({
       "products.sellerId": sellerId
-    }).sort({ createdAt: -1 });
+    }).populate("products.productId","imagePath").sort({ createdAt: -1 });
 
-    res.render("sellerViewOrders", { orders });
+    const filteredOrders=orders.map(order=>{
+      const sellerProducts=order.products.filter(
+        product=>product.sellerId.toString()==sellerId.toString()
+      )
+      return{
+        ...order.toObject(),
+        products:sellerProducts,
+        totalBill:sellerProducts.reduce((sum,item)=>{
+          return sum+item.price*item.qty;
+        },0)
+      }
+    })
+
+    res.render("sellerViewOrders", { orders:filteredOrders });
   } catch (err) {
     console.error(err);
     res.render("sellerViewOrders", { orders: [] });

@@ -374,7 +374,7 @@ export const getOrders = async (req, res) => {
     if (!req.session.userId) {
       return res.redirect("/");
     }
-    const orders = await Order.find({ userId: req.session.userId }).sort({
+    const orders = await Order.find({ userId: req.session.userId }).populate("products.productId","imagePath").sort({
       createdAt: -1,
     });
     res.render("viewOrders", { orders });

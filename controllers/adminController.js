@@ -139,6 +139,27 @@ export const adminPage = async (req, res) => {
   }
 };
 
+export const getCategoriesPage=async(req,res)=>{
+  try{
+    const categories=await Category.find({});
+    res.render("categories",{categories})
+  }
+  catch(err){
+    res.status(500).send("Server Error")
+  }
+}
+
+export const getSubcategoriesPage=async(req,res)=>{
+  try{
+    const category=await Category.findById(req.params.id);
+    res.render("subcategories",{category})
+  }
+  catch(err){
+    console.error(err);
+    res.status(500).send("Server error")
+  }
+}
+
 export const addCategory = async (req, res) => {
   try {
     const name = req.body.name.toLowerCase().trim();
@@ -160,103 +181,101 @@ export const addCategory = async (req, res) => {
 
 export const addSubcategory = async (req, res) => {
   try {
-    let { categoryName, subcategoryName } = req.body;
+    const { subcategoryName } = req.body;
+    const { id } = req.params;
 
-    categoryName = categoryName.toLowerCase().trim();
-    subcategoryName = subcategoryName.toLowerCase().trim();
+    if (!subcategoryName || !subcategoryName.trim()) {
+      return res.json({
+        success: false,
+        message: "Subcategory name is required",
+      });
+    }
 
-    const category = await Category.findOne({ name: categoryName });
+    const category = await Category.findById(id);
 
     if (!category) {
       return res.json({
         success: false,
         message: "Category does not exist",
-        type: "not_exists",
       });
     }
 
+    const formattedName = subcategoryName.toLowerCase().trim();
+
     const exists = category.subcategories.some(
-      (sub) => sub.name == subcategoryName,
+      (sub) => sub.name === formattedName
     );
 
     if (exists) {
       return res.json({
         success: false,
-        type: "exists",
-        message: "Subcategory already exists, you can use it.",
+        message: "Subcategory already exists in this category",
       });
     }
 
-    category.subcategories.push({ name: subcategoryName });
+    category.subcategories.push({ name: formattedName });
     await category.save();
 
     return res.json({
       success: true,
       message: "Subcategory added successfully",
     });
+
   } catch (err) {
-    console.error("Error adding subcategory: ", err);
+    console.error("Error adding subcategory:", err);
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
 
-export const editCategory = async (req, res) => {
-  try {
-    let { oldName, newName } = req.body;
+export const editCategory=async (req,res)=>{
+  try{
+    const {id,newName}=req.body;
 
-    oldName = oldName.toLowerCase().trim();
-    newName = newName.toLowerCase().trim();
+    const existing=await Category.findOne({
+      name:newName.toLowerCase().trim()
+    })
 
-    const category = await Category.findOne({ name: oldName });
-    if (!category) {
-      return res.json({ success: false, message: "Category not found" });
+    if(existing){
+      return res.json({success:false,message:"Category already exists"});
     }
 
-    category.name = newName;
-    await category.save();
+    await Category.findByIdAndUpdate(id,{
+      name:newName.toLowerCase().trim()
+    })
 
-    res.json({ success: true, message: "Category updated successfully" });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false });
+    res.json({success:true,message:"Category updated successfully"})
   }
-};
+  catch(err){
+    res.status(500).json({success:false})
+  }
+}
 
-export const editSubcategory = async (req, res) => {
-  try {
-    let { categoryName, oldSub, newSub } = req.body;
+export const editSubcategory=async(req,res)=>{
+  try{
+    const {categoryId, subId, newSub}=req.body;
 
-    categoryName = categoryName.toLowerCase().trim();
-    oldSub = oldSub.toLowerCase().trim();
-    newSub = newSub.toLowerCase().trim();
+    const category=await Category.findById(categoryId);
+    if(!category) return res.json({success:false});
 
-    const category = await Category.findOne({ name: categoryName });
-    if (!category) {
-      return res.json({ success: false, message: "Category not found" });
-    }
+    const sub=category.subcategories.id(subId);
+    if(!sub) return res.json({success:false});
 
-    const sub = category.subcategories.find((s) => s.name === oldSub);
-    if (!sub) {
-      return res.json({ success: false, message: "Subcategory not found" });
-    }
+    const oldName=sub.name;
+    sub.name=newSub.toLowerCase().trim();
 
-    sub.name = newSub;
     await category.save();
 
     await Product.updateMany(
-      {
-        categoryId: category._id,
-        subcategory: oldSub,
-      },
-      { $set: { subcategory: newSub } },
-    );
+      {categoryId,subcategory:oldName},
+      {$set:{subcategory:sub.name}}
+    )
 
-    res.json({ success: true, message: "Subcategory updated everywhere" });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false });
+    res.json({success:true})
   }
-};
+  catch(err){
+    res.status(500).json({success:false})
+  }
+}
 
 export const viewAllProducts = async (req, res) => {
   try {

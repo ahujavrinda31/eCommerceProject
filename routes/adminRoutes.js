@@ -1,5 +1,5 @@
 import express from "express";
-import { adminUsersPage,deleteUser, approveUser, rejectUser, viewAllProducts, deleteProductByAdmin, viewOrders, getAvailableTransporters, assignTransporter, addCategory, addSubcategory, editCategory, editSubcategory } from "../controllers/adminController.js";
+import { adminUsersPage,deleteUser, approveUser, rejectUser, viewAllProducts, deleteProductByAdmin, viewOrders, getAvailableTransporters, assignTransporter, addCategory, addSubcategory, editCategory, editSubcategory, getCategoriesPage, getSubcategoriesPage } from "../controllers/adminController.js";
 
 const router=express.Router();
 
@@ -15,9 +15,12 @@ router.get("/products",isAdmin,viewAllProducts);
 router.get("/view-orders", isAdmin,viewOrders);
 router.get("/users",isAdmin,adminUsersPage);
 router.get("/available-transporters", isAdmin, getAvailableTransporters);
+router.get("/categories",isAdmin,getCategoriesPage);
+router.get("/categories/:id/subcategories",isAdmin,getSubcategoriesPage);
 router.post("/assign-transporter", assignTransporter);
 router.post("/addCategory",addCategory);
-router.post("/addsubcategory",addSubcategory);
+// router.post("/addsubcategory",addSubcategory);
+router.post("/categories/:id/addSubcategory",addSubcategory);
 router.put("/edit-category",editCategory);
 router.put("/edit-subcategory",editSubcategory);
 router.delete("/product/:id",deleteProductByAdmin);

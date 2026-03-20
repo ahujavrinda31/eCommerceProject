@@ -45,3 +45,31 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   });
 });
+
+document.querySelectorAll(".delete-card").forEach(btn => {
+
+  btn.addEventListener("click", function(){
+
+    const card = this.closest(".order-card");
+
+    Swal.fire({
+      title: "Remove order from view?",
+      text: "This will only remove it from the page.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes remove"
+    }).then(result => {
+
+      if(result.isConfirmed){
+        card.remove();
+        Swal.fire({
+          title:"Removed",
+          icon:"success"
+        })
+      }
+
+    });
+
+  });
+
+});

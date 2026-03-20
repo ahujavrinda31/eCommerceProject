@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subcategories</title>
+    <link rel="stylesheet" href="/css/adminSubcategories.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <!-- <h2>Subcategories of <%= category.name %></h2>
+    <button id="add-subcategory-btn" data-id="<%= category._id %>">Add Subcategory</button>
+
+    <a href="/admin/categories">Back</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Subcategory</th>
+                <th>Edit</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% category.subcategories.forEach(sub=>{ %>
+                <tr>
+                    <td><%= sub.name %></td>
+                    <td>
+                        <button data-subid="<%= sub._id %>" data-name="<%= sub.name %>" data-categoryid="<%= category._id %>" class="edit-subcategory">Edit</button>
+                    </td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table> -->
+
+    <header class="top-header">
+    <button onclick="location.href='/admin/categories'" class="back-btn">
+        <i class="fa-solid fa-arrow-left"></i> 
+    </button>
+    <h2>Subcategories of <%= category.name %></h2>
+    <div></div>
+</header>
+
+<div class="container">
+
+    <div class="actions">
+        <button id="add-subcategory-btn"
+                data-id="<%= category._id %>"
+                class="primary-btn">
+            <i class="fa-solid fa-plus"></i> Add Subcategory
+        </button>
+    </div>
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Subcategory</th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% category.subcategories.forEach(sub=>{ %>
+                    <tr>
+                        <td class="subcat-name"><%= sub.name %></td>
+                        <td>
+                            <button class="edit-subcategory"
+                                    data-subid="<%= sub._id %>"
+                                    data-name="<%= sub.name %>"
+                                    data-categoryid="<%= category._id %>">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</div>
+    <script src="/jsExpress/adminSubcategories.js"></script>
+</body>
+</html>

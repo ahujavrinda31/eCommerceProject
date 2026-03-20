@@ -26,14 +26,26 @@
     <div class="orders-grid">
       <% orders.forEach((order)=>{ %>
       <div class="order-card">
+         <% if(order.status === "Delivered" || order.status === "Cancelled"){ %>
+  <button class="delete-card">
+    <i class="fa-solid fa-trash"></i>
+  </button>
+  <% } %>
         <p>
           <strong>Order Date: </strong>
           <%= new Date(order.orderedOn).toLocaleString() %>
         </p>
         <% order.products.forEach((item)=>{ %>
+          <div class="product-row">
+           <% if (item.productId) { %>
+           <img src="<%= item.productId.imagePath %>" alt="<%= item.name %>" width="80">
+           <% } %>
+           <div class="product-info">
         <h4><strong><%= item.name.toUpperCase() %></strong></h4>
         <p><strong>Price: </strong> <%= item.price %></p>
         <p><strong>Quantity: </strong> <%= item.qty %></p>
+        </div>
+        </div>
         <% if(order.status=="Cancelled") { %>
           <p><strong>Status: </strong>Cancelled</p>
         <% } %>
@@ -44,9 +56,9 @@
           <%= new Date(order.deliveredOn).toLocaleString() %>
           <% } %>
         </p>
-        <h3>Total Bill: <%=order.totalBill %></h3>
+  
         <hr>
-
+        <div class="order-footer">
         <form class="assign-form" data-order-id="<%= order._id %>">
           <select class="select-transporter">
             <option value="">Select Transporter</option>
@@ -58,6 +70,8 @@
   Assign Transporter
 </button>
         </form>
+        <h3>Total Bill: <%=order.totalBill %></h3>
+        </div>
       </div>
       <% }) %>
     </div>

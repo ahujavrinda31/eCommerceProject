@@ -1,0 +1,148 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body {
+  background-color: #f4f6f9;
+}
+
+.top-header {
+  position: sticky;
+  top: 0;
+  background: white;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  padding: 15px 30px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  z-index: 1000;
+}
+
+.top-header h2 {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.back-btn {
+  position: absolute;
+  left: 20px;
+  background-color: white;
+  border: 1px solid black;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.subcat-name{
+    text-transform: capitalize;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.primary-btn {
+  background: #5481c5;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 6px;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.primary-btn:hover {
+  background-color: #0056b3;
+}
+
+.table-wrapper {
+  background: white;
+  border-radius: 8px;
+  overflow-x: auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background-color: #f8f9fb;
+}
+
+th, td {
+  padding: 14px 16px;
+  text-align: left;
+}
+
+th {
+  font-weight: 600;
+  font-size: 14px;
+  color: #444;
+}
+
+tbody tr {
+  border-top: 1px solid #eee;
+  transition: background 0.2s ease;
+}
+
+tbody tr:hover {
+  background-color: #f9fafc;
+}
+
+.edit-subcategory {
+  background: #c74855;
+  color: white;
+  border: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+
+  .top-header {
+    grid-template-columns: auto 1fr;
+  }
+
+  .top-header h2 {
+    text-align: left;
+    padding-left: 10px;
+  }
+
+  .actions {
+    justify-content: center;
+  }
+
+  .primary-btn {
+    width: 100%;
+  }
+
+  th, td {
+    font-size: 13px;
+    padding: 10px;
+  }
+}

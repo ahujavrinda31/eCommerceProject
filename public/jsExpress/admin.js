@@ -76,7 +76,7 @@ if (addCategoryBtn) {
         .then((res) => res.json())
         .then((data) => {
           if (data.exists) {
-            Swal.fire("Category Exists", "You can use this category", "info");
+            Swal.fire("Category Exists", "There cannot be another category of same name", "info");
           } else if (data.success) {
             Swal.fire("Success", "Category created successfully", "success");
           } else {

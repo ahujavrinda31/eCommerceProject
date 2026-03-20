@@ -47,6 +47,135 @@ body {
   color: #777;
 }
 
+.orders-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  max-width: 900px;
+  margin: auto;
+}
+
+.product-row{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  margin-bottom:15px;
+}
+
+.product-img{
+  width:70px;
+  height:70px;
+  object-fit:cover;
+  border-radius:8px;
+  border:1px solid #eee;
+}
+
+.product-info h4{
+  margin:0;
+  font-size:15px;
+}
+
+.product-info p{
+  margin:2px 0;
+  font-size:13px;
+  color:#555;
+}
+
+.order-card {
+  position: relative;
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+}
+
+.delete-card{
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  color: #d33;
+  cursor: pointer;
+}
+
+.delete-card:hover{
+  color: #a10000;
+  transform: scale(1.1);
+}
+
+.order-card > p:first-child {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 12px;
+}
+
+.order-card h4 {
+  margin-top: 12px;
+  font-size: 15px;
+  color: #222;
+}
+
+.order-card p {
+  font-size: 14px;
+  margin: 4px 0;
+  color: #555;
+}
+
+.order-card hr {
+  margin: 12px 0;
+  border: none;
+  border-top: 1px solid #eee;
+}
+
+.order-card h3 {
+  margin-top: 15px;
+  text-align: right;
+  font-size: 16px;
+  color: #2f6fed;
+}
+
+.assign-form {
+  margin-top: auto;
+  display: flex;
+  gap: 10px;
+}
+
+.select-transporter {
+  flex: 1;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.assign-btn {
+  padding: 9px 18px;
+  background: #c74855;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.assign-btn:hover {
+  background: #b32937;
+}
+
+.assign-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.order-footer{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:10px;
+}
+
 @media (max-width: 1024px) {
   .orders-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -143,81 +272,4 @@ body {
     padding: 5px;
     font-size: 10px;
   }
-}
-
-.orders-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 25px;
-}
-
-.order-card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-  display: flex;
-  flex-direction: column;
-}
-
-.order-card > p:first-child {
-  font-size: 14px;
-  color: #777;
-  margin-bottom: 12px;
-}
-
-.order-card h4 {
-  margin-top: 12px;
-  font-size: 15px;
-  color: #222;
-}
-
-.order-card p {
-  font-size: 14px;
-  margin: 4px 0;
-  color: #555;
-}
-
-.order-card hr {
-  margin: 12px 0;
-  border: none;
-  border-top: 1px solid #eee;
-}
-
-.order-card h3 {
-  margin-top: 15px;
-  text-align: right;
-  font-size: 16px;
-  color: #2f6fed;
-}
-
-.assign-form {
-  margin-top: auto;
-  display: flex;
-  gap: 10px;
-}
-
-.select-transporter {
-  flex: 1;
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
-
-.assign-btn {
-  padding: 9px 18px;
-  background: #c74855;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.assign-btn:hover {
-  background: #b32937;
-}
-
-.assign-btn:disabled {
-  background: #ccc;
-  cursor: not-allowed;
 }

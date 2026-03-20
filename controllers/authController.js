@@ -286,13 +286,25 @@ export const user = async (req, res) => {
 
 export const seller = async (req, res) => {
   try {
-    const products = await Product.find({ sellerId: req.session.userId });
+    const sellerId=req.session.userId;
+    const products = await Product.find({ sellerId });
 
-    const orders=await Order.find({"products.sellerId":req.session.userId});
+    const orders=await Order.find({"products.sellerId":sellerId});
 
     const totalOrders=orders.length;
 
-    const totalSales=orders.filter(o=>o.status=="Delivered").reduce((sum,o)=>sum+o.totalBill,0); 
+    let totalSales=0;
+    orders.forEach(order=>{
+      if(order.status=="Delivered"){
+        const sellerProducts=order.products.filter(
+          p=>p.sellerId.toString()==sellerId.toString()
+        );
+
+        sellerProducts.forEach(p=>{
+          totalSales+=p.price*p.qty;
+        })
+      }
+    })
     res.render("seller", { name: req.session.name, products, stats:{totalOrders,totalSales,totalProducts:products.length} });
   } catch (err) {
     console.error(err);

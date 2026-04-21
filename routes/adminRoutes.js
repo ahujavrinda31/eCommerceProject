@@ -10,7 +10,6 @@ const isAdmin=(req,res,next)=>{
     next();
 }
 
-
 router.get("/products",isAdmin,viewAllProducts);
 router.get("/view-orders", isAdmin,viewOrders);
 router.get("/users",isAdmin,adminUsersPage);
@@ -19,7 +18,6 @@ router.get("/categories",isAdmin,getCategoriesPage);
 router.get("/categories/:id/subcategories",isAdmin,getSubcategoriesPage);
 router.post("/assign-transporter", assignTransporter);
 router.post("/addCategory",addCategory);
-// router.post("/addsubcategory",addSubcategory);
 router.post("/categories/:id/addSubcategory",addSubcategory);
 router.put("/edit-category",editCategory);
 router.put("/edit-subcategory",editSubcategory);

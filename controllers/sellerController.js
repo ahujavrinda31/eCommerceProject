@@ -76,67 +76,40 @@ export const updateProfile = async (req, res) => {
   }
 };
 
+export const addProductBySeller=async(req,res)=>{
+  try{
+    const categories=await Category.find({});
+    res.render("addProduct",{categories});
+  }
+  catch(err){
+    console.error(err);
+    res.status(500).send("Server Error")
+  }
+}
+
+export const getSubcategories=async(req,res)=>{
+  try{
+    const category=await Category.findById(req.params.id);
+    res.json(category.subcategories);
+  }
+  catch(err){
+    res.status(500).json({message:"Error fetching subcategories"});
+  }
+}
+
 export const addProduct=async(req,res)=>{
-    try{
-        let {categoryName,subcategoryName,name,price,quantity,description}=req.body;
+  try{
+    const {name,price,qty,description,subcategory,categoryId}=req.body;
+    const product=new Product({name,price,quantity:qty,description,imagePath:`/uploads/products/${req.file.filename}`,sellerId:req.session.userId,categoryId,subcategory});
 
-        categoryName=categoryName.toLowerCase().trim();
-        subcategoryName=subcategoryName.toLowerCase().trim();
-        name=name.toLowerCase().trim();
+    await product.save();
 
-        const category=await Category.findOne({name:categoryName});
-        if(!category){
-            return res.json({
-                success:false,
-                message:"Category does not exist"
-            })
-        }
-
-        const subExists=category.subcategories.some((sub)=>sub.name==subcategoryName);
-
-        if(!subExists){
-            return res.json({
-                success:false,
-                message:"Subcategory does not exist in this category"
-            })
-        }
-
-        const existingProduct=await Product.findOne({
-            sellerId:req.session.userId,
-            name,
-            categoryId:category._id,
-            subcategory:subcategoryName
-        })
-
-        if(existingProduct){
-            return res.json({
-                success:false,
-                message:"Product already exists"
-            })
-        }
-
-        const product=new Product({
-            name,
-            price,
-            quantity,
-            description,
-            imagePath:`/uploads/products/${req.file.filename}`,
-            sellerId:req.session.userId,
-            categoryId:category._id,
-            subcategory:subcategoryName
-        })
-
-        await product.save();
-
-        res.json({
-            success:true,
-            message:"Product saved successfully"
-        })
-    }
-    catch(err){
-        console.error("Error adding product: ",err);
-        res.status(500).json({success:false,message:"Server error"})
-    }
+    res.json({message:"Product added successfully"})
+  }
+  catch(err){
+    console.error(err);
+    res.status(500).json({message:"Error adding product"})
+  }
 }
 
 export const getProducts=async(req,res)=>{

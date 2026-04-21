@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product</title>
+    <link rel="stylesheet" href="/css/addProduct.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-top">
+                <button id="back-btn"><- Back</button>
+                <h2>Add Product</h2>
+            </div>
+            <p class="subtitle">Follow steps to add a product</p>
+        </div>
+
+        <div class="section" id="category-section">
+            <h3>Step 1: Select Category</h3>
+            <div id="category-container">
+                <% categories.forEach(cat=>{ %>
+                    <div class="category" data-id="<%= cat._id %>"><%= cat.name %></div>
+                <% }) %>
+            </div>
+        </div>
+
+        <div class="section hidden" id="subcategory-section">
+            <div class="section-header">
+                <button id="back-to-categories"><- Back</button>
+                <h3>Step 2: Select Subcategory</h3>
+            </div>
+            <div id="subcategory-container"></div>
+        </div>
+
+        <div class="section hidden" id="form-section">
+            <div class="section-header">
+                <button id="back-to-subcategories"><- Back</button>
+                <h3>Step 3: Add Product</h3>
+            </div>
+            <div id="form-container"></div>
+        </div>
+    </div>
+    <script src="/jsExpress/addProduct.js"></script>
+</body>
+</html>

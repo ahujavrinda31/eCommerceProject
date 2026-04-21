@@ -99,76 +99,9 @@ viewAllBtn.addEventListener("click", () => {
   window.location.reload();
 });
 
-document.getElementById("add-product").addEventListener("click", () => {
-  Swal.fire({
-    title: "Add Product",
-    html: `<input id="categoryName" class="swal2-input" placeholder="Category Name">
-        <input id="subcategoryname" class="swal2-input" placeholder="Subcategory Name">
-        <input id="productName" class="swal2-input" placeholder="Product Name">
-        <input id="price" class="swal2-input" placeholder="Product Price">
-        <input id="quantity" class="swal2-input" placeholder="Product Quantity">
-        <textarea id="description" class="swal2-input" placeholder="Product Description"></textarea>
-        <input id="image" name="image" type="file" class="swal2-file">`,
-    confirmButtonText: "Add Product",
-    showCancelButton: true,
-    preConfirm: () => {
-      const data = {
-        categoryName: document.getElementById("categoryName").value.trim(),
-        subcategoryName: document
-          .getElementById("subcategoryname")
-          .value.trim(),
-        name: document.getElementById("productName").value.trim(),
-        price: document.getElementById("price").value,
-        quantity: document.getElementById("quantity").value,
-        description: document.getElementById("description").value.trim(),
-        image: document.getElementById("image").files[0],
-      };
-
-      if (
-        !data.categoryName ||
-        !data.subcategoryName ||
-        !data.name ||
-        !data.price ||
-        !data.quantity ||
-        !data.description ||
-        !data.image
-      ) {
-        Swal.showValidationMessage("All fields are mandatory");
-        return false;
-      }
-      return data;
-    },
-  }).then((result) => {
-    if (!result.isConfirmed) return;
-
-    const formData = new FormData();
-    Object.entries(result.value).forEach(([key, value]) => {
-      formData.append(key, value);
-    });
-
-    fetch("/seller/add-product", {
-      method: "POST",
-      credentials: "include",
-      body: formData,
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          Swal.fire({
-            title: "Success",
-            text: data.message,
-            icon: "success",
-            confirmButtonText: "OK",
-          }).then((result) => {
-            if (result.isConfirmed) {
-              window.location.href = "/seller";
-            }
-          });
-        } else {
-          Swal.fire("Error", data.message, "error");
-        }
-      });
-  });
+const addProduct=document.getElementById("add-product");
+addProduct.addEventListener("click",()=>{
+  window.location.href="/seller/addProduct";
 });
 
 document.querySelectorAll(".edit-btn").forEach((btn) => {

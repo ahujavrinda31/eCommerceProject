@@ -1,10 +1,7 @@
-const profileInitialElement = document.getElementById('profile-initial');
-if (profileInitialElement && typeof userInitial !== 'undefined') {
-  profileInitialElement.textContent = userInitial;
-  profileInitialElement.onclick = () => {
-    window.location.href="/transporter/profile";
-  };
-}
+const profile = document.getElementById("view-profile");
+profile.addEventListener("click", () => {
+  window.location.href = "/transporter/profile";
+});
 
 async function updateStatus(orderId, newStatus) {
   const res = await fetch("/transporter/update-order-status", {

@@ -208,6 +208,10 @@ document.querySelectorAll(".delete-btn").forEach((btn) => {
     if (data.success) {
       Swal.fire("Deleted", data.message, "success");
       document.getElementById(`product-${productId}`).remove();
+
+      const productCount=document.getElementById("product-count");
+      let currentCount=parseInt(productCount.textContent);
+      productCount.textContent=currentCount-1;
     } else {
       Swal.fire("Error", data.message, "error");
     }

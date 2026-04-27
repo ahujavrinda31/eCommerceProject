@@ -79,7 +79,16 @@ function handleForm(subcategory) {
     });
 
     const data = await res.json();
-    alert(data.message);
+    Swal.fire({
+      title:"Success",
+      text:data.message,
+      icon:"success",
+      confirmButtonText:"OK"
+    }).then((result)=>{
+      if(result.isConfirmed){
+        window.location.href="/seller/addProduct";
+      }
+    })
   });
 }
 
